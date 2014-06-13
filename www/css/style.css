@@ -1,0 +1,3 @@
+@import "reset.css"; /*set html&body styles, hide debug field for AJAX*/
+@import "design.css"; /*design styles*/
+@import "forms.css" screen; /*form's styles*/
