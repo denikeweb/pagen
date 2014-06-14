@@ -26,7 +26,7 @@ class eController {
 		$this->content = array ();
 	}
 
-	public function view ($data = array (), $template = 'index') {
+	protected function view ($data = array (), $template = 'index') {
 		global $word;
 		define ('DIRSEP', DIRECTORY_SEPARATOR);
 		$folder = config::TEMPLATE;
@@ -45,11 +45,11 @@ class eController {
 		}
 	}
 	
-	public function run () {
+	protected function run () {
 		$this->loadModel ();
 	}
 
-	public function loadModel () {
+	protected function loadModel () {
 		if (is_file($this->modelPath)) {
 			define ('DIRSEP', DIRECTORY_SEPARATOR);
 			$eModel = dirname(__FILE__).DIRSEP.'eModel.class.php';

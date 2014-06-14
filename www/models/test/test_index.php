@@ -9,7 +9,8 @@ class mtest_index extends eModel {
 		return $data;
 	}
 	public function show () {
-		return 1;
+		$this->setFields(['id', 'title', 'text']);
+		return true;
 	}
 }
 ?>

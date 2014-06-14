@@ -31,9 +31,10 @@ echo '<br>';
 		<meta name="robots" content="all">
 		<meta name="description" content="<?php echo $data['meta_d']; ?>">
 		<meta name="keywords" content="<?php echo $data['meta_k']; ?>">
+		<?php if (isset($data['canonical_url'])) { ?><link rel="canonical" href="<?php echo $data['canonical_url'], 1; ?>"><?php } ?>
 		
 		<!--link rel="shortcut icon" href="<?php echo $this->url; ?>/favicon.ico" -->
-		<link href="<?php echo $this->url; ?>/css/style.css" rel="stylesheet" type="text/css"> 
+		<link href="<?php echo $this->url; ?>/css/style.css" rel="stylesheet" type="text/css">
 		
 		<script type="text/javascript" src="<?php echo $this->url; ?>/js/jquery-1.11.js"></script>
 		<script type="text/javascript" src="<?php echo $this->url; ?>/js/scripts.js"></script>
