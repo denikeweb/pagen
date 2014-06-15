@@ -108,9 +108,21 @@ abstract class Site {
 		}
 		//settings without database using*/
 
-		if (self::$ThisPage['static'] == '1') {
-			include ('controllers/index_controller.php');
-			$a = new index_controller();
+		if (isset(self::$ThisPage['static'])) {
+			$is_static = self::$ThisPage['static'];
+		} elseif {
+			$is_static = -1;
+		}
+
+		if ($is_static != 0) {
+			if ($is_static == 1) {
+				$controller = 'IndexDBController';
+				// if DB route exist
+			} else {
+				$controller = 'IndexController';
+			}
+			include ("classes/$controller.php");
+			$a = new $controller();
 			$a->run();
 			//if page is static load default page controller
 		} else {

@@ -1,5 +1,5 @@
 <?php
-class index_controller extends eController {
+class IndexController extends eController {
 	public function run (){
 		$this->printContent ();
 	}
