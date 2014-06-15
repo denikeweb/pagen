@@ -1,5 +1,5 @@
 <?php
-abstract class eController {
+class eController {
 	/**
 	*	Pagen Controller parrent class
 	*	Pagen v1.0

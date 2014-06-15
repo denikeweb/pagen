@@ -1,5 +1,5 @@
 <?php
-abstract class eModel {
+class eModel {
 	/**
 	*	Pagen Model parrent class
 	*	Pagen v1.0

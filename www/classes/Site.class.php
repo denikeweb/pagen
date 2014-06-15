@@ -1,5 +1,5 @@
 <?php
-abstract class Site {
+class Site {
 	public static $ThisPage;
 	public static $Lang;
 	public static $Content;

@@ -1,5 +1,5 @@
 <?php
-abstract class Files {
+class Files {
 	/**
 	*	Pagen demo-class Files
 	*	Pagen v0.8
