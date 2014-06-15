@@ -1,5 +1,5 @@
 <?php
-class DataBase {
+abstract class DataBase {
 	public static function connect () {
 		if (config::DB) {
 			mysql_connect (config::DB_SERVER,config::DB_USER,config::DB_PASS);

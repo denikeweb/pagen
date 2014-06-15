@@ -1,5 +1,5 @@
 <?php
-class Validator {
+abstract class Validator {
 	public static function csrf(){
 		if (substr_count($_SERVER['HTTP_REFERER'], $_SERVER['HTTP_HOST']) == 0) {
 			exit();

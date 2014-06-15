@@ -1,5 +1,5 @@
 <?php
-class PageLang {
+abstract class PageLang {
 	public static function word ($label) {
 		$lan = config::LANG;
 		//standart language is ukrainian

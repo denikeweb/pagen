@@ -1,5 +1,5 @@
 <?php
-class RandKey {
+abstract class RandKey {
 	const LN = 62;
 	const KEYC = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz0123456789";
 	private static function get_ctrl($key){
