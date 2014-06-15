@@ -1,5 +1,5 @@
 <?php
-class User {
+abstract class User {
 	const GUEST = 0;
 	const USER = 1;
 	const V_USER = 2;
