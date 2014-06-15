@@ -1,5 +1,5 @@
-<?php
-class index extends eController {
+
+class IndexController extends eController {
 	public function run (){
 		$this->printContent ();
 	}
@@ -19,7 +19,7 @@ class index extends eController {
 		$data ['content'] = Site::$Content;
 		
 		if (!config::DB){
-			$data ['title'] = 'PaGen - Home';
+			$data ['title'] = 'Home';
 			$data ['meta_d'] = 'PaGen';
 			$data ['meta_k'] = 'PaGen';
 			$data ['info'] = 'Denis Dragomirik © 2014';
@@ -29,4 +29,3 @@ class index extends eController {
 		$this->view ($data, $template);
 	}
 }
-?>

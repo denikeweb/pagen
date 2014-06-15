@@ -17,14 +17,6 @@ class IndexController extends eController {
 		$data ['meta_k'] = Site::$ThisPage['meta_k'];
 		$data ['info'] = Site::$ThisPage['info'];
 		$data ['content'] = Site::$Content;
-		
-		if (!config::DB){
-			$data ['title'] = 'Home';
-			$data ['meta_d'] = 'PaGen';
-			$data ['meta_k'] = 'PaGen';
-			$data ['info'] = 'Denis Dragomirik © 2014';
-			$data ['content'] = '<h1 class="h1">Home page</h1><span class="h1_after"></span><p>Pagen - the best framework.</p>';
-		}
 
 		$this->view ($data, $template);
 	}

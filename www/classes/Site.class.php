@@ -84,6 +84,7 @@ abstract class Site {
 				// replace title of this page from language array
 			}
 		}
+		print_r(self::$ThisPage);
 	}
 	
 	private static function getFromDB ($table, $page_id){
@@ -97,30 +98,8 @@ abstract class Site {
 	}
 	
 	public static function printPage () {
-		global $word;
-		$folder = config::TEMPLATE;
-		//our templates folder
-		self::$ThisPage['static'] = '0';
-		/*if (!config::DB) {
-			self::$ThisPage['static'] = '0';
-			//if database is not used our pages are not static
-			//we can use only controllers in our pages - you change 0 to 1 for using only static page or connect with database
-		}
-		//settings without database using*/
-
-		if (isset(self::$ThisPage['static'])) {
-			$is_static = self::$ThisPage['static'];
-		} elseif {
-			$is_static = -1;
-		}
-
-		if ($is_static != 0) {
-			if ($is_static == 1) {
-				$controller = 'IndexDBController';
-				// if DB route exist
-			} else {
-				$controller = 'IndexController';
-			}
+		if (self::$ThisPage['static'] == 1) {
+			$controller = 'IndexController';
 			include ("classes/$controller.php");
 			$a = new $controller();
 			$a->run();
