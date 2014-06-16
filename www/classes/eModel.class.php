@@ -34,7 +34,7 @@ abstract class eModel {
 	}
 	// setting associative array of condition for WHERE (field->value)
 	
-	public function addCondition($field, $value, $sign = '='){
+	public function addCond($field, $value, $sign = '='){
 		$field = addslashes($field);
 		$value = addslashes($value);
 		$sign = addslashes($sign);
@@ -176,7 +176,16 @@ abstract class eModel {
 	}
 
 	private function returnFields () {
-		return '*';
+		if (count($this->fields) == 0) {
+			return '*';
+		} else {
+			$_fields = array();
+			foreach ($this->fields as $item) {
+				$_fields = '`'.$item.'`';
+			}
+			$result = implode(',', $_fields);
+			return $result;
+		}
 	}
 
 	private function returnCondition () {
@@ -185,11 +194,11 @@ abstract class eModel {
 
 	private function returnTablename () {
 		if (is_array($this->table)) {
-			$tables = array ();
+			$_tables = array ();
 			foreach ($this->table as $i => $t) {
-				$tables [$i] = '`'.config::PREFIX.$t.'`';
+				$_tables [$i] = '`'.config::PREFIX.$t.'`';
 			}
-			 $result = implode(',', $tables);
+			$result = implode(',', $_tables);
 			return $result;
 		} else {
 			return '`'.config::PREFIX.$this->table.'`';
