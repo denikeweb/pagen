@@ -60,12 +60,16 @@ abstract class Site {
 
 		if (config::DB) {
 			$result = mysql_query("SELECT * FROM `".config::PREFIX."pages` WHERE `cpurl`='$mypage'");
-			if (mysql_num_rows($result) == 0) {
+			$is404 = mysql_num_rows($result) == 0;
+			if ($is404) {
 				$result = mysql_query("SELECT * FROM `".config::PREFIX."pages` WHERE `id`='0'");
 			}
 			//check page
 
 			self::$ThisPage = mysql_fetch_assoc($result);
+			if ($is404) {
+				self::$ThisPage ['static'] = -1;
+			}
 			//save data of rhis page in array
 
 			if (self::$ThisPage ['static'] == '1') {
@@ -84,7 +88,6 @@ abstract class Site {
 				// replace title of this page from language array
 			}
 		}
-		print_r(self::$ThisPage);
 	}
 	
 	private static function getFromDB ($table, $page_id){
@@ -99,52 +102,48 @@ abstract class Site {
 	
 	public static function printPage () {
 		if (self::$ThisPage['static'] == 1) {
-			$controller = 'IndexController';
-			include ("classes/$controller.php");
-			$a = new $controller();
-			$a->run();
+			self::defaultController ();
 			//if page is static load default page controller
 		} else {
 			define ('DIRSEP', DIRECTORY_SEPARATOR);
-			$c_pagen_path = dirname(dirname(__FILE__)).DIRSEP.'controllers'.DIRSEP;
-			//get path to coltrollers
-			$m_pagen_path = dirname(dirname(__FILE__)).DIRSEP.'models'.DIRSEP;
+			$c_pagen_path = dirname (dirname(__FILE__)).DIRSEP.'controllers'.DIRSEP;
+			//get path to controllers
+			$m_pagen_path = dirname (dirname(__FILE__)).DIRSEP.'models'.DIRSEP;
 			//get path to models
 			$pieces = Site::$urlArray;
-			$path = dirname(dirname(__FILE__)).DIRSEP;
+			$path = dirname (dirname(__FILE__)).DIRSEP;
 			// set site path
-			if (empty($pieces [0])) {
+			if (empty ($pieces [0])) {
 				unset ($pieces [0]);
 				$controller = 'index';
 			}
 			//unset empty array element
 			foreach ($pieces as $piece) {
 				$fullpath = $c_pagen_path.$piece;
-				if (is_dir($fullpath)) {
+				if (is_dir ($fullpath)) {
 					$c_pagen_path .= $piece.DIRSEP;
 					$m_pagen_path .= $piece.DIRSEP;
-					array_shift($pieces);
+					array_shift ($pieces);
 					continue;
 				}
-				if (is_file($fullpath.'.php')) {
+				if (is_file ($fullpath.'.php')) {
 					$controller = $piece;
-					array_shift($pieces);
+					array_shift ($pieces);
 					break;
 				}
 			}
 			//search untill getting file
-			if (empty($controller)) {
+			if (empty ($controller)) {
 				#$controller = 'index';
-				$file = $path.'404.php';
-				include ($file);
+				self::include404 ();
 				//if controller file not exists, send 404
 			} else {
-				if (is_array($pieces)) {
-					$action = array_shift($pieces);
+				if (is_array ($pieces)) {
+					$action = array_shift ($pieces);
 				} else {
 					$action = '';
 				}
-				if (empty($action) or $action == 'run') {
+				if (empty ($action) or $action == 'run') {
 					$action = 'run';
 				} else {
 					$action .= 'action_';
@@ -152,21 +151,29 @@ abstract class Site {
 				// get action, default method - run ()
 
 				$file = $c_pagen_path.$controller.'.php';
-				$m_pagen_path .= $controller.'.php';
+				$m_pagen_path .= 'm_'.$controller.'.php';
 				//create full model path
 				$args = $pieces;
 				include ($file);
-				$a = new $controller($m_pagen_path, $args, $path);
+				$a = new $controller ($m_pagen_path, $args, $path);
 				//construct controller
-				if (method_exists($a, $action)){
-					$a->$action();
+				if (method_exists ($a, $action)){
+					$a->$action ();
 				} else {
-					$file = $path.'404.php';
-					include ($file);
+					self::include404 ();
 					//if action not exists, send 404
 				}
 			}
 		}
+	}
+	private static function defaultController ($controller = 'IndexController') {
+		include ("classes/$controller.php");
+		$a = new $controller();
+		$a->run();
+	}
+	private static function include404 () {
+		$file = dirname(dirname(__FILE__)).DIRSEP.'404.php';
+		include ($file);
 	}
 }
 ?>

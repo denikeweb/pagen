@@ -56,8 +56,10 @@ echo '<br>';
 		
 		<section id="content">
 			<article>
-				<?php echo $data['content']; ?>
-				<?php echo $data['content2']; ?>
+				<pre>
+					<?php #echo $data['content']; ?>
+					<?php print_r ($data); ?>
+				</pre>
 			</article>
 		</section><!-- #content-->
 

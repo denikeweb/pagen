@@ -26,7 +26,7 @@ abstract class eController {
 		$this->content = array ();
 	}
 
-	protected function view ($data = array (), $template = 'index') {
+	protected function view ($data = array (), $template = 'index', $settings = array ()) {
 		global $word;
 		define ('DIRSEP', DIRECTORY_SEPARATOR);
 		$folder = config::TEMPLATE;
@@ -53,6 +53,8 @@ abstract class eController {
 		if (is_file($this->modelPath)) {
 			define ('DIRSEP', DIRECTORY_SEPARATOR);
 			$eModel = dirname(__FILE__).DIRSEP.'eModel.class.php';
+			$Validator = dirname(__FILE__).DIRSEP.'Validator.class.php';
+			include_once ($Validator);
 			include_once ($eModel);
 			include ($this->modelPath);
 		}

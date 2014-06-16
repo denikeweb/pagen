@@ -6,18 +6,21 @@ abstract class eModel {
 	*
 	*/
 	
-	public $fields = array ();         # array
-	public $condition = array ();      # assoc array
-	public $data = array ();           # assoc array
-	public $table = '';                # string
-	public $order = array('', '');     # array (2)
-	public $from = '';                 # integer/empty string
-	public $limit = '';                # integer/empty string
-	public $sql = '';                  # string
-	public $union = 'AND';             # string
-	public $assoc = true;              # boolean
+	private $fields = array ();         # array
+	private $condition = array ();      # assoc array
+	private $data = array ();           # assoc array
+	private $table = '';                # string
+	private $order = array('', '');     # array (2)
+	private $from = '';                 # integer/empty string
+	private $limit = '';                # integer/empty string
+	private $sql = '';                  # string
+	private $union = 'AND';             # string
+	private $assoc = true;              # boolean
 	
 	public function setFields($myFields){
+		foreach ($myFields as $p) {
+			$p = addslashes($p);
+		}
 		$this->fields = $myFields;
 	}
 	// setting array of table fields
@@ -33,6 +36,9 @@ abstract class eModel {
 	// setting union for condition
 	
 	public function setData($myData){
+		foreach ($myData as $p) {
+			$p = addslashes($p);
+		}
 		$this->data = $myData;
 	}
 	// setting associative array of data (field->value)

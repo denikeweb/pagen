@@ -1,5 +1,10 @@
 <?php
-class mtest_index extends eModel {
+class m_test_index extends eModel {
+	function __construct (){
+		$this->setTable('blog');
+	//	$this->setFields(['id', 'title', 'text']);
+	}
+
 	public function returnTitles () {
 		$data ['title'] = 'PaGen - iHome';
 		$data ['meta_d'] = 'iPaGen';
@@ -8,8 +13,13 @@ class mtest_index extends eModel {
 		$data ['content'] = '<h1 class="h1">iHome page</h1><span class="h1_after"></span><p>PaGen - the best framework.</p>';
 		return $data;
 	}
+
 	public function show () {
-		$this->setFields(['id', 'title', 'text']);
+		$this->readLast ();
+		return true;
+	}
+
+	public function add () {
 		return true;
 	}
 }

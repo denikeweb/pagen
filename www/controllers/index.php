@@ -1,4 +1,4 @@
-
+<?php
 class IndexController extends eController {
 	public function run (){
 		$this->printContent ();
@@ -29,3 +29,4 @@ class IndexController extends eController {
 		$this->view ($data, $template);
 	}
 }
+?>
