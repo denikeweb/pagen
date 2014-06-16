@@ -9,7 +9,7 @@ abstract class eModel {
 	private $fields = array ();         # array
 	private $condition = array ();      # assoc array
 	private $data = array ();           # assoc array
-	private $table = '';                # string
+	private $table = '';                # string || array
 	private $order = array('', '');     # array (2)
 	private $from = '';                 # integer/empty string
 	private $limit = '';                # integer/empty string
@@ -26,6 +26,10 @@ abstract class eModel {
 	// setting array of table fields
 	
 	public function setCondition($myCondition){
+		foreach ($myCondition as $k => $p) {
+			$k = addslashes($k);
+			$p = addslashes($p);
+		}
 		$this->condition = $myCondition;
 	}
 	// setting associative array of condition for WHERE (field->value)
@@ -94,8 +98,14 @@ abstract class eModel {
 	}
 	// set $data as first $fields row by $sql or $condition as $union
 	
-	public function readLast(){
-		
+	public function readLast($order = 'id'){
+		$this->returnTableExist ();
+		$all = $this->returnFields ();
+		$conditions = $this->returnCondition ();
+		$tablename = $this->returnTablename ();
+		echo $t = "SELECT $all FROM $tablename WHERE $conditions ORDER BY `$order` DESC LIMIT 1";
+		$query = mysql_query($t);
+		$this->returnResult ($query);
 	}
 	// set $data as last $fields row by $sql or $condition as $union
 	
@@ -139,5 +149,53 @@ abstract class eModel {
 	}
 	// extended relevant search ($titles x20, $metas x10, $content x1)
 	
+	private function returnResult ($query){
+		if ($this->assoc) {
+			$func = 'mysql_fetch_assoc';
+		} else {
+			$func = 'mysql_fetch_array';
+		}
+		if (mysql_num_rows($query) > 0) {
+			$this->data = $func($query);
+		}
+	}
+
+	private function returnTableExist () {
+		if (empty($this->table)) {
+			die ('Your tablename is not exist');
+		}
+	}
+
+	private function returnFields () {
+		return '*';
+	}
+
+	private function returnCondition () {
+		return 1;
+	}
+
+	private function returnTablename () {
+		$dump = var_dump($this->table);
+		echo '!!!!',$dump;
+		if (strpos($dump, 'array') > -1) {
+			$tables = array ();
+			foreach ($this->table as $i => $t) {
+				$tables [$i] = '`'.config::PREFIX.$t.'`';
+			}
+			 $result = implode(',', $tables);
+			return $result;
+		} else {
+			return '`'.config::PREFIX.$this->table.'`';
+		}
+	}
+
+	private function returnOrder () {
+		$order = '';
+		if (!empty($this->order [0]) and !empty($this->order [1])) {
+			$order = "ORDER BY `{$this->order [0]}` {$this->order [1]}";
+		}
+		return $order;
+	}
+
 }
 ?>

@@ -13,5 +13,8 @@ class test_index extends eController {
 		print_r($this->data);
 		$this->view ($this->data);
 	}
+	public function action_edit () {
+
+	}
 }
 ?>
