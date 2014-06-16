@@ -71,7 +71,7 @@ abstract class eModel {
 	}
 	// setting order
 	
-	public function setLimits($myFrom, $myLimit){
+	public function setLimits($myFrom, $myLimit = ''){
 		$this->from = $myFrom;
 		$this->limit = $myLimit;	
 	}
@@ -98,12 +98,25 @@ abstract class eModel {
 	// adding new record to $table by $data
 	
 	public function readById($id){
-		
+		$id = addslashes($id);
+		$this->returnTableExist ();
+		$all = $this->returnFields ();
+		$conditions = $this->returnCondition ();
+		$tablename = $this->returnTablename ();
+		$t = "SELECT $all FROM $tablename WHERE $conditions AND `id`='$id' LIMIT 1";
+		$query = mysql_query($t);
+		$this->returnResult ($query);		
 	}
 	// set $data as $fields row by this $id and $condition as $union
 	
-	public function readFirst(){
-		
+	public function readFirst($order = 'id'){
+		$this->returnTableExist ();
+		$all = $this->returnFields ();
+		$conditions = $this->returnCondition ();
+		$tablename = $this->returnTablename ();
+		$t = "SELECT $all FROM $tablename WHERE $conditions ORDER BY `$order` ASC LIMIT 1";
+		$query = mysql_query($t);
+		$this->returnResult ($query);
 	}
 	// set $data as first $fields row by $sql or $condition as $union
 	
@@ -112,19 +125,37 @@ abstract class eModel {
 		$all = $this->returnFields ();
 		$conditions = $this->returnCondition ();
 		$tablename = $this->returnTablename ();
-		echo $t = "SELECT $all FROM $tablename WHERE $conditions ORDER BY `$order` DESC LIMIT 1";
+		$t = "SELECT $all FROM $tablename WHERE $conditions ORDER BY `$order` DESC LIMIT 1";
 		$query = mysql_query($t);
 		$this->returnResult ($query);
 	}
 	// set $data as last $fields row by $sql or $condition as $union
 	
 	public function readBy($field, $value){
-		
+		$field = addslashes($field);
+		$value = addslashes($value);
+		$this->returnTableExist ();
+		$all = $this->returnFields ();
+		$conditions = $this->returnCondition ();
+		$tablename = $this->returnTablename ();
+		$limits = $this->returnLimits ();
+		$order = $this->returnOrder ();
+		$t = "SELECT $all FROM $tablename WHERE $conditions AND `$field`{$this->union}'$value' $order $limits";
+		$query = mysql_query($t);
+		$this->returnResult ($query);
 	}
 	// set $data as $fields array by this $field $union $value, $order, $from, $limit, $assoc
 	
 	public function read(){
-		
+		$this->returnTableExist ();
+		$all = $this->returnFields ();
+		$conditions = $this->returnCondition ();
+		$tablename = $this->returnTablename ();
+		$limits = $this->returnLimits ();
+		$order = $this->returnOrder ();
+		$t = "SELECT $all FROM $tablename WHERE $conditions $order $limits";
+		$query = mysql_query($t);
+		$this->returnResult ($query);
 	}
 	// set $data as $fields array by $sql or $condition as $union, $order, $from, $limit, $assoc
 	
@@ -164,8 +195,16 @@ abstract class eModel {
 		} else {
 			$func = 'mysql_fetch_array';
 		}
-		if (mysql_num_rows($query) > 0) {
-			$this->data = $func($query);
+		$nums = mysql_num_rows($query);
+		if ($nums > 0) {
+			if ($nums == 1) {
+				$this->data = $func($query);
+			} else {
+				$tmp_data = $func($query);
+				do {
+					array_push($this->data, $tmp_data);
+				} while ($tmp_data = $func($query));
+			}
 		}
 	}
 
@@ -181,7 +220,7 @@ abstract class eModel {
 		} else {
 			$_fields = array();
 			foreach ($this->fields as $item) {
-				$_fields = '`'.$item.'`';
+				array_push($_fields, '`'.$item.'`');
 			}
 			$result = implode(',', $_fields);
 			return $result;
@@ -189,7 +228,21 @@ abstract class eModel {
 	}
 
 	private function returnCondition () {
-		return 1;
+		if (empty($this->sql)) {
+			if (count($this->conditions) == 0) {
+				return 1;
+			} else {
+				$_conds = array();
+				foreach ($this->conditions as $field => $value) {
+					array_push($_conds, '`'.config::PREFIX.$field.'`'.$cond."'".$value."'");
+				}
+				$glue = ' '.$this->union.' ';
+				$result = implode($glue, $_conds);
+				return $result;
+			}
+		} else {
+			return $this->sql;
+		}
 	}
 
 	private function returnTablename () {
@@ -211,6 +264,17 @@ abstract class eModel {
 			$order = "ORDER BY `{$this->order [0]}` {$this->order [1]}";
 		}
 		return $order;
+	}
+
+	private function returnLimits () {
+		$limits = '';
+		if (!empty($this->from)) {
+			$limits = 'LIMIT '.$this->from;
+			if (!empty($this->limit)){
+				$limits .= ','.$this->limit;
+			}
+		}
+		return $limits;
 	}
 
 }

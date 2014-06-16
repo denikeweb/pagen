@@ -16,7 +16,7 @@ class m_test_index extends eModel {
 	}
 
 	public function show () {
-		$this->readLast ();
+		$this->read ();
 		return true;
 	}
 
