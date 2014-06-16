@@ -10,7 +10,7 @@ class m_test_index extends eModel {
 	}
 
 	function __construct (){
-		$this->setTable(array ('blog'));
+		$this->setTable('blog');
 		$this->setFields(array ('id', 'title', 'text'));
 		$this->setOrder('id', 'DESC');
 	}

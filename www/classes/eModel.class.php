@@ -25,15 +25,24 @@ abstract class eModel {
 	}
 	// setting array of table fields
 	
-	public function setCondition($myCondition){
-		foreach ($myCondition as $k => $p) {
+	public function setConditions($myConditions){
+		foreach ($myConditions as $k => $p) {
 			$k = addslashes($k);
 			$p = addslashes($p);
 		}
-		$this->condition = $myCondition;
+		$this->condition = $myConditions;
 	}
 	// setting associative array of condition for WHERE (field->value)
 	
+	public function addCondition($field, $value, $sign = '='){
+		$field = addslashes($field);
+		$value = addslashes($value);
+		$sign = addslashes($sign);
+		$this->condition [$field] = $value;
+		$this->condition [$field] [0] = $sign;
+	}
+	//add new condition to associative array of condition for WHERE
+
 	public function setUnion($myUnion){
 		$this->union = $myUnion;
 	}
@@ -175,9 +184,7 @@ abstract class eModel {
 	}
 
 	private function returnTablename () {
-		$dump = var_dump($this->table);
-		echo '!!!!',$dump;
-		if (strpos($dump, 'array') > -1) {
+		if (is_array($this->table)) {
 			$tables = array ();
 			foreach ($this->table as $i => $t) {
 				$tables [$i] = '`'.config::PREFIX.$t.'`';
