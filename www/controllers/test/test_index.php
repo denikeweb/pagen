@@ -7,10 +7,12 @@ class test_index extends eController {
 		$this->data = array ();
 		$this->data = $this->m->returnTitles ();
 
-		$this->m->show ();
+		//$this->m->show ();
+		//$this->data ['content'] = $this->m->getData ();
+		//print_r($this->data);
 
-		$this->data ['content'] = $this->m->getData ();
-		print_r($this->data);
+		$this->m->add ();
+
 		$this->view ($this->data);
 	}
 	public function action_edit () {

@@ -11,16 +11,17 @@ class m_test_index extends eModel {
 
 	function __construct (){
 		$this->setTable('blog');
-		$this->setFields(array ('id', 'title', 'text'));
-		$this->setOrder('id', 'DESC');
 	}
 
 	public function show () {
+		$this->setFields(array ('id', 'title', 'text'));
+		$this->setOrder('id', 'DESC');
 		$this->read ();
 		return true;
 	}
 
 	public function add () {
+		$this->update();
 		return true;
 	}
 }
