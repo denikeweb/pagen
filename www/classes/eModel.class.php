@@ -39,15 +39,6 @@ abstract class eModel {
 	}
 	// setting array of table fields
 	
-	/*public function setConditions($myConditions){
-		foreach ($myConditions as $k => $p) {
-			$k = mysql_real_escape_string($k);
-			$p = mysql_real_escape_string($p);
-		}
-		$this->condition = $myConditions;
-	}
-	// setting associative array of condition for WHERE (field->value)*/
-	
 	public function addCond($field, $value, $sign = '='){
 		$field = mysql_real_escape_string($field);
 		$value = mysql_real_escape_string($value);
