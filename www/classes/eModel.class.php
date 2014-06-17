@@ -203,7 +203,7 @@ abstract class eModel {
 	// update record by $data and $sql or $condition as $union
 	
 	public function deleteById($id){
-		
+		//DELETE FROM `awm_001`.`pagen_blog` WHERE `pagen_blog`.`id` = 5
 	}
 	// delete record by this $id and $condition as $union
 	
