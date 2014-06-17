@@ -58,13 +58,18 @@ abstract class eModel {
 	//add new condition to associative array of condition for WHERE
 
 	public function setUnion($myUnion){
+		$myUnion = mysql_real_escape_string($myUnion);
+		if ($myUnion == 0 or strtolower($myUnion) == 'or') {
+			$myUnion = 'OR';
+		} else {
+			$myUnion = 'AND';
+		}
 		$this->union = $myUnion;
 	}
-	// setting union for condition
+	// setting union for condition AND [1] | OR [0]
 	
 	public function setData($myData){
-		foreach ($myData as $k => &$p) {
-			$k = mysql_real_escape_string($k);
+		foreach ($myData as &$p) {
 			$p = mysql_real_escape_string($p);
 		}
 		$this->data = $myData;
@@ -78,14 +83,19 @@ abstract class eModel {
 	
 	public function setTable($myTable){
 		$this->table = $myTable;
-		//!!!!!!!!
 	}
-	// setting tablename
+	// setting tablename or array of tablenames
 	
 	public function setOrder($myField, $myType){
+		$myField = mysql_real_escape_string($myField);
+		if ($myType == 0 or strtolower($myType) == 'desc') {
+			$myType = 'DESC';
+		} else {
+			$myType = 'ASC';
+		}
 		$this->order = array($myField, $myType);
 	}
-	// setting order
+	// setting order ASC [1] | DESC [0]
 	
 	public function setLimits($myFrom, $myLimit = ''){
 		$this->from = (int) $myFrom;
@@ -96,10 +106,10 @@ abstract class eModel {
 	public function setSQL($mySQL){
 		$this->sql = $mySQL;
 	}
-	// setting SQL-query
+	// setting SQL-query [no escaping]
 	
 	public function setResultType($myAssoc){
-		$this->assoc = $myAssoc;
+		$this->assoc = (boolean) $myAssoc;
 	}
 	// setting type of result array
 	
@@ -122,7 +132,7 @@ abstract class eModel {
 		$inputs = $this->returnInputs ();
 		$fields = $inputs [0];
 		$values = $inputs [1];
-		echo $t = "INSERT INTO $tablename ($fields) VALUES ($values)";
+		$t = "INSERT INTO $tablename ($fields) VALUES ($values)";
 		$query = mysql_query($t);
 		return $query;
 	}
@@ -286,12 +296,12 @@ abstract class eModel {
 		if (is_array($this->table)) {
 			$_tables = array ();
 			foreach ($this->table as $i => $t) {
-				$_tables [$i] = '`'.config::PREFIX.$t.'`';
+				$_tables [$i] = '`'.config::PREFIX.mysql_real_escape_string($t).'`';
 			}
 			$result = implode(',', $_tables);
 			return $result;
 		} else {
-			return '`'.config::PREFIX.$this->table.'`';
+			return '`'.config::PREFIX.mysql_real_escape_string($this->table).'`';
 		}
 	}
 
