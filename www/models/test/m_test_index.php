@@ -16,11 +16,20 @@ class m_test_index extends eModel {
 	public function show () {
 		$this->setFields(array ('id', 'title', 'text'));
 		$this->setOrder('id', 'DESC');
-		$this->read ();
+		$this->readLast ();
+		return true;
+	}
+
+	public function edit () {
+		$this->addCond('id', 2);
+		$this->setData(array ('title' => 'My Article/ for Pagen'));
+		$this->update();
 		return true;
 	}
 
 	public function add () {
+		$this->addCond('id', 2);
+		$this->setData(array ('title' => 'My Article/ for Pagen'));
 		$this->update();
 		return true;
 	}

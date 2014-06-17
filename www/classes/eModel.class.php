@@ -17,6 +17,20 @@ abstract class eModel {
 	private $union = 'AND';             # string
 	private $assoc = true;              # boolean
 	
+	public function setDefault(){
+		#$this->table = '';           
+		$this->fields = array ();    
+		$this->condition = array (); 
+		$this->data = array ();      
+		$this->order = array('', '');
+		$this->from = '';            
+		$this->limit = '';           
+		$this->sql = '';             
+		$this->union = 'AND';        
+		$this->assoc = true;         
+	}
+	//set default options
+	
 	public function setFields($myFields){
 		foreach ($myFields as $p) {
 			$p = addslashes($p);
@@ -25,21 +39,21 @@ abstract class eModel {
 	}
 	// setting array of table fields
 	
-	public function setConditions($myConditions){
+	/*public function setConditions($myConditions){
 		foreach ($myConditions as $k => $p) {
 			$k = addslashes($k);
 			$p = addslashes($p);
 		}
 		$this->condition = $myConditions;
 	}
-	// setting associative array of condition for WHERE (field->value)
+	// setting associative array of condition for WHERE (field->value)*/
 	
 	public function addCond($field, $value, $sign = '='){
 		$field = addslashes($field);
 		$value = addslashes($value);
 		$sign = addslashes($sign);
-		$this->condition [$field] = $value;
-		$this->condition [$field] [0] = $sign;
+		$this->condition [$field] [0] = $value;
+		$this->condition [$field] [1] = $sign;
 	}
 	//add new condition to associative array of condition for WHERE
 
@@ -49,7 +63,8 @@ abstract class eModel {
 	// setting union for condition
 	
 	public function setData($myData){
-		foreach ($myData as $p) {
+		foreach ($myData as $k => $p) {
+			$k = addslashes($k);
 			$p = addslashes($p);
 		}
 		$this->data = $myData;
@@ -160,7 +175,13 @@ abstract class eModel {
 	// set $data as $fields array by $sql or $condition as $union, $order, $from, $limit, $assoc
 	
 	public function update(){
-		
+		$this->returnTableExist ();
+		$tablename = $this->returnTablename ();
+		$conditions = $this->returnCondition ();
+		$updates = $this->returnUpdates ();
+		$t = "UPDATE $tablename SET $updates WHERE $conditions";
+		$query = mysql_query($t);
+		return $query;
 	}
 	// update record by $data and $sql or $condition as $union
 	
@@ -229,12 +250,12 @@ abstract class eModel {
 
 	private function returnCondition () {
 		if (empty($this->sql)) {
-			if (count($this->conditions) == 0) {
+			if (count($this->condition) == 0) {
 				return 1;
 			} else {
 				$_conds = array();
-				foreach ($this->conditions as $field => $value) {
-					array_push($_conds, '`'.config::PREFIX.$field.'`'.$cond."'".$value."'");
+				foreach ($this->condition as $field => $value) {
+					array_push($_conds, '`'.$field.'`'.$value [1]."'".$value [0]."'");
 				}
 				$glue = ' '.$this->union.' ';
 				$result = implode($glue, $_conds);
@@ -276,6 +297,16 @@ abstract class eModel {
 		}
 		return $limits;
 	}
+
+	private function returnUpdates () {
+		$_updates = array ();
+		foreach ($this->data as $field => $value) {
+			array_push($_updates, '`'.$field."`='".$value."'");
+		}
+		$result = implode(',', $_updates);
+		return $result;
+	}
+
 
 }
 ?>
