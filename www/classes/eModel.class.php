@@ -32,8 +32,8 @@ abstract class eModel {
 	//set default options
 	
 	public function setFields($myFields){
-		foreach ($myFields as $p) {
-			$p = addslashes($p);
+		foreach ($myFields as &$p) {
+			$p = mysql_real_escape_string($p);
 		}
 		$this->fields = $myFields;
 	}
@@ -41,17 +41,17 @@ abstract class eModel {
 	
 	/*public function setConditions($myConditions){
 		foreach ($myConditions as $k => $p) {
-			$k = addslashes($k);
-			$p = addslashes($p);
+			$k = mysql_real_escape_string($k);
+			$p = mysql_real_escape_string($p);
 		}
 		$this->condition = $myConditions;
 	}
 	// setting associative array of condition for WHERE (field->value)*/
 	
 	public function addCond($field, $value, $sign = '='){
-		$field = addslashes($field);
-		$value = addslashes($value);
-		$sign = addslashes($sign);
+		$field = mysql_real_escape_string($field);
+		$value = mysql_real_escape_string($value);
+		$sign = mysql_real_escape_string($sign);
 		$this->condition [$field] [0] = $value;
 		$this->condition [$field] [1] = $sign;
 	}
@@ -63,9 +63,9 @@ abstract class eModel {
 	// setting union for condition
 	
 	public function setData($myData){
-		foreach ($myData as $k => $p) {
-			$k = addslashes($k);
-			$p = addslashes($p);
+		foreach ($myData as $k => &$p) {
+			$k = mysql_real_escape_string($k);
+			$p = mysql_real_escape_string($p);
 		}
 		$this->data = $myData;
 	}
@@ -78,6 +78,7 @@ abstract class eModel {
 	
 	public function setTable($myTable){
 		$this->table = $myTable;
+		//!!!!!!!!
 	}
 	// setting tablename
 	
@@ -87,8 +88,8 @@ abstract class eModel {
 	// setting order
 	
 	public function setLimits($myFrom, $myLimit = ''){
-		$this->from = $myFrom;
-		$this->limit = $myLimit;	
+		$this->from = (int) $myFrom;
+		$this->limit = (int) $myLimit;	
 	}
 	// setting limits
 	
@@ -103,12 +104,27 @@ abstract class eModel {
 	// setting type of result array
 	
 	public function getCount(){
-	
+		$this->returnTableExist ();
+		$conditions = $this->returnCondition ();
+		$tablename = $this->returnTablename ();
+		$limits = $this->returnLimits ();
+		$order = $this->returnOrder ();
+		$t = "SELECT COUNT(*) FROM $tablename WHERE $conditions $order $limits";
+		$query = mysql_query($t);
+		$result = mysql_fetch_array($query);
+		return $result [0];
 	}
 	// return count of records by $sql or $condition as $union
 	
 	public function create(){
-		
+		$this->returnTableExist ();
+		$tablename = $this->returnTablename ();
+		$inputs = $this->returnInputs ();
+		$fields = $inputs [0];
+		$values = $inputs [1];
+		echo $t = "INSERT INTO $tablename ($fields) VALUES ($values)";
+		$query = mysql_query($t);
+		return $query;
 	}
 	// adding new record to $table by $data
 	
@@ -301,12 +317,23 @@ abstract class eModel {
 	private function returnUpdates () {
 		$_updates = array ();
 		foreach ($this->data as $field => $value) {
-			array_push($_updates, '`'.$field."`='".$value."'");
+			array_push($_updates, '`'.mysql_real_escape_string($field)."`='".$value."'");
 		}
 		$result = implode(',', $_updates);
 		return $result;
 	}
 
+	private function returnInputs () {
+		$_fields = array ();
+		$_values = array ();
+		foreach ($this->data as $field => $value) {
+			array_push($_fields, '`'.mysql_real_escape_string($field).'`');
+			array_push($_values, "'".$value."'");
+		}
+		$result [0] = implode(',', $_fields);
+		$result [1] = implode(',', $_values);
+		return $result;
+	}
 
 }
 ?>

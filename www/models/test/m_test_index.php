@@ -20,18 +20,22 @@ class m_test_index extends eModel {
 		return true;
 	}
 
+	public function count () {
+		//$this->setFields(array ('id', 'title', 'text'));
+		//$this->setOrder('id', 'DESC');
+		return $this->getCount ();
+		
+	}
+
 	public function edit () {
 		$this->addCond('id', 2);
 		$this->setData(array ('title' => 'My Article/ for Pagen'));
-		$this->update();
-		return true;
+		return $this->update();
 	}
 
 	public function add () {
-		$this->addCond('id', 2);
-		$this->setData(array ('title' => 'My Article/ for Pagen'));
-		$this->update();
-		return true;
+		$this->setData(array ('title' => "Add's -> ".mt_rand(0,50), 'text' => "Ha! It's mine text"));
+		return $this->create ();
 	}
 }
 ?>
