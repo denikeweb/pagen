@@ -17,6 +17,15 @@ abstract class eModel {
 	private $union = 'AND';             # string
 	private $assoc = true;              # boolean
 	
+	public function __toString() {
+		echo $result = current ($this->getData ()).'';
+		return $result;
+	}
+	
+	public function __invoke () {
+		print_r($this->getData ());
+	}
+	
 	public function setDefault(){
 		#$this->table = '';           
 		$this->fields = array ();    
@@ -30,7 +39,7 @@ abstract class eModel {
 		$this->assoc = true;         
 	}
 	//set default options
-	
+
 	public function setFields($myFields){
 		foreach ($myFields as &$p) {
 			$p = mysql_real_escape_string($p);
