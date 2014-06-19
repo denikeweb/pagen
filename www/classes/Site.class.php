@@ -28,7 +28,7 @@ abstract class Site {
 		//choose language if isset cookie
 		
 		if (config::DB) {
-			$query_language = mysqli_query("SELECT `$lang`, `id` FROM `".config::PREFIX."titles` WHERE 1");
+			$query_language = mysqli_real_query("SELECT `$lang`, `id` FROM `".config::PREFIX."titles` WHERE 1");
 			$lang_row = mysqli_fetch_assoc($query_language);
 			do {
 				$lang_index = $lang_row ['id'];

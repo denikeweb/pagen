@@ -1,17 +1,15 @@
 <?php
-class DataBase{
+class DataBase extends mysqli{
 	public static function connect () {
 		if (config::DB) {
-			global $mysqli;
-			$mysqli = new mysqli (config::DB_SERVER,config::DB_USER,config::DB_PASS,config::DB_NAME);
-			$mysqli->query ("SET NAMES 'utf8'");
-			$mysqli->query ("SET CHARACTER SET 'utf8'");
+			mysqli_connect (config::DB_SERVER,config::DB_USER,config::DB_PASS,config::DB_NAME);
+			#mysqli_query ("SET NAMES 'utf8'");
+			#mysqli_query ("SET CHARACTER SET 'utf8'");
 		}
 	}
 	public static function disconnect () {
 		if (config::DB) {
-			global $mysqli;
-			$mysqli->close ();
+			mysqli_close ();
 		}
 	}
 }
