@@ -24,8 +24,8 @@ abstract class User {
 		if (config::DB) {
 			if (!empty($_SESSION['id'])) {
 				$id = $_SESSION['id'];
-				$user_query = mysql_query("SELECT `id`, `login`, `email`, `rights` FROM `".config::PREFIX."users` WHERE `id`='$id'");
-				self::$userInfo = mysql_fetch_assoc($user_query);
+				$user_query = mysqli__query("SELECT `id`, `login`, `email`, `rights` FROM `".config::PREFIX."users` WHERE `id`='$id'");
+				self::$userInfo = mysqli__fetch_assoc($user_query);
 			}
 			//create array with user information
 		}

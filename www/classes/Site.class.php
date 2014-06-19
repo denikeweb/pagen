@@ -28,12 +28,12 @@ abstract class Site {
 		//choose language if isset cookie
 		
 		if (config::DB) {
-			$query_language = mysql_query("SELECT `$lang`, `id` FROM `".config::PREFIX."titles` WHERE 1");
-			$lang_row = mysql_fetch_assoc($query_language);
+			$query_language = mysqli_query("SELECT `$lang`, `id` FROM `".config::PREFIX."titles` WHERE 1");
+			$lang_row = mysqli_fetch_assoc($query_language);
 			do {
 				$lang_index = $lang_row ['id'];
 				$word [$lang_index] = $lang_row [$lang];
-			} while ($lang_row = mysql_fetch_assoc($query_language));
+			} while ($lang_row = mysqli_fetch_assoc($query_language));
 			//create array of language words
 		}
 		
@@ -59,14 +59,14 @@ abstract class Site {
 		//user-friendly URL
 
 		if (config::DB) {
-			$result = mysql_query("SELECT * FROM `".config::PREFIX."pages` WHERE `cpurl`='$mypage'");
-			$is404 = mysql_num_rows($result) == 0;
+			$result = mysqli_query("SELECT * FROM `".config::PREFIX."pages` WHERE `cpurl`='$mypage'");
+			$is404 = mysqli_num_rows($result) == 0;
 			if ($is404) {
-				$result = mysql_query("SELECT * FROM `".config::PREFIX."pages` WHERE `id`='0'");
+				$result = mysqli_query("SELECT * FROM `".config::PREFIX."pages` WHERE `id`='0'");
 			}
 			//check page
 
-			self::$ThisPage = mysql_fetch_assoc($result);
+			self::$ThisPage = mysqli_fetch_assoc($result);
 			if ($is404) {
 				self::$ThisPage ['static'] = -1;
 			}
@@ -92,11 +92,11 @@ abstract class Site {
 	
 	private static function getFromDB ($table, $page_id){
 		$lang_tag = self::$Lang;
-		$result = mysql_query("SELECT `$lang_tag` FROM `".config::PREFIX."$table` WHERE `id`='$page_id'");
-		if (mysql_num_rows($result) == 0) {
-			$result = mysql_query("SELECT `$lang_tag` FROM `".config::PREFIX."$table` WHERE `id`='0'");
+		$result = mysqli_query("SELECT `$lang_tag` FROM `".config::PREFIX."$table` WHERE `id`='$page_id'");
+		if (mysqli_num_rows($result) == 0) {
+			$result = mysqli_query("SELECT `$lang_tag` FROM `".config::PREFIX."$table` WHERE `id`='0'");
 		}
-		$my_row = mysql_fetch_assoc($result);
+		$my_row = mysqli_fetch_assoc($result);
 		return $my_row [$lang_tag];
 	}
 	
