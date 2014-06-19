@@ -7,6 +7,7 @@ abstract class Site {
 	
 	public static function setupLanguage (){
 		global $word;
+		global $mysqli;
 		$lang = config::LANG;
 		if (isset($_GET ['lang'])) { //if cookie is not showed
 			setcookie("lang", $_GET['lang'], time() + 2592000); //set language id
@@ -28,12 +29,12 @@ abstract class Site {
 		//choose language if isset cookie
 		
 		if (config::DB) {
-			$query_language = mysqli_real_query("SELECT `$lang`, `id` FROM `".config::PREFIX."titles` WHERE 1");
-			$lang_row = mysqli_fetch_assoc($query_language);
+			$query_lang = $mysqli->query("SELECT `$lang`, `id` FROM `".config::PREFIX."titles` WHERE 1");
+			$lang_row = $query_lang->fetch_assoc();
 			do {
 				$lang_index = $lang_row ['id'];
 				$word [$lang_index] = $lang_row [$lang];
-			} while ($lang_row = mysqli_fetch_assoc($query_language));
+			} while ($lang_row = $query_lang->fetch_assoc());
 			//create array of language words
 		}
 		
@@ -42,6 +43,7 @@ abstract class Site {
 	
 	public static function getPage (){
 		global $word;
+		global $mysqli;
 		$thisUrl = '/';
 		if (isset($_GET ['page'])) {
 			if (Validator::urlname($_GET ['page'])) {
@@ -59,14 +61,14 @@ abstract class Site {
 		//user-friendly URL
 
 		if (config::DB) {
-			$result = mysqli_query("SELECT * FROM `".config::PREFIX."pages` WHERE `cpurl`='$mypage'");
-			$is404 = mysqli_num_rows($result) == 0;
+			$result = $mysqli->query("SELECT * FROM `".config::PREFIX."pages` WHERE `cpurl`='$mypage'");
+			$is404 = $result->num_rows == 0;
 			if ($is404) {
-				$result = mysqli_query("SELECT * FROM `".config::PREFIX."pages` WHERE `id`='0'");
+				$result = $mysqli->query("SELECT * FROM `".config::PREFIX."pages` WHERE `id`='0'");
 			}
 			//check page
 
-			self::$ThisPage = mysqli_fetch_assoc($result);
+			self::$ThisPage = $result->fetch_assoc();
 			if ($is404) {
 				self::$ThisPage ['static'] = -1;
 			}
@@ -91,12 +93,13 @@ abstract class Site {
 	}
 	
 	private static function getFromDB ($table, $page_id){
+		global $mysqli;
 		$lang_tag = self::$Lang;
-		$result = mysqli_query("SELECT `$lang_tag` FROM `".config::PREFIX."$table` WHERE `id`='$page_id'");
-		if (mysqli_num_rows($result) == 0) {
-			$result = mysqli_query("SELECT `$lang_tag` FROM `".config::PREFIX."$table` WHERE `id`='0'");
+		$result = $mysqli->query("SELECT `$lang_tag` FROM `".config::PREFIX."$table` WHERE `id`='$page_id'");
+		if ($result->num_rows == 0) {
+			$result = $mysqli->query("SELECT `$lang_tag` FROM `".config::PREFIX."$table` WHERE `id`='0'");
 		}
-		$my_row = mysqli_fetch_assoc($result);
+		$my_row = $result->fetch_assoc();
 		return $my_row [$lang_tag];
 	}
 	

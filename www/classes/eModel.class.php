@@ -16,6 +16,15 @@ abstract class eModel {
 	private $sql = '';                  # string
 	private $union = 'AND';             # string
 	private $assoc = true;              # boolean
+	private $mysqli = '';              # boolean
+
+	function __construct ($table = ''){
+		global $mysqli;
+		$this->mysqli = $mysqli;
+		if (!empty($table)) {
+			$this->setTable($table);
+		}
+	}
 	
 	public function setDefault(){
 		#$this->table = '';           
@@ -33,23 +42,23 @@ abstract class eModel {
 
 	public function setFields($myFields){
 		foreach ($myFields as &$p) {
-			$p = mysqli_i_real_real_escape_string($p);
+			$p = $this->mysqli->real_escape_string ($p);
 		}
 		$this->fields = $myFields;
 	}
 	// setting array of table fields
 	
 	public function addCond($field, $value, $sign = '='){
-		$field = mysqli_i_real_real_escape_string($field);
-		$value = mysqli_i_real_real_escape_string($value);
-		$sign = mysqli_i_real_real_escape_string($sign);
+		$field = $this->mysqli->real_escape_string ($field);
+		$value = $this->mysqli->real_escape_string ($value);
+		$sign = $this->mysqli->real_escape_string ($sign);
 		$this->condition [$field] [0] = $value;
 		$this->condition [$field] [1] = $sign;
 	}
 	//add new condition to associative array of condition for WHERE
 
 	public function setUnion($myUnion){
-		$myUnion = mysqli_i_real_real_escape_string($myUnion);
+		$myUnion = $this->mysqli->real_escape_string ($myUnion);
 		if ($myUnion == 0 or strtolower($myUnion) == 'or') {
 			$myUnion = 'OR';
 		} else {
@@ -61,7 +70,7 @@ abstract class eModel {
 	
 	public function setData($myData){
 		foreach ($myData as &$p) {
-			$p = $mysqli->real_escape_string($p);
+			$p = $this->mysqli->real_escape_string ($p);
 		}
 		$this->data = $myData;
 	}
@@ -78,7 +87,7 @@ abstract class eModel {
 	// setting tablename or array of tablenames
 	
 	public function setOrder($myField, $myType){
-		$myField = mysqli_i_real_real_escape_string($myField);
+		$myField = $this->mysqli->real_escape_string ($myField);
 		if ($myType == 0 or strtolower($myType) == 'desc') {
 			$myType = 'DESC';
 		} else {
@@ -94,8 +103,8 @@ abstract class eModel {
 	}
 	// setting limits
 	
-	public function setSQL($mysqli_){
-		$this->sql = $mysqli_;
+	public function setSQL($sqli){
+		$this->sql = $sql;
 	}
 	// setting SQL-query [no escaping]
 	
@@ -111,8 +120,8 @@ abstract class eModel {
 		$limits = $this->returnLimits ();
 		$order = $this->returnOrder ();
 		$t = "SELECT COUNT(*) FROM $tablename WHERE $conditions $order $limits";
-		$query = mysqli_i_query($t);
-		$result = mysqli_i_fetch_array($query);
+		$query = $this->mysqli->query ($t);
+		$result = $query->fetch_assoc ();
 		return $result [0];
 	}
 	// return count of records by $sql or $condition as $union
@@ -124,7 +133,7 @@ abstract class eModel {
 		$fields = $inputs [0];
 		$values = $inputs [1];
 		$t = "INSERT INTO $tablename ($fields) VALUES ($values)";
-		$query = mysqli_i_query($t);
+		$query = $this->mysqli->query ($t);
 		return $query;
 	}
 	// adding new record to $table by $data
@@ -136,7 +145,7 @@ abstract class eModel {
 		$conditions = $this->returnCondition ();
 		$tablename = $this->returnTablename ();
 		$t = "SELECT $all FROM $tablename WHERE $conditions AND `id`='$id' LIMIT 1";
-		$query = mysqli_i_query($t);
+		$query = $this->mysqli->query ($t);
 		$this->returnResult ($query);		
 	}
 	// set $data as $fields row by this $id and $condition as $union
@@ -147,7 +156,7 @@ abstract class eModel {
 		$conditions = $this->returnCondition ();
 		$tablename = $this->returnTablename ();
 		$t = "SELECT $all FROM $tablename WHERE $conditions ORDER BY `$order` ASC LIMIT 1";
-		$query = mysqli_i_query($t);
+		$query = $this->mysqli->query ($t);
 		$this->returnResult ($query);
 	}
 	// set $data as first $fields row by $sql or $condition as $union
@@ -158,7 +167,7 @@ abstract class eModel {
 		$conditions = $this->returnCondition ();
 		$tablename = $this->returnTablename ();
 		$t = "SELECT $all FROM $tablename WHERE $conditions ORDER BY `$order` DESC LIMIT 1";
-		$query = mysqli_i_query($t);
+		$query = $this->mysqli->query ($t);
 		$this->returnResult ($query);
 	}
 	// set $data as last $fields row by $sql or $condition as $union
@@ -173,7 +182,7 @@ abstract class eModel {
 		$limits = $this->returnLimits ();
 		$order = $this->returnOrder ();
 		$t = "SELECT $all FROM $tablename WHERE $conditions AND `$field`{$this->union}'$value' $order $limits";
-		$query = mysqli_i_query($t);
+		$query = $this->mysqli->query ($t);
 		$this->returnResult ($query);
 	}
 	// set $data as $fields array by this $field $union $value, $order, $from, $limit, $assoc
@@ -186,7 +195,7 @@ abstract class eModel {
 		$limits = $this->returnLimits ();
 		$order = $this->returnOrder ();
 		$t = "SELECT $all FROM $tablename WHERE $conditions $order $limits";
-		$query = mysqli_i_query($t);
+		$query = $this->mysqli->query ($t);
 		$this->returnResult ($query);
 	}
 	// set $data as $fields array by $sql or $condition as $union, $order, $from, $limit, $assoc
@@ -197,7 +206,7 @@ abstract class eModel {
 		$conditions = $this->returnCondition ();
 		$updates = $this->returnUpdates ();
 		$t = "UPDATE $tablename SET $updates WHERE $conditions";
-		$query = mysqli_i_query($t);
+		$query = $this->mysqli->query ($t);
 		return $query;
 	}
 	// update record by $data and $sql or $condition as $union
@@ -229,19 +238,19 @@ abstract class eModel {
 	
 	private function returnResult ($query){
 		if ($this->assoc) {
-			$func = 'mysqli_i_fetch_assoc';
+			$func = 'fetch_assoc';
 		} else {
-			$func = 'mysqli_i_fetch_array';
+			$func = 'fetch_array';
 		}
-		$nums = mysqli_i_num_rows($query);
+		$nums = $query->num_rows;
 		if ($nums > 0) {
 			if ($nums == 1) {
-				$this->data = $func($query);
+				$this->data = $query->$func ();
 			} else {
-				$tmp_data = $func($query);
+				$tmp_data = $query->$func ();
 				do {
 					array_push($this->data, $tmp_data);
-				} while ($tmp_data = $func($query));
+				} while ($tmp_data = $query->$func ());
 			}
 		}
 	}
@@ -287,12 +296,12 @@ abstract class eModel {
 		if (is_array($this->table)) {
 			$_tables = array ();
 			foreach ($this->table as $i => $t) {
-				$_tables [$i] = '`'.config::PREFIX.mysqli_i_real_real_escape_string($t).'`';
+				$_tables [$i] = '`'.config::PREFIX.$this->mysqli->real_escape_string ($t).'`';
 			}
 			$result = implode(',', $_tables);
 			return $result;
 		} else {
-			return '`'.config::PREFIX.mysqli_i_real_real_escape_string($this->table).'`';
+			return '`'.config::PREFIX.$this->mysqli->real_escape_string ($this->table).'`';
 		}
 	}
 
@@ -318,7 +327,7 @@ abstract class eModel {
 	private function returnUpdates () {
 		$_updates = array ();
 		foreach ($this->data as $field => $value) {
-			array_push($_updates, '`'.mysqli_i_real_real_escape_string($field)."`='".$value."'");
+			array_push($_updates, '`'.$this->mysqli->real_escape_string ($field)."`='".$value."'");
 		}
 		$result = implode(',', $_updates);
 		return $result;
@@ -328,7 +337,7 @@ abstract class eModel {
 		$_fields = array ();
 		$_values = array ();
 		foreach ($this->data as $field => $value) {
-			array_push($_fields, '`'.mysqli_i_real_real_escape_string($field).'`');
+			array_push($_fields, '`'.$this->mysqli->real_escape_string ($field).'`');
 			array_push($_values, "'".$value."'");
 		}
 		$result [0] = implode(',', $_fields);

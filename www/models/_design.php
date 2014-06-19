@@ -3,10 +3,11 @@ class _design {
 	public function createMenu () {
 		if (config::DB) {
 			global $word;
+			global $mysqli;
 			$user_prioritet = User::$userInfo ['rights'] + 1;
 			$menu = array ();
-			$menu_query = mysql_query ("SELECT * FROM `".config::PREFIX."pages` WHERE `show` <= '$user_prioritet' AND `show`!='0' ORDER BY `hor_menu` ASC");
-			$menu_row = mysql_fetch_assoc ($menu_query);
+			$menu_query = $mysqli->query ("SELECT * FROM `".config::PREFIX."pages` WHERE `show` <= '$user_prioritet' AND `show`!='0' ORDER BY `hor_menu` ASC");
+			$menu_row = $menu_query->fetch_assoc ();
 			$i = 0;
 			do {
 				$title_index = $menu_row ['title'];
@@ -20,7 +21,7 @@ class _design {
 				$menu [$i] ['cpurl'] = $menu_row ['cpurl'];
 				//get menu array
 				$i ++;
-			} while ($menu_row = mysql_fetch_assoc ($menu_query));
+			} while ($menu_row = $menu_query->fetch_assoc ());
 			//forming horisontal menu
 		}
 		return $menu;

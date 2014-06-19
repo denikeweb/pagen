@@ -10,6 +10,7 @@ abstract class User {
 	public static $IP;
 	
 	public static function userAuth () {
+		global $mysqli;
 		session_start();
 		//start session for user's identification
 
@@ -24,8 +25,8 @@ abstract class User {
 		if (config::DB) {
 			if (!empty($_SESSION['id'])) {
 				$id = $_SESSION['id'];
-				$user_query = mysqli__query("SELECT `id`, `login`, `email`, `rights` FROM `".config::PREFIX."users` WHERE `id`='$id'");
-				self::$userInfo = mysqli__fetch_assoc($user_query);
+				$user_query = $mysqli->query('SELECT `id`, `login`, `email`, `rights` FROM `'.config::PREFIX.'users` WHERE `id`=\''.$id.'\'');
+				self::$userInfo = $user_query->fetch_assoc();
 			}
 			//create array with user information
 		}

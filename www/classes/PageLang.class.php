@@ -10,7 +10,8 @@ abstract class PageLang {
 			if ($_COOKIE ['lang'] == "en") {$lang = 'en';}
 		}
 		//choose language if isset cookie
-		$result_k = mysqli__fetch_array(mysqli__query("SELECT `".$lan."` FROM `".config::PREFIX."titles` WHERE `id`='".$label."'"));
+		$query = $mysqli->query('SELECT `".$lan."` FROM `'.config::PREFIX.'titles` WHERE `id`=\''.$label.'\'');
+		$result_k = $query->fetch_array();
 		return $result_k [$lan];
 	}
 	public static function alert ($label) {
@@ -23,7 +24,8 @@ abstract class PageLang {
 			if ($_COOKIE ['lang'] == "en") {$lang = 'en';}
 		}
 		//choose language if isset cookie
-		$result_k = mysqli__fetch_array(mysqli__query("SELECT `".$lan."` FROM `".config::PREFIX."alerts` WHERE `id`='".$label."'"));
+		$query = $mysqli->query('SELECT `".$lan."` FROM `'.config::PREFIX.'alerts` WHERE `id`=\''.$label.'\'');
+		$result_k = $query->fetch_array();
 		return $result_k [$lan];
 	}
 }

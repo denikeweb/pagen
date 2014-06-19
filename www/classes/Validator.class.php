@@ -83,17 +83,11 @@ abstract class Validator {
 	}
 
 	public static function length ($var){
-		$len = strlen ($str);
-		$n = $len;
-		for ($i = 0; $i < $n; $i ++) {
-			if (ord($str [$i]) == 208) {
-				$len --;
-			}
-		}
-		return $len;
+		$result = iconv_strlen($var, 'UTF-8');
+		return $result;
 	}
 	
-	public static function text ($var){
+/*	public static function text ($var){
 		$var = trim($var);
 		$var = htmlspecialchars($var);
 		$var = str_replace("#", "&#35;", $var);
@@ -150,6 +144,6 @@ abstract class Validator {
 		$str = trim($str, "-");
 		return $str;
 	}
-	
+*/	
 }
 ?>
