@@ -17,15 +17,6 @@ abstract class eModel {
 	private $union = 'AND';             # string
 	private $assoc = true;              # boolean
 	
-	public function __toString() {
-		echo $result = current ($this->getData ()).'';
-		return $result;
-	}
-	
-	public function __invoke () {
-		print_r($this->getData ());
-	}
-	
 	public function setDefault(){
 		#$this->table = '';           
 		$this->fields = array ();    
