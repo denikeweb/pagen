@@ -1,4 +1,11 @@
 <?php
+
+ 
+
+
+
+
+
 $start_time = microtime(3);
 $start_memory = memory_get_usage();
 /**
@@ -20,6 +27,7 @@ include_once "pagen_config.php";
 #config::checkIP ();
 #config::toLog ();
 
+include_once "classes/DataBase.class.php";
 include_once "classes/Validator.class.php";
 include_once "classes/User.class.php";
 include_once "classes/Site.class.php";
@@ -27,14 +35,14 @@ include_once "classes/eController.class.php";
 
 //echo memory_get_usage() - $start_memory;
 
-$mysqli = new mysqli (config::DB_SERVER, config::DB_USER, config::DB_PASS, config::DB_NAME);
+DataBase::connect ();
 User::userAuth ();
 Site::setupLanguage ();
 Site::getPage ();
 Site::printPage ();
-$mysqli->close ();
+DataBase::disconnect ();
 
-
+unset($mysqli);
 echo '<br>';
 $end_memory = memory_get_usage();
 echo $end_memory - $start_memory;

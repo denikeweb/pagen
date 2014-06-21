@@ -10,26 +10,26 @@ abstract class Site {
 		global $mysqli;
 		$lang = config::LANG;
 		if (isset($_GET ['lang'])) { //if cookie is not showed
-			setcookie("lang", $_GET['lang'], time() + 2592000); //set language id
-			$url = "http://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']; 
-			$pos = strpos($url, "?lang=");
+			setcookie('lang', $_GET['lang'], time() + 2592000); //set language id
+			$url = 'http://'.$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']; 
+			$pos = strpos($url, '?lang=');
 			if ($pos === false) {
-				$pos = strpos($url, "&lang=");
+				$pos = strpos($url, '&lang=');
 			}
 			$url = substr($url, 0, $pos);
 			//formed uri
-			header("Location:$url");
+			header('Location:'.$url);
 		}
 		//standart language is ukrainian
-		if (isset($_COOKIE ["lang"])){
-			if ($_COOKIE ['lang'] == "uk") {$lang = 'uk';}
-			if ($_COOKIE ['lang'] == "ru") {$lang = 'ru';}
-			if ($_COOKIE ['lang'] == "en") {$lang = 'en';}
+		if (isset($_COOKIE ['lang'])){
+			if ($_COOKIE ['lang'] == 'uk') {$lang = 'uk';}
+			if ($_COOKIE ['lang'] == 'ru') {$lang = 'ru';}
+			if ($_COOKIE ['lang'] == 'en') {$lang = 'en';}
 		}
 		//choose language if isset cookie
 		
 		if (config::DB) {
-			$query_lang = $mysqli->query("SELECT `$lang`, `id` FROM `".config::PREFIX."titles` WHERE 1");
+			$query_lang = $mysqli->query('SELECT `'.$lang.'`, `id` FROM `'.config::PREFIX.'titles` WHERE 1');
 			$lang_row = $query_lang->fetch_assoc();
 			do {
 				$lang_index = $lang_row ['id'];
@@ -61,10 +61,10 @@ abstract class Site {
 		//user-friendly URL
 
 		if (config::DB) {
-			$result = $mysqli->query("SELECT * FROM `".config::PREFIX."pages` WHERE `cpurl`='$mypage'");
+			$result = $mysqli->query('SELECT * FROM `'.config::PREFIX.'pages` WHERE `cpurl`=\''.$mypage.'\'');
 			$is404 = $result->num_rows == 0;
 			if ($is404) {
-				$result = $mysqli->query("SELECT * FROM `".config::PREFIX."pages` WHERE `id`='0'");
+				$result = $mysqli->query('SELECT * FROM `'.config::PREFIX.'pages` WHERE `id`=\'0\'');
 			}
 			//check page
 
@@ -95,9 +95,9 @@ abstract class Site {
 	private static function getFromDB ($table, $page_id){
 		global $mysqli;
 		$lang_tag = self::$Lang;
-		$result = $mysqli->query("SELECT `$lang_tag` FROM `".config::PREFIX."$table` WHERE `id`='$page_id'");
+		$result = $mysqli->query('SELECT `'.$lang_tag.'` FROM `'.config::PREFIX.$table.'` WHERE `id`=\''.$page_id.'\'');
 		if ($result->num_rows == 0) {
-			$result = $mysqli->query("SELECT `$lang_tag` FROM `".config::PREFIX."$table` WHERE `id`='0'");
+			$result = $mysqli->query('SELECT `'.$lang_tag.'` FROM `'.config::PREFIX.$table.'` WHERE `id`=\'0\'');
 		}
 		$my_row = $result->fetch_assoc();
 		return $my_row [$lang_tag];
