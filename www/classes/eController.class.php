@@ -28,7 +28,6 @@ abstract class eController {
 
 	protected function view ($data = array (), $template = 'index', $settings = array ()) {
 		global $word;
-		define ('DIRSEP', DIRECTORY_SEPARATOR);
 		$folder = config::TEMPLATE;
 		$content = $this->content;
 		foreach ($content as $part) {
@@ -49,14 +48,15 @@ abstract class eController {
 		$this->loadModel ();
 	}
 
-	protected function loadModel () {
-		if (is_file($this->modelPath)) {
-			define ('DIRSEP', DIRECTORY_SEPARATOR);
+	protected function loadModel ($modelPath = '') {
+		if (empty($modelPath)) {
+			$modelPath = $this->modelPath;
+		}
+		$modelPath = SITE.'models'.DIRSEP.$modelPath.'.php';
+		if (is_file($modelPath)) {
 			$eModel = dirname(__FILE__).DIRSEP.'eModel.class.php';
-			$Validator = dirname(__FILE__).DIRSEP.'Validator.class.php';
-			include_once ($Validator);
 			include_once ($eModel);
-			include ($this->modelPath);
+			include ($modelPath);
 		}
 	}
 }

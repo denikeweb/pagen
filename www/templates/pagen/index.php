@@ -2,7 +2,7 @@
 	include($path.'models/_design.php');
 	$_d = new _design();
 	function hor_menu ($_d) {include ($viewPath.'blocks/hor_menu.php');}
-	function sign_in_form () {include ($viewPath.'blocks/sign_in_form.php');}
+	function sign_in_form ($word) {include ($viewPath.'blocks/sign_in_form.php');}
 	if (!config::DB) {include ($viewPath.'functional/set_lang.php');}
 	if (empty($data['info'])) {$data['info'] = $word [0];}
 ?>
@@ -40,7 +40,7 @@ echo '<br>';
 		<script type="text/javascript" src="<?php echo $this->url; ?>/js/scripts.js"></script>
 	</head>
 	<body>
-		<?php sign_in_form (); ?>
+		<?php sign_in_form ($word); ?>
 		<header id="header">
 			<hgroup>
 				<div id="languages">

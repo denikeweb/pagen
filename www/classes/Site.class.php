@@ -111,7 +111,7 @@ abstract class Site {
 			define ('DIRSEP', DIRECTORY_SEPARATOR);
 			$c_pagen_path = dirname (dirname(__FILE__)).DIRSEP.'controllers'.DIRSEP;
 			//get path to controllers
-			$m_pagen_path = dirname (dirname(__FILE__)).DIRSEP.'models'.DIRSEP;
+			$modelPath = '';
 			//get path to models
 			$pieces = Site::$urlArray;
 			$path = dirname (dirname(__FILE__)).DIRSEP;
@@ -125,7 +125,7 @@ abstract class Site {
 				$fullpath = $c_pagen_path.$piece;
 				if (is_dir ($fullpath)) {
 					$c_pagen_path .= $piece.DIRSEP;
-					$m_pagen_path .= $piece.DIRSEP;
+					$modelPath .= $piece.DIRSEP;
 					array_shift ($pieces);
 					continue;
 				}
@@ -154,11 +154,11 @@ abstract class Site {
 				// get action, default method - run ()
 
 				$file = $c_pagen_path.$controller.'.php';
-				$m_pagen_path .= 'm_'.$controller.'.php';
+				$modelPath .= 'm_'.$controller;
 				//create full model path
 				$args = $pieces;
 				include ($file);
-				$a = new $controller ($m_pagen_path, $args, $path);
+				$a = new $controller ($modelPath, $args, $path);
 				//construct controller
 				if (method_exists ($a, $action)){
 					$a->$action ();

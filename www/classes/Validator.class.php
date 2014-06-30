@@ -1,11 +1,5 @@
 <?php
 abstract class Validator {
-	public static function csrf(){
-		if (substr_count($_SERVER['HTTP_REFERER'], $_SERVER['HTTP_HOST']) == 0) {
-			exit();
-		}
-	}
-	
 	public static function fname($str){
 		if (preg_match("|^[.A-Za-z0-9_-]+$|",$str)) {
 			return true;
@@ -54,7 +48,7 @@ abstract class Validator {
 		}
 	}//check is number
 
-	public static function cyrillic ($var){
+	public static function curyllic ($var){
 		if (!preg_match("/[^(\w)|(\x7F-\xFF)|(\s)]/",$var)) {
 			return true;
 		} else {
@@ -69,18 +63,6 @@ abstract class Validator {
 			return false;
 		}
 	}//check is number
-	
-	public static function timeBegin (){
-		global $start_time;
-		$start_time = microtime(0);
-	}
-	
-	public static function timeEnd (){
-		global $start_time;
-		$end_time = microtime(0);
-		$time = $end_time - $start_time;
-		echo "<span class='microtime'>Download time: <br />".$time."</span>";
-	}
 
 	public static function length ($var){
 		$result = iconv_strlen($var, 'UTF-8');

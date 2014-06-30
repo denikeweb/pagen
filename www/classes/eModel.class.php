@@ -16,7 +16,7 @@ abstract class eModel {
 	private $sql = '';                  # string
 	private $union = 'AND';             # string
 	private $assoc = true;              # boolean
-	private $mysqli = '';              # boolean
+	private $mysqli = '';               # boolean
 
 	function __construct ($table = ''){
 		global $mysqli;
@@ -205,9 +205,11 @@ abstract class eModel {
 		$tablename = $this->returnTablename ();
 		$conditions = $this->returnCondition ();
 		$updates = $this->returnUpdates ();
-		$t = "UPDATE $tablename SET $updates WHERE $conditions";
-		$query = $this->mysqli->query ($t);
-		return $query;
+		$limits = $this->returnLimits ();
+		$order = $this->returnOrder ();
+		$t = "UPDATE $tablename SET $updates WHERE $conditions $order $limits";
+		$this->mysqli->query ($t);
+		return $this->mysqli->affected_rows;
 	}
 	// update record by $data and $sql or $condition as $union
 	
