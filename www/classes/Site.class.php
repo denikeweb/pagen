@@ -20,7 +20,6 @@ abstract class Site {
 			//formed uri
 			header('Location:'.$url);
 		}
-		//standart language is ukrainian
 		if (isset($_COOKIE ['lang'])){
 			if ($_COOKIE ['lang'] == 'uk') {$lang = 'uk';}
 			if ($_COOKIE ['lang'] == 'ru') {$lang = 'ru';}
@@ -39,6 +38,7 @@ abstract class Site {
 		}
 		
 		self::$Lang = $lang;
+		config::$Lang = $lang;
 	}
 	
 	public static function getPage (){
@@ -158,7 +158,7 @@ abstract class Site {
 				//create full model path
 				$args = $pieces;
 				include ($file);
-				$a = new $controller ($modelPath, $args, $path);
+				$a = new $controller ($modelPath, $args);
 				//construct controller
 				if (method_exists ($a, $action)){
 					$a->$action ();

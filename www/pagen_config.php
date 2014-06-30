@@ -12,6 +12,7 @@ class config {
 	const PASS = '9GGm6GmcSGaHXiGD8dNuG44R21eRYtiqRhDJ46PBSJCZY'; //111111
 	const DB = true;
 	const TEMPLATE = 'pagen';
+	public static $Lang;
 	
 	/*public static function checkIP(){
 		include_once "classes/Files.class.php";
