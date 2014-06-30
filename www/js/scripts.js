@@ -24,7 +24,7 @@ var ajax_contents;
         timeout: 5000
     });
 
-    _ajax = function (file, args, func, isC) {
+    _ajax = function (file, args, func) {
         var success_func, myData, sArgs = '';
         if (func == false) {
             success_func = function (data, textStatus, jqXHR) {ajax_contents = data};
@@ -38,7 +38,7 @@ var ajax_contents;
             i ++;
         });
         //!!!!!!!!!!!!!!!!!!!!!!!!! + assoc array
-        myData = "f=" + file + '&c=' + isC + sArgs;
+        myData = "f=" + file + sArgs;
         $.ajax({
             data: myData,
             success: success_func
@@ -46,9 +46,16 @@ var ajax_contents;
     }
 }).call(this);
 
-_ajax ('login/ftp', [1,2,3], function (data) {alert(data)}, 0);
 
+$(function (){
+    $('.log_button').on('click', function (){
+        login = $('#login_e').val ();
+        pass = $('#pass_out_e').val ();
+        _ajax ('auth/login', [login, pass], function (data) {alert(data)});
+    });
+});
 
+//---------------------------------------------------------------------
 function login_form (tag){
     if (tag == 1) {
         document.getElementById("login_alert").style.display = "none";

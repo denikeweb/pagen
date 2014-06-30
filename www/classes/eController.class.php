@@ -6,23 +6,21 @@ abstract class eController {
 	*
 	*/
 	private $modelPath;
-	public $viewPath;
-	public $path;
-	public $args;
-	public $data;
-	public $content;
-	public $url;
-	public $site_title;
-	public $ls_ame;
+	protected $viewPath;
+	protected $args;
+	protected $data;
+	protected $content;
+	protected $url;
+	protected $site_title;
+	protected $ls_name;
 
-	function __construct ($modelPath = '', $args = array (), $path = '') {
+	function __construct ($modelPath = '', $args = array ()) {
 		$this->modelPath = $modelPath;
 		$this->args = $args;
-		$this->path = $path;
-		$this->lang = Site::$Lang;
+		$this->lang = config::$Lang;
 		$this->url = "//$_SERVER[HTTP_HOST]";
 		$this->site_title = config::TITLE;
-		$this->ls_ame = "//$_SERVER[SERVER_NAME]$_SERVER[REQUEST_URI]?lang";
+		$this->ls_name = "//$_SERVER[SERVER_NAME]$_SERVER[REQUEST_URI]?lang";
 		$this->content = array ();
 	}
 
@@ -35,7 +33,7 @@ abstract class eController {
 		}
 		$this->data = $data;
 		$this->word = $word;
-		$this->viewPath = $this->path.'templates'.DIRSEP.$folder.DIRSEP;
+		$this->viewPath = SITE.'templates'.DIRSEP.$folder.DIRSEP;
 		$file = $this->viewPath.$template.'.php';
 		if (is_file($file)) {
 			include ($file);
