@@ -5,7 +5,7 @@ abstract class eController {
 	*	Pagen v1.0
 	*
 	*/
-	private $modelPath;
+	private   $modelPath;
 	protected $viewPath;
 	protected $args;
 	protected $data;
@@ -35,6 +35,8 @@ abstract class eController {
 		$this->word = $word;
 		$this->viewPath = SITE.'templates'.DIRSEP.$folder.DIRSEP;
 		$file = $this->viewPath.$template.'.php';
+		$viewPath = $this->viewPath;
+		$url = $this->url;
 		if (is_file($file)) {
 			include ($file);
 		} else {

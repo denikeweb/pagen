@@ -24,7 +24,8 @@ echo '<br>';
 		<title><?php echo $this->site_title, ' - ', $data[title]; ?></title>
 		
 		<meta charset="utf-8">
-		<meta http-equiv="content-language" content="$lang">
+		<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+		<meta http-equiv="content-language" content="<?php echo config::$Lang; ?>">
 		<meta name="document-state" content="Dynamic">
 		<meta name="resource-type" content="document">
 		<meta name="revisit" content="7">

@@ -86,7 +86,7 @@ abstract class eModel {
 	}
 	// setting tablename or array of tablenames
 	
-	public function setOrder($myField, $myType){
+	public function setOrder($myField, $myType = 0){
 		$myField = $this->mysqli->real_escape_string ($myField);
 		if ($myType == 0 or strtolower($myType) == 'desc') {
 			$myType = 'DESC';
@@ -187,7 +187,7 @@ abstract class eModel {
 	}
 	// set $data as $fields array by this $field $union $value, $order, $from, $limit, $assoc
 	
-	public function read(){
+	public function read($poly = false){
 		$this->returnTableExist ();
 		$all = $this->returnFields ();
 		$conditions = $this->returnCondition ();
@@ -196,7 +196,7 @@ abstract class eModel {
 		$order = $this->returnOrder ();
 		$t = "SELECT $all FROM $tablename WHERE $conditions $order $limits";
 		$query = $this->mysqli->query ($t);
-		$this->returnResult ($query);
+		$this->returnResult ($query, $poly);
 	}
 	// set $data as $fields array by $sql or $condition as $union, $order, $from, $limit, $assoc
 	
@@ -238,7 +238,7 @@ abstract class eModel {
 	}
 	// extended relevant search ($titles x20, $metas x10, $content x1)
 	
-	private function returnResult ($query){
+	private function returnResult ($query, $poly = false){
 		if ($this->assoc) {
 			$func = 'fetch_assoc';
 		} else {
@@ -246,7 +246,7 @@ abstract class eModel {
 		}
 		$nums = $query->num_rows;
 		if ($nums > 0) {
-			if ($nums == 1) {
+			if ($nums == 1 and !$poly) {
 				$this->data = $query->$func ();
 			} else {
 				$tmp_data = $query->$func ();
