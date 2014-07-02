@@ -149,7 +149,7 @@ abstract class Site {
 				if (empty ($action) or $action == 'run') {
 					$action = 'run';
 				} else {
-					$action .= 'action_';
+					$action = 'action_'.$action;
 				}
 				// get action, default method - run ()
 
@@ -163,8 +163,12 @@ abstract class Site {
 				if (method_exists ($a, $action)){
 					$a->$action ();
 				} else {
-					self::include404 ();
-					//if action not exists, send 404
+					if (method_exists ($a, 'run')){
+						$a->run ();
+					} else {
+						self::include404 ();
+						//if action not exists, send 404
+					}
 				}
 			}
 		}

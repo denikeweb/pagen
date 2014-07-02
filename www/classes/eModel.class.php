@@ -139,7 +139,7 @@ abstract class eModel {
 	// adding new record to $table by $data
 	
 	public function readById($id){
-		$id = addslashes($id);
+		$id = $this->mysqli->real_escape_string ($id);
 		$this->returnTableExist ();
 		$all = $this->returnFields ();
 		$conditions = $this->returnCondition ();
@@ -173,15 +173,15 @@ abstract class eModel {
 	// set $data as last $fields row by $sql or $condition as $union
 	
 	public function readBy($field, $value){
-		$field = addslashes($field);
-		$value = addslashes($value);
+		$field = $this->mysqli->real_escape_string ($field);
+		$value = $this->mysqli->real_escape_string ($value);
 		$this->returnTableExist ();
 		$all = $this->returnFields ();
 		$conditions = $this->returnCondition ();
 		$tablename = $this->returnTablename ();
 		$limits = $this->returnLimits ();
 		$order = $this->returnOrder ();
-		$t = "SELECT $all FROM $tablename WHERE $conditions AND `$field`{$this->union}'$value' $order $limits";
+		$t = "SELECT $all FROM $tablename WHERE $conditions AND `$field`='$value' $order $limits";
 		$query = $this->mysqli->query ($t);
 		$this->returnResult ($query);
 	}

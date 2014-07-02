@@ -7,7 +7,7 @@ abstract class eController {
 	*/
 	private   $modelPath;
 	protected $viewPath;
-	protected $args;
+	public $args;
 	protected $data;
 	protected $content;
 	protected $url;
