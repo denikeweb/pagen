@@ -28,8 +28,6 @@ abstract class PageLang {
 		//choose language if isset cookie
 		$query = $mysqli->query ('SELECT `'.$lan.'` FROM `'.config::PREFIX.'alerts` WHERE `id`=\''.$label.'\'');
 		$result_k = $query->fetch_array ();
-		#$query = $mysqli->query ("SELECT `id`,`rights`,`pass` FROM `".config::PREFIX."users` WHERE `login`='$login'");
-		#$result = $query->fetch_assoc ();
 		return $result_k [$lan];
 	}
 }

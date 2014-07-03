@@ -109,7 +109,7 @@ abstract class Site {
 			//if page is static load default page controller
 		} else {
 			define ('DIRSEP', DIRECTORY_SEPARATOR);
-			$c_pagen_path = dirname (dirname(__FILE__)).DIRSEP.'controllers'.DIRSEP;
+			$c_pagen_path = dirname (dirname(__FILE__)).DIRSEP.'controllers';
 			//get path to controllers
 			$modelPath = '';
 			//get path to models
@@ -121,15 +121,16 @@ abstract class Site {
 				$controller = 'index';
 			}
 			//unset empty array element
+			$fullpath = $c_pagen_path;
 			foreach ($pieces as $piece) {
-				$fullpath = $c_pagen_path.$piece;
+				$fullpath .= DIRSEP.$piece;
 				if (is_dir ($fullpath)) {
-					$c_pagen_path .= $piece.DIRSEP;
+					$c_pagen_path .= DIRSEP.$piece;
 					$modelPath .= $piece.DIRSEP;
 					array_shift ($pieces);
 					continue;
 				}
-				if (is_file ($fullpath.'.php')) {
+				if (is_file ($fullpath.EXT)) {
 					$controller = $piece;
 					array_shift ($pieces);
 					break;
@@ -147,23 +148,28 @@ abstract class Site {
 					$action = '';
 				}
 				if (empty ($action) or $action == 'run') {
-					$action = 'run';
+					$_action = 'run';
 				} else {
-					$action = 'action_'.$action;
+					$_action = 'action_'.$action;
 				}
 				// get action, default method - run ()
 
-				$file = $c_pagen_path.$controller.'.php';
+				$file = $c_pagen_path.DIRSEP.$controller.EXT;
 				$modelPath .= 'm_'.$controller;
 				//create full model path
 				$args = $pieces;
 				include ($file);
 				$a = new $controller ($modelPath, $args);
 				//construct controller
-				if (method_exists ($a, $action)){
-					$a->$action ();
+				
+				if (method_exists ($a, $_action)){
+					$a->$_action ();
 				} else {
 					if (method_exists ($a, 'run')){
+						if (!empty($_action)) {
+							array_unshift ($pieces, $action);
+							$a->args = $pieces;
+						}
 						$a->run ();
 					} else {
 						self::include404 ();
@@ -174,12 +180,12 @@ abstract class Site {
 		}
 	}
 	private static function defaultController ($controller = 'IndexController') {
-		include ("classes/$controller.php");
+		include ('classes/'.$controller.EXT);
 		$a = new $controller();
 		$a->run();
 	}
 	private static function include404 () {
-		$file = dirname(dirname(__FILE__)).DIRSEP.'404.php';
+		$file = dirname(dirname(__FILE__)).DIRSEP.'404'.EXT;
 		include ($file);
 	}
 }
