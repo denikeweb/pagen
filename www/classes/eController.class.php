@@ -5,9 +5,9 @@ abstract class eController {
 	*	Pagen v1.0
 	*
 	*/
-	private   $modelPath;
-	protected $viewPath;
 	public $args;
+	private $modelPath;
+	protected $viewPath;
 	protected $data;
 	protected $content;
 	protected $url;
@@ -34,7 +34,7 @@ abstract class eController {
 		$this->data = $data;
 		$this->word = $word;
 		$this->viewPath = SITE.'templates'.DIRSEP.$folder.DIRSEP;
-		$file = $this->viewPath.$template.'.php';
+		$file = $this->viewPath.$template.EXT;
 		$viewPath = $this->viewPath;
 		$url = $this->url;
 		if (is_file($file)) {
@@ -52,9 +52,9 @@ abstract class eController {
 		if (empty($modelPath)) {
 			$modelPath = $this->modelPath;
 		}
-		$modelPath = SITE.'models'.DIRSEP.$modelPath.'.php';
+		$modelPath = SITE.'models'.DIRSEP.$modelPath.EXT;
 		if (is_file($modelPath)) {
-			$eModel = dirname(__FILE__).DIRSEP.'eModel.class.php';
+			$eModel = dirname(__FILE__).DIRSEP.'eModel.class'.EXT;
 			include_once ($eModel);
 			include ($modelPath);
 		}
