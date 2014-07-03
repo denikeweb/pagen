@@ -10,8 +10,8 @@ $start_memory = memory_get_usage();
 	* multilingualism possibility, configured sessions authorization.
 	*
 	* @author Denis Dragomiric <denikewebpost@yandex.ua>
-	* @copyright Denis Dragomiric, Web-Mount Studio
-	* @license http://www.web-mount.com/public/pagen/license.txt Pagen 1.0
+	* @copyright Denis Dragomiric
+	* @license http://www.lux-blog.org/public/pagen/license.txt Pagen 1.0
 	*
 */
 

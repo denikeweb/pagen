@@ -1,4 +1,5 @@
 <?php
+	//!!!!!!!!!!!!!!!!!!!!!!!!!
 	include($path.'models/_design.php');
 	$_d = new _design();
 	function hor_menu ($_d) {include ($viewPath.'blocks/hor_menu.php');}
@@ -6,17 +7,6 @@
 	if (!config::DB) {include ($viewPath.'functional/set_lang.php');}
 	if (empty($data['info'])) {$data['info'] = $word [0];}
 ?>
-
-<!--?php
-echo $data[title], 1;
-echo '<br>';
-echo $this->data[title], 2;
-echo '<br>';
-echo $word[2], 3;
-echo '<br>';
-echo $this->word[2], 4;
-echo '<br>';
-?-->
 
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $this->lang; ?>" lang="<?php echo $this->lang; ?>">

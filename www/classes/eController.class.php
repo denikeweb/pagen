@@ -9,7 +9,6 @@ abstract class eController {
 	private $modelPath;
 	protected $viewPath;
 	protected $data;
-	protected $content;
 	protected $url;
 	protected $site_title;
 	protected $ls_name;
@@ -21,17 +20,12 @@ abstract class eController {
 		$this->url = "//$_SERVER[HTTP_HOST]";
 		$this->site_title = config::TITLE;
 		$this->ls_name = "//$_SERVER[SERVER_NAME]$_SERVER[REQUEST_URI]?lang";
-		$this->content = array ();
 	}
 
 	protected function view ($data = array (), $template = 'index', $settings = array ()) {
 		global $word;
 		$folder = config::TEMPLATE;
-		$content = $this->content;
-		foreach ($content as $part) {
-			$data ['content'] .= $part;
-		}
-		$this->data = $data;
+		extract($data, EXTR_SKIP);
 		$this->word = $word;
 		$this->viewPath = SITE.'templates'.DIRSEP.$folder.DIRSEP;
 		$file = $this->viewPath.$template.EXT;
