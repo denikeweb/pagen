@@ -4,9 +4,9 @@ abstract class Site {
 	public static $Lang;
 	public static $Content;
 	public static $urlArray;
+	public static $word;
 	
 	public static function setupLanguage (){
-		global $word;
 		global $mysqli;
 		$lang = config::LANG;
 		if (isset($_GET ['lang'])) { //if cookie is not showed
@@ -37,12 +37,12 @@ abstract class Site {
 			//create array of language words
 		}
 		
+		self::$word = $word;
 		self::$Lang = $lang;
 		config::$Lang = $lang;
 	}
 	
 	public static function getPage (){
-		global $word;
 		global $mysqli;
 		$thisUrl = '/';
 		if (isset($_GET ['page'])) {
@@ -86,7 +86,7 @@ abstract class Site {
 				self::$ThisPage ['meta_d'] = self::getFromDB('meta_d', $page_id);
 				//return meta tags for this page (keywords & description)
 
-				self::$ThisPage['title'] = $word[$title_index];
+				self::$ThisPage ['title'] = self::$word [$title_index];
 				// replace title of this page from language array
 			}
 		}
@@ -159,7 +159,8 @@ abstract class Site {
 				//create full model path
 				$args = $pieces;
 				include ($file);
-				$a = new $controller ($modelPath, $args);
+				$a = new $controller ($modelPath, $args, self::$word);
+				self::$word = NULL;
 				//construct controller
 				
 				if (method_exists ($a, $_action)){
@@ -183,7 +184,8 @@ abstract class Site {
 	}
 	private static function defaultController ($controller = 'IndexController') {
 		include ('classes/'.$controller.EXT);
-		$a = new $controller();
+		$a = new $controller('', NULL, self::$word);
+		self::$word = NULL;
 		$a->run();
 		self::result ($a);
 	}

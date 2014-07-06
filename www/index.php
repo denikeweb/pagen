@@ -15,7 +15,6 @@ $start_memory = memory_get_usage();
 	*
 */
 
-$word;
 define ('DIRSEP', DIRECTORY_SEPARATOR);
 define ('EXT', '.php');
 define ('SITE', dirname(__FILE__).DIRSEP);

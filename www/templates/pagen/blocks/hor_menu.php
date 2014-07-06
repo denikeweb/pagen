@@ -1,15 +1,13 @@
-<?php
-	if (config::DB) {
-		$HorMenu = '<ul id="menu">';
-		$menu_rows = $_d->createMenu ();
-		$url = $a->url;
-		foreach ($menu_rows as $row) {
-			$HorMenu .= "<li><a href=\"$url/$row[cpurl]\" title=\"$row[title]\">$row[title]</a></li>";
-		}
-		if (!User::is_auth()) {
-			$HorMenu .= "<li><a href=\"$url/sign_up\" title=\"$word[3]\">$word[3]</a></li>";
-		}
-		$HorMenu .= '</ul><!-- #menu -->';
-		echo $HorMenu;
-	}
-?>
+<?php if (config::DB) { ?>
+	<ul id="menu">
+		<?php
+			$menu_rows = $_d->createMenu ();
+			foreach ($menu_rows as $row) {?>
+				<li><a href="<?php echo $url; ?>/<?php echo $row['cpurl']; ?>" title="<?php echo $row['title']; ?>"></a></li>
+			<?php }
+			if (!User::is_auth()) {?>
+				<li><a href="<?php echo $url; ?>/sign_up" title="<?php echo $word[3]; ?>"></a></li><?php
+			}
+		?>
+	</ul><!-- #menu -->
+<?php } ?>

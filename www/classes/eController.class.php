@@ -5,24 +5,26 @@ abstract class eController {
 	*	Pagen v1.0
 	*
 	*/
-	public  $args;
-	private $modelPath;
-	private $url;
-	private $site_title;
-	private $lang;
-	private $ls_name;
+	public    $args;
+	private   $modelPath;
+	private   $url;
+	private   $site_title;
+	private   $lang;
+	private   $ls_name;
+	protected $word;
 	
 	public function run () {
 		$this->loadModel ();
 	}
 
-	final public function __construct ($modelPath = '', $args = array ()) {
+	final public function __construct ($modelPath = '', array $args = NULL, array $word = NULL) {
 		$this->modelPath = $modelPath;
 		$this->args = $args;
 		$this->lang = config::$Lang;
 		$this->url = "//$_SERVER[HTTP_HOST]";
 		$this->site_title = config::TITLE;
 		$this->ls_name = "//$_SERVER[SERVER_NAME]$_SERVER[REQUEST_URI]?lang";
+		$this->word = $word;
 	}
 
 	final protected function getLocals (array $data = NULL, array $params = array ('url', 'title', 'lang', 'setLangUrl')) {
