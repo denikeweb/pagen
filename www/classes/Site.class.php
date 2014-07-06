@@ -164,6 +164,7 @@ abstract class Site {
 				
 				if (method_exists ($a, $_action)){
 					$a->$_action ();
+					self::result ($a);
 				} else {
 					if (method_exists ($a, 'run')){
 						if (!empty($_action)) {
@@ -171,6 +172,7 @@ abstract class Site {
 							$a->args = $pieces;
 						}
 						$a->run ();
+					self::result ($a);
 					} else {
 						self::include404 ();
 						//if action not exists, send 404
@@ -183,10 +185,15 @@ abstract class Site {
 		include ('classes/'.$controller.EXT);
 		$a = new $controller();
 		$a->run();
+		self::result ($a);
 	}
 	private static function include404 () {
+		header("HTTP/1.x 404 Not Found");
 		$file = dirname(dirname(__FILE__)).DIRSEP.'404'.EXT;
 		include ($file);
+	}
+	private static function result (eController $a) {
+		echo $a->view;
 	}
 }
 ?>

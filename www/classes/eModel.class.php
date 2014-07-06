@@ -17,7 +17,6 @@ abstract class eModel {
 	private $union = 'AND';             # string
 	private $assoc = true;              # boolean
 	private $mysqli = '';               # boolean
-	public  $data;
 
 	final public function __construct ($table = ''){
 		global $mysqli;

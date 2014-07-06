@@ -7,10 +7,9 @@ abstract class eController {
 	*/
 	public $args;
 	private $modelPath;
-	protected $viewPath;
-	protected $data;
 	protected $url;
 	protected $site_title;
+	protected $lang;
 	protected $ls_name;
 	
 	protected function run () {
@@ -24,22 +23,6 @@ abstract class eController {
 		$this->url = "//$_SERVER[HTTP_HOST]";
 		$this->site_title = config::TITLE;
 		$this->ls_name = "//$_SERVER[SERVER_NAME]$_SERVER[REQUEST_URI]?lang";
-	}
-
-	final protected function view ($data = array (), $template = 'index', $settings = array ()) {
-		global $word;
-		$folder = config::TEMPLATE;
-		extract($data, EXTR_SKIP);
-		$this->word = $word;
-		$this->viewPath = SITE.'templates'.DIRSEP.$folder.DIRSEP;
-		$file = $this->viewPath.$template.EXT;
-		$viewPath = $this->viewPath;
-		$url = $this->url;
-		if (is_file($file)) {
-			include ($file);
-		} else {
-			echo 'View do not loaded';
-		}
 	}
 
 	final protected function loadModel ($modelPath = '') {

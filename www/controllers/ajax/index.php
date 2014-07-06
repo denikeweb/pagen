@@ -61,6 +61,9 @@
 			case 'Files':
 				include_once (SITE.'classes'.DIRSEP.'Validator.class.php');
 				break;
+			case 'View':
+				include_once (SITE.'classes'.DIRSEP.'View.class.php');
+				break;
 			default: {
 					echo $module.' do not exists';
 					exit ();
