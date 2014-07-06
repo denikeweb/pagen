@@ -14,7 +14,6 @@ class test_index extends eController {
 
 		$this->m->add ();
 
-		
 		$this->m->setDefault ();
 		$this->m->show ();
 		//echo $this->m->count ();

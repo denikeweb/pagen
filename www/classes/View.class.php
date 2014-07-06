@@ -1,6 +1,8 @@
 <?php
 class View {
 
+	private $content;
+
 	public static function factory (array $data = NULL, array $files = NULL, array $word = NULL,  $template = 'index') {
 		return new View($data, $files, $word, $template);
 	}
@@ -9,12 +11,15 @@ class View {
 
 	}
 
-	private function view ($data = array (), $template = 'index', $settings = array ()) {
-		global $word;
+	private function getFile ($file = NULL, array $data = NULL) {
 		$folder = config::TEMPLATE;
 		extract($data, EXTR_SKIP);
-		$this->word = $word;
-		$this->viewPath = SITE.'templates'.DIRSEP.$folder.DIRSEP;
+		$viewPath = SITE.'templates'.DIRSEP.$folder.DIRSEP;
+		$templateFile = $this->viewPath.$template.EXT;
+	}
+
+	private function view ($data = array (), $template = 'index', $settings = array ()) {
+		$this->
 		$file = $this->viewPath.$template.EXT;
 		$viewPath = $this->viewPath;
 		$url = $this->url;
@@ -25,19 +30,8 @@ class View {
 		}
 	}
 
-	public function __toString()
-	{
-		return '1';
-		/*try
-		{
-			return $this->render();
-		}
-		catch (Exception $e)
-		{
-			return $error_response->body();
-		}*/
+	public function __toString() {
+		return $this->content;
 	}
-	
-
 }
 ?>
