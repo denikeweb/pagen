@@ -25,8 +25,7 @@ class test_index extends eController {
 		$data['_d'] = new _design();
 		$files = array(
 			'hor_menu' => 'blocks'.DIRSEP.'hor_menu.php',
-			'sign_in_form' => 'blocks'.DIRSEP.'sign_in_form.php'/*,
-			'lang_settings' => 'functional/set_lang.php' //if (!config::DB)*/
+			'sign_in_form' => 'blocks'.DIRSEP.'sign_in_form.php'
 		);
 		$this->view = View::factory ($data, $files);
 	}
