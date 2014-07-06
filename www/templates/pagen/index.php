@@ -1,48 +1,38 @@
-<?php
-	/*/!!!!!!!!!!!!!!!!!!!!!!!!!
-	include($path.'models/_design.php');
-	$_d = new _design();
-	function hor_menu ($_d) {include ($viewPath.'blocks/hor_menu.php');}
-	function sign_in_form ($word) {include ($viewPath.'blocks/sign_in_form.php');}
-	if (!config::DB) {include ($viewPath.'functional/set_lang.php');}
-	if (empty($data['info'])) {$data['info'] = $word [0];}*/
-?>
-
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $this->lang; ?>" lang="<?php echo $this->lang; ?>">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $SiteLang; ?>" lang="<?php echo $SiteLang; ?>">
 	<head>
-		<title><?php echo $this->site_title, ' - ', $data[title]; ?></title>
+		<title><?php echo $SiteTitle, ' - ', $title; ?></title>
 		
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=Edge">
-		<meta http-equiv="content-language" content="<?php echo config::$Lang; ?>">
+		<meta http-equiv="content-language" content="<?php echo $SiteLang; ?>">
 		<meta name="document-state" content="Dynamic">
 		<meta name="resource-type" content="document">
 		<meta name="revisit" content="7">
 		<meta name="robots" content="all">
-		<meta name="description" content="<?php echo $data['meta_d']; ?>">
-		<meta name="keywords" content="<?php echo $data['meta_k']; ?>">
-		<?php if (isset($data['canonical_url'])) { ?><link rel="canonical" href="<?php echo $data['canonical_url'], 1; ?>"><?php } ?>
+		<meta name="description" content="<?php echo $meta_d; ?>">
+		<meta name="keywords" content="<?php echo $meta_k; ?>">
+		<?php if (isset($canonical_url)) { ?><link rel="canonical" href="<?php echo $canonical_url; ?>"><?php } ?>
 		
-		<!--link rel="shortcut icon" href="<?php echo $this->url; ?>/favicon.ico" -->
-		<link href="<?php echo $this->url; ?>/css/style.css" rel="stylesheet" type="text/css">
+		<!--link rel="shortcut icon" href="<?php echo $url; ?>/favicon.ico" -->
+		<link href="<?php echo $url; ?>/css/style.css" rel="stylesheet" type="text/css">
 		
-		<script type="text/javascript" src="<?php echo $this->url; ?>/js/jquery-1.11.js"></script>
-		<script type="text/javascript" src="<?php echo $this->url; ?>/js/scripts.js"></script>
+		<script type="text/javascript" src="<?php echo $url; ?>/js/jquery-1.11.js"></script>
+		<script type="text/javascript" src="<?php echo $url; ?>/js/scripts.js"></script>
 	</head>
 	<body>
-		<?php sign_in_form ($word); ?>
+		<?php echo $sign_in_form; ?>
 		<header id="header">
 			<hgroup>
 				<div id="languages">
-					<a href="<?php echo $this->ls_ame; ?>=uk">укр</a> / 
-					<a href="<?php echo $this->ls_ame; ?>=ru">рус</a> / 
-					<a href="<?php echo $this->ls_ame; ?>=en">eng</a>
+					<a href="<?php echo $setLangUrl; ?>=uk">укр</a> / 
+					<a href="<?php echo $setLangUrl; ?>=ru">рус</a> / 
+					<a href="<?php echo $setLangUrl; ?>=en">eng</a>
 				</div><!-- #languages -->
 			</hgroup><!-- hgroup -->
 		</header><!-- #languages -->
 		<nav id="nav">
-			<?php hor_menu ($_d); ?>
+			<?php echo $hor_menu; ?>
 		</nav><!-- #nav -->
 		
 		<section id="content">
@@ -56,7 +46,7 @@
 
 		<footer id="footer">
 			<span>
-				<?php echo $data['info']; ?>
+				<?php echo $info; ?>
 			</span>
 		</footer><!-- #footer -->
 	</body>
