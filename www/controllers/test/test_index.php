@@ -21,7 +21,8 @@ class test_index extends eController {
 		$data ['content'] = $this->m->getData ();
 		//print_r($this->data);
 
-		$this->view = View::factory ($data);
+		$files = NULL; // array ();
+		$this->view = View::factory ($data, $files);
 	}
 	public function action_edit () {
 

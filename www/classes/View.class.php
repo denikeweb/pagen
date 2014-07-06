@@ -1,14 +1,11 @@
 <?php
 class View {
 
-
-
-	public static function factory (array $data = NULL, array $files = NULL,  $template = '') {
-		return new View($file, $data);
+	public static function factory (array $data = NULL, array $files = NULL, array $word = NULL,  $template = 'index') {
+		return new View($data, $files, $word, $template);
 	}
 
-	private function __clone () {}
-	private function __construct () {
+	private function __construct ($data, $files, $word, $template) {
 
 	}
 
