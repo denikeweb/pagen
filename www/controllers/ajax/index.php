@@ -56,10 +56,10 @@
 				include_once (SITE.'classes'.DIRSEP.'Validator.class.php');
 				break;
 			case 'User':
-				include_once (SITE.'classes'.DIRSEP.'Validator.class.php');
+				include_once (SITE.'classes'.DIRSEP.'User.class.php');
 				break;
 			case 'Files':
-				include_once (SITE.'classes'.DIRSEP.'Validator.class.php');
+				include_once (SITE.'classes'.DIRSEP.'Files.class.php');
 				break;
 			case 'View':
 				include_once (SITE.'classes'.DIRSEP.'View.class.php');
