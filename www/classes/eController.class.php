@@ -5,7 +5,7 @@ abstract class eController {
 	*	Pagen v1.0
 	*
 	*/
-	public $args;
+	public  $args;
 	private $modelPath;
 	private $url;
 	private $site_title;

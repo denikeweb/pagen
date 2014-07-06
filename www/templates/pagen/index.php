@@ -1,11 +1,11 @@
 <?php
-	//!!!!!!!!!!!!!!!!!!!!!!!!!
+	/*/!!!!!!!!!!!!!!!!!!!!!!!!!
 	include($path.'models/_design.php');
 	$_d = new _design();
 	function hor_menu ($_d) {include ($viewPath.'blocks/hor_menu.php');}
 	function sign_in_form ($word) {include ($viewPath.'blocks/sign_in_form.php');}
 	if (!config::DB) {include ($viewPath.'functional/set_lang.php');}
-	if (empty($data['info'])) {$data['info'] = $word [0];}
+	if (empty($data['info'])) {$data['info'] = $word [0];}*/
 ?>
 
 <!DOCTYPE html>

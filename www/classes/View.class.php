@@ -8,7 +8,36 @@ class View {
 	}
 
 	private function __construct ($data, $files, $word, $template) {
+		$folder = config::TEMPLATE;
+		extract($data, EXTR_SKIP);
+		$viewPath = SITE.'templates'.DIRSEP.$folder.DIRSEP;
+		$templateFile = $viewPath.$template.EXT;
+		extract($data, EXTR_SKIP);
 
+		//files content loading
+		$filesInput = array ();
+		if (count($files) > 0)
+		foreach ($files as $key => $value) {
+			ob_start();
+			try {
+				include $viewPath.$value.EXT;
+			} catch (Exception $e) {
+				ob_end_clean();
+				throw $e;
+			}
+			$filesInput ['file_'.$key] = ob_get_clean();
+		}
+		extract($filesInput, EXTR_SKIP);
+
+		//template loading
+		ob_start();
+		try {
+			include $templateFile;
+		} catch (Exception $e) {
+			ob_end_clean();
+			throw $e;
+		}
+		$this->content = ob_get_clean();
 	}
 
 	private function getFile ($file = NULL, array $data = NULL) {

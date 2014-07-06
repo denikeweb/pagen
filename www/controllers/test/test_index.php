@@ -21,7 +21,13 @@ class test_index extends eController {
 		$data = $this->getLocals ($data);
 		//print_r($this->data);
 
-		$files = NULL; // array ();
+		$this->loadModel ('_design');
+		$data['_d'] = new _design();
+		$files = array(
+			'hor_menu' => 'blocks'.DIRSEP.'hor_menu.php',
+			'sign_in_form' => 'blocks'.DIRSEP.'sign_in_form.php'/*,
+			'lang_settings' => 'functional/set_lang.php' //if (!config::DB)*/
+		);
 		$this->view = View::factory ($data, $files);
 	}
 	public function action_edit () {
