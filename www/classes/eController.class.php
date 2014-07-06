@@ -26,10 +26,10 @@ abstract class eController {
 	}
 
 	final protected function getLocals (array $data = NULL, array $params = array ('url', 'title', 'lang', 'setLangUrl')) {
-		if (in_array('url', $params)) {$data ['url'] = $this->url;}
-		if (in_array('title', $params)) {$data ['SiteTitle'] = $this->site_title;}
-		if (in_array('lang', $params)) {$data ['SiteLang'] = $this->lang;}
-		if (in_array('setLangUrl', $params)) {$data ['setLangUrl'] = $this->ls_name;}
+		if (in_array('url', $params)) {array_push($data, $this->url);}
+		if (in_array('title', $params)) {array_push($data, $this->site_title);}
+		if (in_array('lang', $params)) {array_push($data, $this->lang);}
+		if (in_array('setLangUrl', $params)) {array_push($data, $this->ls_name);}
 		return $data;		
 	}
 

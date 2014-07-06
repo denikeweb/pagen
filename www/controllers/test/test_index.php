@@ -21,8 +21,7 @@ class test_index extends eController {
 		$data = $this->getLocals ($data);
 		//print_r($this->data);
 
-		$files = NULL;
-		//$files = array ('data' => 'blocks'.DIRSEP.'index');
+		$files = NULL; // array ();
 		$this->view = View::factory ($data, $files);
 	}
 	public function action_edit () {
