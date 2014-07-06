@@ -15,13 +15,10 @@ class View {
 		$folder = config::TEMPLATE;
 		extract($data, EXTR_SKIP);
 		$viewPath = SITE.'templates'.DIRSEP.$folder.DIRSEP;
-		$templateFile = $this->viewPath.$template.EXT;
+		$templateFile = $viewPath.$template.EXT;
 	}
 
 	private function view ($data = array (), $template = 'index', $settings = array ()) {
-		$this->
-		$file = $this->viewPath.$template.EXT;
-		$viewPath = $this->viewPath;
 		$url = $this->url;
 		if (is_file($file)) {
 			include ($file);

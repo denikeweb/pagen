@@ -7,12 +7,12 @@ abstract class eController {
 	*/
 	public $args;
 	private $modelPath;
-	protected $url;
-	protected $site_title;
-	protected $lang;
-	protected $ls_name;
+	private $url;
+	private $site_title;
+	private $lang;
+	private $ls_name;
 	
-	protected function run () {
+	public function run () {
 		$this->loadModel ();
 	}
 
@@ -23,6 +23,14 @@ abstract class eController {
 		$this->url = "//$_SERVER[HTTP_HOST]";
 		$this->site_title = config::TITLE;
 		$this->ls_name = "//$_SERVER[SERVER_NAME]$_SERVER[REQUEST_URI]?lang";
+	}
+
+	final protected function getLocals (array $data = NULL, array $params = array ('url', 'title', 'lang', 'setLangUrl')) {
+		if (in_array('url', $params)) {array_push($data, $this->url);}
+		if (in_array('title', $params)) {array_push($data, $this->site_title);}
+		if (in_array('lang', $params)) {array_push($data, $this->lang);}
+		if (in_array('setLangUrl', $params)) {array_push($data, $this->ls_name);}
+		return $data;		
 	}
 
 	final protected function loadModel ($modelPath = '') {

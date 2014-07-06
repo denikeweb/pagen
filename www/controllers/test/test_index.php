@@ -18,6 +18,7 @@ class test_index extends eController {
 		$this->m->show ();
 		//echo $this->m->count ();
 		$data ['content'] = $this->m->getData ();
+		$data = $this->getLocals ($data);
 		//print_r($this->data);
 
 		$files = NULL; // array ();
