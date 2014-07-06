@@ -24,8 +24,8 @@ class test_index extends eController {
 		$this->loadModel ('_design');
 		$data['_d'] = new _design();
 		$files = array(
-			'hor_menu' => 'blocks'.DIRSEP.'hor_menu.php',
-			'sign_in_form' => 'blocks'.DIRSEP.'sign_in_form.php'
+			'hor_menu' => 'blocks'.DIRSEP.'hor_menu',
+			'sign_in_form' => 'blocks'.DIRSEP.'sign_in_form'
 		);
 		$this->view = View::factory ($data, $files, $this->word);
 	}

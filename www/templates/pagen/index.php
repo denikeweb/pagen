@@ -21,7 +21,7 @@
 		<script type="text/javascript" src="<?php echo $url; ?>/js/scripts.js"></script>
 	</head>
 	<body>
-		<?php echo $sign_in_form; ?>
+		<?php echo $file_sign_in_form; ?>
 		<header id="header">
 			<hgroup>
 				<div id="languages">
@@ -32,7 +32,7 @@
 			</hgroup><!-- hgroup -->
 		</header><!-- #languages -->
 		<nav id="nav">
-			<?php echo $hor_menu; ?>
+			<?php echo $file_hor_menu; ?>
 		</nav><!-- #nav -->
 		
 		<section id="content">

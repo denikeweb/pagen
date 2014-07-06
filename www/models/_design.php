@@ -1,12 +1,11 @@
 <?php
 class _design {
-	public function createMenu () {
+	public function createMenu ($word) {
 		if (config::DB) {
-			global $word;
 			global $mysqli;
 			$user_prioritet = User::$userInfo ['rights'] + 1;
 			$menu = array ();
-			$menu_query = $mysqli->query ("SELECT * FROM `".config::PREFIX."pages` WHERE `show` <= '$user_prioritet' AND `show`!='0' ORDER BY `hor_menu` ASC");
+			$menu_query = $mysqli->query ("SELECT * FROM `".config::PREFIX."pages` WHERE `show` <= '$user_prioritet' AND `show` != '0' ORDER BY `hor_menu` ASC");
 			$menu_row = $menu_query->fetch_assoc ();
 			$i = 0;
 			do {
