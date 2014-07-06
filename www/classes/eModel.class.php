@@ -17,8 +17,9 @@ abstract class eModel {
 	private $union = 'AND';             # string
 	private $assoc = true;              # boolean
 	private $mysqli = '';               # boolean
+	public  $data;
 
-	function __construct ($table = ''){
+	final public function __construct ($table = ''){
 		global $mysqli;
 		$this->mysqli = $mysqli;
 		if (!empty($table)) {
@@ -26,7 +27,7 @@ abstract class eModel {
 		}
 	}
 	
-	public function setDefault(){
+	final public function setDefault(){
 		#$this->table = '';           
 		$this->fields = array ();    
 		$this->condition = array (); 
@@ -40,7 +41,7 @@ abstract class eModel {
 	}
 	//set default options
 
-	public function setFields($myFields){
+	final public function setFields($myFields){
 		foreach ($myFields as &$p) {
 			$p = $this->mysqli->real_escape_string ($p);
 		}
@@ -48,7 +49,7 @@ abstract class eModel {
 	}
 	// setting array of table fields
 	
-	public function addCond($field, $value, $sign = '='){
+	final public function addCond($field, $value, $sign = '='){
 		$field = $this->mysqli->real_escape_string ($field);
 		$value = $this->mysqli->real_escape_string ($value);
 		$sign = $this->mysqli->real_escape_string ($sign);
@@ -57,7 +58,7 @@ abstract class eModel {
 	}
 	//add new condition to associative array of condition for WHERE
 
-	public function setUnion($myUnion){
+	final public function setUnion($myUnion){
 		$myUnion = $this->mysqli->real_escape_string ($myUnion);
 		if ($myUnion == 0 or strtolower($myUnion) == 'or') {
 			$myUnion = 'OR';
@@ -68,7 +69,7 @@ abstract class eModel {
 	}
 	// setting union for condition AND [1] | OR [0]
 	
-	public function setData($myData){
+	final public function setData($myData){
 		foreach ($myData as &$p) {
 			$p = $this->mysqli->real_escape_string ($p);
 		}
@@ -76,17 +77,17 @@ abstract class eModel {
 	}
 	// setting associative array of data (field->value)
 	
-	public function getData(){
+	final public function getData(){
 		return $this->data;
 	}
 	// return associative array of data (field->value)
 	
-	public function setTable($myTable){
+	final public function setTable($myTable){
 		$this->table = $myTable;
 	}
 	// setting tablename or array of tablenames
 	
-	public function setOrder($myField, $myType = 0){
+	final public function setOrder($myField, $myType = 0){
 		$myField = $this->mysqli->real_escape_string ($myField);
 		if ($myType == 0 or strtolower($myType) == 'desc') {
 			$myType = 'DESC';
@@ -97,23 +98,23 @@ abstract class eModel {
 	}
 	// setting order ASC [1] | DESC [0]
 	
-	public function setLimits($myFrom, $myLimit = ''){
+	final public function setLimits($myFrom, $myLimit = ''){
 		$this->from = (int) $myFrom;
 		$this->limit = (int) $myLimit;	
 	}
 	// setting limits
 	
-	public function setSQL($sqli){
+	final public function setSQL($sqli){
 		$this->sql = $sql;
 	}
 	// setting SQL-query [no escaping]
 	
-	public function setResultType($myAssoc){
+	final public function setResultType($myAssoc){
 		$this->assoc = (boolean) $myAssoc;
 	}
 	// setting type of result array
 	
-	public function getCount(){
+	final public function getCount(){
 		$this->returnTableExist ();
 		$conditions = $this->returnCondition ();
 		$tablename = $this->returnTablename ();
@@ -126,7 +127,7 @@ abstract class eModel {
 	}
 	// return count of records by $sql or $condition as $union
 	
-	public function create(){
+	final public function create(){
 		$this->returnTableExist ();
 		$tablename = $this->returnTablename ();
 		$inputs = $this->returnInputs ();
@@ -138,7 +139,7 @@ abstract class eModel {
 	}
 	// adding new record to $table by $data
 	
-	public function readById($id){
+	final public function readById($id){
 		$id = $this->mysqli->real_escape_string ($id);
 		$this->returnTableExist ();
 		$all = $this->returnFields ();
@@ -150,7 +151,7 @@ abstract class eModel {
 	}
 	// set $data as $fields row by this $id and $condition as $union
 	
-	public function readFirst($order = 'id'){
+	final public function readFirst($order = 'id'){
 		$this->returnTableExist ();
 		$all = $this->returnFields ();
 		$conditions = $this->returnCondition ();
@@ -161,7 +162,7 @@ abstract class eModel {
 	}
 	// set $data as first $fields row by $sql or $condition as $union
 	
-	public function readLast($order = 'id'){
+	final public function readLast($order = 'id'){
 		$this->returnTableExist ();
 		$all = $this->returnFields ();
 		$conditions = $this->returnCondition ();
@@ -172,7 +173,7 @@ abstract class eModel {
 	}
 	// set $data as last $fields row by $sql or $condition as $union
 	
-	public function readBy($field, $value){
+	final public function readBy($field, $value){
 		$field = $this->mysqli->real_escape_string ($field);
 		$value = $this->mysqli->real_escape_string ($value);
 		$this->returnTableExist ();
@@ -187,7 +188,7 @@ abstract class eModel {
 	}
 	// set $data as $fields array by this $field $union $value, $order, $from, $limit, $assoc
 	
-	public function read($poly = false){
+	final public function read($poly = false){
 		$this->returnTableExist ();
 		$all = $this->returnFields ();
 		$conditions = $this->returnCondition ();
@@ -200,7 +201,7 @@ abstract class eModel {
 	}
 	// set $data as $fields array by $sql or $condition as $union, $order, $from, $limit, $assoc
 	
-	public function update(){
+	final public function update(){
 		$this->returnTableExist ();
 		$tablename = $this->returnTablename ();
 		$conditions = $this->returnCondition ();
@@ -213,27 +214,27 @@ abstract class eModel {
 	}
 	// update record by $data and $sql or $condition as $union
 	
-	public function deleteById($id){
+	final public function deleteById($id){
 		//DELETE FROM `awm_001`.`pagen_blog` WHERE `pagen_blog`.`id` = 5
 	}
 	// delete record by this $id and $condition as $union
 	
-	public function deleteBy($field, $value){
+	final public function deleteBy($field, $value){
 		
 	}
 	// delete record by this $field $union $value
 	
-	public function delete(){
+	final public function delete(){
 		
 	}
 	// delete record by $sql or $condition as $union
 	
-	public function search($search = array()){
+	final public function search($search = array()){
 		
 	}
 	// seach by database as LIKE by 
 	
-	public function eSearch($titles = array(), $metas = array(), $content = array()){
+	final public function eSearch($titles = array(), $metas = array(), $content = array()){
 		
 	}
 	// extended relevant search ($titles x20, $metas x10, $content x1)

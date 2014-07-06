@@ -1,5 +1,8 @@
 <?php
 class test_index extends eController {
+
+	private $m;
+
 	public function run () {
 		$this->loadModel ();
 

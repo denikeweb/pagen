@@ -12,8 +12,12 @@ abstract class eController {
 	protected $url;
 	protected $site_title;
 	protected $ls_name;
+	
+	protected function run () {
+		$this->loadModel ();
+	}
 
-	function __construct ($modelPath = '', $args = array ()) {
+	final public function __construct ($modelPath = '', $args = array ()) {
 		$this->modelPath = $modelPath;
 		$this->args = $args;
 		$this->lang = config::$Lang;
@@ -22,7 +26,7 @@ abstract class eController {
 		$this->ls_name = "//$_SERVER[SERVER_NAME]$_SERVER[REQUEST_URI]?lang";
 	}
 
-	protected function view ($data = array (), $template = 'index', $settings = array ()) {
+	final protected function view ($data = array (), $template = 'index', $settings = array ()) {
 		global $word;
 		$folder = config::TEMPLATE;
 		extract($data, EXTR_SKIP);
@@ -37,12 +41,8 @@ abstract class eController {
 			echo 'View do not loaded';
 		}
 	}
-	
-	protected function run () {
-		$this->loadModel ();
-	}
 
-	protected function loadModel ($modelPath = '') {
+	final protected function loadModel ($modelPath = '') {
 		if (empty($modelPath)) {
 			$modelPath = $this->modelPath;
 		}
