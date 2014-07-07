@@ -27,7 +27,7 @@ class test_index extends eController {
 			'hor_menu' => 'blocks'.DIRSEP.'hor_menu',
 			'sign_in_form' => 'blocks'.DIRSEP.'sign_in_form'
 		);
-		$this->view = View::factory ($data, $files, $this->word, '');
+		$this->view = View::factory ($data, $files, $this->word);
 	}
 	public function action_edit () {
 
