@@ -15,19 +15,18 @@ class View {
 		extract($data, EXTR_SKIP);
 
 		//files content loading
-		$filesInput = array ();
 		if (count($files) > 0)
 		foreach ($files as $key => $value) {
 			ob_start();
 			$thisFile = $viewPath.$value.EXT;
 			if (is_file($thisFile)) {
 				include $thisFile;
-				$filesInput ['file_'.$key] = ob_get_clean();
+				$var = 'file_'.$key;
+				$$var = ob_get_clean();
 			} else {
 				ob_end_clean();
 			}
 		}
-		extract($filesInput, EXTR_SKIP);
 
 		//template loading
 		ob_start();
