@@ -23,7 +23,7 @@ abstract class eController {
 		$this->lang = config::$Lang;
 		$this->url = "//$_SERVER[HTTP_HOST]";
 		$this->site_title = config::TITLE;
-		$this->ls_name = "//$_SERVER[SERVER_NAME]$_SERVER[REQUEST_URI]?lang";
+		$this->ls_name = "//$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]?lang";
 		$this->word = $word;
 	}
 
