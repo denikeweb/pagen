@@ -3,7 +3,7 @@ class config {
 	const PREFIX = 'pagen_';
 	const LANG = 'uk';
 	const TITLE = 'MySite';
-	const DB_SERVER = 'localhost';
+	const DB_SERVER = '127.0.0.1';
 	const DB_USER = 'root';
 	const DB_PASS = '';
 	const DB_NAME = 'awm_001';
