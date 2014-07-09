@@ -13,7 +13,7 @@ class m_test_index extends eModel {
 		$this->setFields(array ('id', 'title', 'text'));
 		$this->setOrder('id', 'DESC');
 		$this->readLast ();
-		return true;
+		return $this->getData ();;
 	}
 
 	public function count () {

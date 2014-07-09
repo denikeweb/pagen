@@ -70,6 +70,14 @@ abstract class eModel {
 	}
 	// setting array of table fields
 	
+	final public function addJoin($field, $value, $sign = '='){
+		$field = $this->mysqli->real_escape_string ($field);
+		$value = $this->mysqli->real_escape_string ($value);
+		$sign = $this->mysqli->real_escape_string ($sign);
+		$this->condition [$field] [0] = $value;
+		$this->condition [$field] [1] = $sign;
+	}
+	
 	final public function addCond($field, $value, $sign = '='){
 		$field = $this->mysqli->real_escape_string ($field);
 		$value = $this->mysqli->real_escape_string ($value);
@@ -260,6 +268,12 @@ abstract class eModel {
 	}
 	// extended relevant search ($titles x20, $metas x10, $content x1)
 	
+	/**
+		* 
+		* Part of private functions
+		* 
+	*/
+
 	private function returnResult ($query, $poly = false){
 		if ($this->assoc) {
 			$func = 'fetch_assoc';
@@ -320,7 +334,11 @@ abstract class eModel {
 		if (is_array($this->table)) {
 			$_tables = array ();
 			foreach ($this->table as $i => $t) {
-				$_tables [$i] = '`'.config::PREFIX.$this->mysqli->real_escape_string ($t).'`';
+				if (is_int($i)){
+					array_push($_tables, '`'.config::PREFIX.$this->mysqli->real_escape_string ($t).'`');
+				} else {
+					array_push($_tables, '`'.config::PREFIX.$this->mysqli->real_escape_string ($t).'` as `'.$i.'`');
+				}
 			}
 			$result = implode(',', $_tables);
 			return $result;
