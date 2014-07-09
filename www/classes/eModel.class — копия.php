@@ -274,6 +274,11 @@ abstract class eModel {
 		* 
 	*/
 
+	private function returnQuery ($query, $poly = false){
+
+
+	}
+
 	private function returnResult ($query, $poly = false){
 		if ($this->assoc) {
 			$func = 'fetch_assoc';
