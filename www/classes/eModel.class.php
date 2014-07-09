@@ -151,7 +151,8 @@ abstract class eModel {
 		$order = $this->returnOrder ();
 		$t = "SELECT COUNT(*) FROM $tablename WHERE $conditions $order $limits";
 		$query = $this->mysqli->query ($t);
-		$result = $query->fetch_assoc ();
+		$result = $query->fetch_array ();
+		echo $this->returnQuery ();
 		return $result [0];
 	}
 	// return count of records by $sql or $condition as $union
@@ -274,9 +275,33 @@ abstract class eModel {
 		* 
 	*/
 
-	private function returnQuery ($query, $poly = false){
-
-
+	/*
+		** Hash Table
+		*
+		* .  - $this->returnTableExist ();
+		* 0  - $conditions = $this->returnCondition ();
+		* 1  - $tablename = $this->returnTablename ();
+		* 2  - $limits = $this->returnLimits ();
+		* 3  - $order = $this->returnOrder ();
+		* .  - $t = "SELECT COUNT(*) FROM $tablename WHERE $conditions $order $limits";
+		* 
+		* 
+		* 
+		* 
+		* 
+		* 
+	*/
+	private function returnQuery ($queryf = '', array $hash = NULL){
+		$queryf = 'SELECT COUNT(*) FROM %s WHERE %s %s %s   ';
+		$hash = array('tExist', 'cond', 'tName', 'limit', 'order');
+		$args = array ();
+		if (in_array('tExist', $hash)) {$this->returnTableExist ();}
+		if (in_array('cond',   $hash)) {$args [] = $this->returnCondition ();}
+		if (in_array('tName',  $hash)) {$args [] = $this->returnTablename ();}
+		if (in_array('limit',  $hash)) {$args [] = $this->returnLimits ();}
+		if (in_array('order',  $hash)) {$args [] = $this->returnOrder ();}
+		$query = sprintf($queryf, $args [0], $args [1], $args [2], $args [3], $args [5], $args [6], $args [7], $args [8], $args [9], $args [10]);
+		return $query;
 	}
 
 	private function returnResult ($query, $poly = false){
@@ -292,7 +317,7 @@ abstract class eModel {
 			} else {
 				$tmp_data = $query->$func ();
 				do {
-					array_push($this->data, $tmp_data);
+					$this->data [] = $tmp_data;
 				} while ($tmp_data = $query->$func ());
 			}
 		}
@@ -310,7 +335,7 @@ abstract class eModel {
 		} else {
 			$_fields = array();
 			foreach ($this->fields as $item) {
-				array_push($_fields, '`'.$item.'`');
+				$_fields [] = '`'.$item.'`';
 			}
 			$result = implode(',', $_fields);
 			return $result;
@@ -324,7 +349,7 @@ abstract class eModel {
 			} else {
 				$_conds = array();
 				foreach ($this->condition as $field => $value) {
-					array_push($_conds, '`'.$field.'`'.$value [1]."'".$value [0]."'");
+					$_conds [] = '`'.$field.'`'.$value [1]."'".$value [0]."'";
 				}
 				$glue = ' '.$this->union.' ';
 				$result = implode($glue, $_conds);
@@ -340,9 +365,9 @@ abstract class eModel {
 			$_tables = array ();
 			foreach ($this->table as $i => $t) {
 				if (is_int($i)){
-					array_push($_tables, '`'.config::PREFIX.$this->mysqli->real_escape_string ($t).'`');
+					$_tables = '`'.config::PREFIX.$this->mysqli->real_escape_string ($t).'`';
 				} else {
-					array_push($_tables, '`'.config::PREFIX.$this->mysqli->real_escape_string ($t).'` as `'.$i.'`');
+					$_tables = '`'.config::PREFIX.$this->mysqli->real_escape_string ($t).'` as `'.$i.'`';
 				}
 			}
 			$result = implode(',', $_tables);
@@ -374,7 +399,7 @@ abstract class eModel {
 	private function returnUpdates () {
 		$_updates = array ();
 		foreach ($this->data as $field => $value) {
-			array_push($_updates, '`'.$this->mysqli->real_escape_string ($field)."`='".$value."'");
+			$_updates = '`'.$this->mysqli->real_escape_string ($field)."`='".$value."'";
 		}
 		$result = implode(',', $_updates);
 		return $result;
@@ -384,8 +409,8 @@ abstract class eModel {
 		$_fields = array ();
 		$_values = array ();
 		foreach ($this->data as $field => $value) {
-			array_push($_fields, '`'.$this->mysqli->real_escape_string ($field).'`');
-			array_push($_values, "'".$value."'");
+			$_fields [] = '`'.$this->mysqli->real_escape_string ($field).'`';
+			$_values [] = "'".$value."'";
 		}
 		$result [0] = implode(',', $_fields);
 		$result [1] = implode(',', $_values);
