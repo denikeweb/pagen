@@ -16,7 +16,9 @@ abstract class eModel {
 	private $sql = '';                  # string
 	private $union = 'AND';             # string
 	private $assoc = true;              # boolean
-	private $mysqli = '';               # boolean
+	private $is_buf = false;            # boolean
+	private $mysqli = NULL;             # mysqli
+	private $buffer = array ();         # array
 
 	final public function __construct ($table = ''){
 		global $mysqli;
@@ -39,6 +41,26 @@ abstract class eModel {
 		$this->assoc = true;         
 	}
 	//set default options
+
+	final public function bufferQuery($isBuffered = true){
+		$this->is_buf = (bool) $isBuffered;
+	}
+
+	final public function clearBuffer(){
+		$this->setDefault ();
+		$this->bufferQuery (false);
+		$this->buffer = array ();
+	}
+
+	final public function renderBuffer($transaction = true){
+		$t = '';
+		foreach ($this->buffer as $query) {
+			$t .= $query.';';
+		}
+		if ($transaction = true) {
+			$t = 'START TRANSACTION;'.$t.'COMMIT;';
+		}
+	}
 
 	final public function setFields($myFields){
 		foreach ($myFields as &$p) {
