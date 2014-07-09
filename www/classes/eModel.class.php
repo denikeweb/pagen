@@ -76,6 +76,7 @@ abstract class eModel {
 		$sign = $this->mysqli->real_escape_string ($sign);
 		$this->condition [$field] [0] = $value;
 		$this->condition [$field] [1] = $sign;
+		#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	}
 	
 	final public function addCond($field, $value, $sign = '='){
@@ -293,11 +294,11 @@ abstract class eModel {
 	*/
 	private function returnQuery ($queryf = '', array $hash = NULL){
 		$queryf = 'SELECT COUNT(*) FROM %s WHERE %s %s %s   ';
-		$hash = array('tExist', 'cond', 'tName', 'limit', 'order');
+		$hash = array('tExist', 'tName', 'cond', 'limit', 'order');
 		$args = array ();
 		if (in_array('tExist', $hash)) {$this->returnTableExist ();}
-		if (in_array('cond',   $hash)) {$args [] = $this->returnCondition ();}
 		if (in_array('tName',  $hash)) {$args [] = $this->returnTablename ();}
+		if (in_array('cond',   $hash)) {$args [] = $this->returnCondition ();}
 		if (in_array('limit',  $hash)) {$args [] = $this->returnLimits ();}
 		if (in_array('order',  $hash)) {$args [] = $this->returnOrder ();}
 		$query = sprintf($queryf, $args [0], $args [1], $args [2], $args [3], $args [5], $args [6], $args [7], $args [8], $args [9], $args [10]);
@@ -365,9 +366,9 @@ abstract class eModel {
 			$_tables = array ();
 			foreach ($this->table as $i => $t) {
 				if (is_int($i)){
-					$_tables = '`'.config::PREFIX.$this->mysqli->real_escape_string ($t).'`';
+					$_tables [] = '`'.config::PREFIX.$this->mysqli->real_escape_string ($t).'`';
 				} else {
-					$_tables = '`'.config::PREFIX.$this->mysqli->real_escape_string ($t).'` as `'.$i.'`';
+					$_tables [] = '`'.config::PREFIX.$this->mysqli->real_escape_string ($t).'` as `'.$i.'`';
 				}
 			}
 			$result = implode(',', $_tables);
@@ -399,7 +400,7 @@ abstract class eModel {
 	private function returnUpdates () {
 		$_updates = array ();
 		foreach ($this->data as $field => $value) {
-			$_updates = '`'.$this->mysqli->real_escape_string ($field)."`='".$value."'";
+			$_updates [] = '`'.$this->mysqli->real_escape_string ($field)."`='".$value."'";
 		}
 		$result = implode(',', $_updates);
 		return $result;
