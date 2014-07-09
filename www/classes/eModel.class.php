@@ -145,26 +145,15 @@ abstract class eModel {
 	// setting type of result array
 	
 	final public function getCount(){
-		$this->returnTableExist ();
-		$conditions = $this->returnCondition ();
-		$tablename = $this->returnTablename ();
-		$limits = $this->returnLimits ();
-		$order = $this->returnOrder ();
-		$t = "SELECT COUNT(*) FROM $tablename WHERE $conditions $order $limits";
+		$t = $this->returnQuery ('SELECT COUNT(*) FROM %s WHERE %s %s %s', array('tExist', 'tName', 'cond', 'limit', 'order'));
 		$query = $this->mysqli->query ($t);
 		$result = $query->fetch_array ();
-		echo $this->returnQuery ();
 		return $result [0];
 	}
 	// return count of records by $sql or $condition as $union
 	
 	final public function create(){
-		$this->returnTableExist ();
-		$tablename = $this->returnTablename ();
-		$inputs = $this->returnInputs ();
-		$fields = $inputs [0];
-		$values = $inputs [1];
-		$t = "INSERT INTO $tablename ($fields) VALUES ($values)";
+		$t = $this->returnQuery ('INSERT INTO %s (%s) VALUES (%s)', array('tExist', 'tName', 'inputs0', 'inputs1'));
 		$query = $this->mysqli->query ($t);
 		return $query;
 	}
@@ -172,11 +161,7 @@ abstract class eModel {
 	
 	final public function readById($id){
 		$id = $this->mysqli->real_escape_string ($id);
-		$this->returnTableExist ();
-		$all = $this->returnFields ();
-		$conditions = $this->returnCondition ();
-		$tablename = $this->returnTablename ();
-		$t = "SELECT $all FROM $tablename WHERE $conditions AND `id`='$id' LIMIT 1";
+		$t = $this->returnQuery ("SELECT %s FROM %s WHERE %s AND `id`='$id' LIMIT 1", array('tExist', 'fields', 'tName', 'cond'));
 		$query = $this->mysqli->query ($t);
 		$this->returnResult ($query);		
 	}
@@ -293,14 +278,18 @@ abstract class eModel {
 		* 
 	*/
 	private function returnQuery ($queryf = '', array $hash = NULL){
-		$queryf = 'SELECT COUNT(*) FROM %s WHERE %s %s %s   ';
-		$hash = array('tExist', 'tName', 'cond', 'limit', 'order');
+		//$queryf = 'SELECT COUNT(*) FROM %s WHERE %s %s %s   ';
+		//$hash = array('tExist', 'tName', 'cond', 'limit', 'order');
 		$args = array ();
 		if (in_array('tExist', $hash)) {$this->returnTableExist ();}
+		if (in_array('fields', $hash)) {$args [] = $this->returnFields ();}
 		if (in_array('tName',  $hash)) {$args [] = $this->returnTablename ();}
 		if (in_array('cond',   $hash)) {$args [] = $this->returnCondition ();}
 		if (in_array('limit',  $hash)) {$args [] = $this->returnLimits ();}
 		if (in_array('order',  $hash)) {$args [] = $this->returnOrder ();}
+		if (in_array('inputs0',$hash) or in_array('inputs1',  $hash)) {$inputs = $this->returnInputs ();}
+		if (in_array('inputs0',$hash)) {$args [] = $inputs [0];}
+		if (in_array('inputs1',$hash)) {$args [] = $inputs [1];}
 		$query = sprintf($queryf, $args [0], $args [1], $args [2], $args [3], $args [5], $args [6], $args [7], $args [8], $args [9], $args [10]);
 		return $query;
 	}

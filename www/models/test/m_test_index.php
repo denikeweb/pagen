@@ -12,7 +12,8 @@ class m_test_index extends eModel {
 	public function show () {
 		$this->setFields(array ('id', 'title', 'text'));
 		$this->setOrder('id', 'DESC');
-		$this->readLast ();
+		//$this->readLast ();
+		$this->readById (543);
 		return $this->getData ();;
 	}
 
