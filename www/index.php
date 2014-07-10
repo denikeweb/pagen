@@ -41,11 +41,12 @@ Site::getPage ();
 Site::printPage ();
 DataBase::disconnect ();
 
+
 echo '<br>';
 $end_memory = memory_get_usage();
+echo $end_memory - $start_memory;
 $db_time = $end_time2 - $start_time2;
 echo '<br>';
-echo $end_memory - $start_memory;
 echo '<br>';
 $end_time = microtime(3);
 $time = $end_time-$start_time;

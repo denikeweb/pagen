@@ -333,6 +333,7 @@ abstract class eModel {
 			} else {
 				$_conds = array();
 				foreach ($this->condition as $field => $value) {
+					$field = str_replace('.', '`.`', $field);
 					$_conds [] = '`'.$field.'`'.$value [1]."'".$value [0]."'";
 				}
 				$glue = ' '.$this->union.' ';
