@@ -313,8 +313,13 @@ abstract class eModel {
 			return '*';
 		} else {
 			$_fields = array();
-			foreach ($this->fields as $item) {
-				$_fields [] = '`'.$item.'`';
+			foreach ($this->fields as $key => $item) {
+				if (!is_int($key)) {
+					$b = '`'.$key.'`.';
+				} else {
+					$b = '';
+				}
+				$_fields [] = $b.'`'.$item.'`';
 			}
 			$result = implode(',', $_fields);
 			return $result;
