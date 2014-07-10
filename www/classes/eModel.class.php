@@ -64,6 +64,8 @@ abstract class eModel {
 		if ($transaction = true) {
 			$t = 'START TRANSACTION;'.$t.'COMMIT;';
 		}
+		$this->clearBuffer ();
+		return $query = $this->mysqli->query ($t);
 	}
 
 	final public function setFields(array $myFields){
@@ -267,13 +269,17 @@ abstract class eModel {
 	}
 
 	private function r ($t, $type = 0, $poly = false){
-		if ($type == 0) {
-			$query = $this->mysqli->query ($t);
-			return $this->mysqli->affected_rows;
-		} elseif ($type == 1) {
-			$query = $this->mysqli->query ($t);
-			$this->returnResult ($query, $poly);
-			return true;
+		if ($this->is_buf) {
+			$this->buffer [] = $t;
+		} else {
+			if ($type == 0) {
+				$query = $this->mysqli->query ($t);
+				return $this->mysqli->affected_rows;
+			} elseif ($type == 1) {
+				$query = $this->mysqli->query ($t);
+				$this->returnResult ($query, $poly);
+				return true;
+			}
 		}
 	}
 
