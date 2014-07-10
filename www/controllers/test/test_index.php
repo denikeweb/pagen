@@ -12,7 +12,7 @@ class test_index extends eController {
 
 		//$this->m->edit ();
 
-		//$this->m->add ();
+		$this->m->add ();
 
 		$this->m->setDefault ();
 		$this->m->count ();
