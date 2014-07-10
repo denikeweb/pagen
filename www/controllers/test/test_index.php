@@ -16,6 +16,7 @@ class test_index extends eController {
 
 		$this->m->setDefault ();
 		$this->m->count ();
+		$this->m->edit ();
 		$data ['content'] = $this->m->show ();
 		$data = $this->getLocals ($data);
 		//print_r($this->data);

@@ -52,17 +52,18 @@ abstract class eModel {
 		$this->buffer = array ();
 	}
 
-	final public function renderBuffer($transaction = true){
+	final public function renderBuffer($transaction = true, $union = false){
 		$t = '';
+		if ($union) {$u = ' UNION ';} else {$u = '; ';}
 		foreach ($this->buffer as $query) {
-			$t .= $query.';';
+			$t .= $query.$u;
 		}
 		if ($transaction = true) {
 			$t = 'START TRANSACTION;'.$t.'COMMIT;';
 		}
 	}
 
-	final public function setFields($myFields){
+	final public function setFields(array $myFields){
 		foreach ($myFields as &$p) {
 			$p = $this->mysqli->real_escape_string ($p);
 		}
@@ -70,17 +71,17 @@ abstract class eModel {
 	}
 	// setting array of table fields
 	
-	final public function addJoin($field, $value, $sign = '='){
-		$field = $this->mysqli->real_escape_string ($field);
-		$value = $this->mysqli->real_escape_string ($value);
-		$sign = $this->mysqli->real_escape_string ($sign);
-		$this->condition [$field] [0] = $value;
-		$this->condition [$field] [1] = $sign;
+	final public function addJoin(array $joinRules){
+		
 		#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	}
 	
-	final public function addCond($field, $value, $sign = '='){
-		$field = $this->mysqli->real_escape_string ($field);
+	final public function addCond($field, $value, $sign = '=', $table = NULL){
+		if ($table !== NULL) {
+			echo $field = $this->mysqli->real_escape_string ($table).'`.`'.$this->mysqli->real_escape_string ($field);
+		} else {
+			echo $field = $this->mysqli->real_escape_string ($field);
+		}
 		$value = $this->mysqli->real_escape_string ($value);
 		$sign = $this->mysqli->real_escape_string ($sign);
 		$this->condition [$field] [0] = $value;
@@ -134,7 +135,7 @@ abstract class eModel {
 	}
 	// setting limits
 	
-	final public function setSQL($sqli){
+	final public function setSQL($sql){
 		$this->sql = $sql;
 	}
 	// setting SQL-query [no escaping]
