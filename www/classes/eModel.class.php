@@ -22,11 +22,14 @@ abstract class eModel {
 
 	final public function __construct ($table = ''){
 		global $mysqli;
-		$this->mysqli = $mysqli;
-		if (!empty($table)) {
-			$this->setTable($table);
-		}
+		$this->mysqli = &$mysqli;
+		if (!empty($table)) {$this->setTable($table);}
 	}
+
+	public function __set($name, $value) {$this->data[$name] = $this->mysqli->real_escape_string ($value); return true;}
+	public function __get($name) {return $this->data[$name];}
+	public function __isset($name) {return isset($this->data[$name]);}
+	public function __unset($name) {unset($this->data[$name]); return true;}
 	
 	final public function setDefault(){
 		#$this->table = '';           
@@ -154,14 +157,14 @@ abstract class eModel {
 	// return count of records by $sql or $condition as $union
 	
 	final public function create(){
-		$t = $this->returnQuery ('INSERT INTO %s (%s) VALUES (%s)', array('tExist', 'tName', 'inputs0', 'inputs1'));
+		$t = $this->returnQuery ('INSERT INTO %s (%s) VALUES (%s)', array('tExist', 'tName', 'i0', 'i1'));
 		return $this->r($t, 0);
 	}
 	// adding new record to $table by $data
 	
 	final public function readById($id){
 		$id = $this->mysqli->real_escape_string ($id);
-		$t = $this->returnQuery ("SELECT %s FROM %s WHERE %s AND `id`='$id' LIMIT 1", array('tExist', 'fields', 'tName', 'cond'));
+		$t = $this->returnQuery ("SELECT %s FROM %s WHERE %s AND `id`='$id'", array('tExist', 'fields', 'tName', 'cond'));
 		return $this->r($t, 1);		
 	}
 	// set $data as $fields row by this $id and $condition as $union
@@ -199,22 +202,39 @@ abstract class eModel {
 	// update record by $data and $sql or $condition as $union
 	
 	final public function deleteById($id){
-		//DELETE FROM `awm_001`.`pagen_blog` WHERE `pagen_blog`.`id` = 5
+		$id = $this->mysqli->real_escape_string ($id);
+		$t = $this->returnQuery ("DELETE FROM %s WHERE %s AND `id`='$id'", array('tExist', 'tName', 'cond', 'order', 'limit'));
+		return $this->r($t, 0);
 	}
 	// delete record by this $id and $condition as $union
 	
-	final public function deleteBy($field, $value){
-		
+	final public function deleteBy($field, $value) {
+		$field = $this->mysqli->real_escape_string ($field);
+		$value = $this->mysqli->real_escape_string ($value);
+		$t = $this->returnQuery ("DELETE FROM %s WHERE %s AND `$field`='$value'", array('tExist', 'tName', 'cond', 'order', 'limit'));
+		return $this->r($t, 0);
 	}
 	// delete record by this $field $union $value
 	
 	final public function delete(){
-		
+		$t = $this->returnQuery ("DELETE FROM %s WHERE %s %s %s", array('tExist', 'tName', 'cond', 'order', 'limit'));
+		return $this->r($t, 0);
 	}
 	// delete record by $sql or $condition as $union
 	
-	final public function search($search = array()){
-		
+	final public function search($field = '', $request = ''){
+		#$trimmed = ',.!&/\\?;:\'"-=+%_*()^';
+		$trans = array("," => " ", '.' => ' ', '!' => ' ', '?' => ' ', '&' => ' ', ';' => ' ', ':' => ' ', '\\' => ' ', '/' => ' ', '\'' => ' ', '"' => ' ', '+' => ' ', '-' => ' ', '=' => ' ', '%' => ' ', '_' => ' ', '*' => ' ', '(' => ' ', ')' => ' ', '^' => ' ');
+		$request = trim(strtr($request, $trans));
+		$r_array = explode(' ', $request);
+		foreach ($r_array as $key => &$value) {
+			$value = trim($value);
+			if (empty($value)) {unset($r_array [$key]);}
+			$value = '`'.$field.'` LIKE \'%'.$value.'%\'';
+		}
+		$search_sql = implode(' OR ', $r_array);
+		$t = $this->returnQuery ("SELECT %s FROM %s WHERE (%s) AND %s %s %s", array('tExist', 'fields', 'tName', 'cond', 'order', 'limit', 'param'), $search_sql);
+		return $this->r($t, 1, true);
 	}
 	// seach by database as LIKE by 
 	
@@ -229,19 +249,20 @@ abstract class eModel {
 		* 
 	*/
 
-	private function returnQuery ($queryf = '', array $hash = NULL){
+	private function returnQuery ($queryf = '', array $hash = NULL, $param = NULL){
 		$args = array ();
 		if (in_array('tExist', $hash)) {$this->returnTableExist ();}
 		if (in_array('fields', $hash)) {$args [] = $this->returnFields ();}
 		if (in_array('tName',  $hash)) {$args [] = $this->returnTablename ();}
 		if (in_array('updates',$hash)) {$args [] = $this->returnUpdates ();}
+		if (in_array('param',  $hash)) {$args [] = $param;}
 		if (in_array('cond',   $hash)) {$args [] = $this->returnCondition ();}
 		if (in_array('order',  $hash)) {$args [] = $this->returnOrder ();}
 		if (in_array('limit',  $hash)) {$args [] = $this->returnLimits ();}
-		if (in_array('inputs0',$hash) or in_array('inputs1',  $hash)) {$inputs = $this->returnInputs ();}
-		if (in_array('inputs0',$hash)) {$args [] = $inputs [0];}
-		if (in_array('inputs1',$hash)) {$args [] = $inputs [1];}
-		$query = sprintf($queryf, $args [0], $args [1], $args [2], $args [3], $args [4]);
+		if (in_array('i0',     $hash) or in_array('i1',  $hash)) {$inputs = $this->returnInputs ();}
+		if (in_array('i0',     $hash)) {$args [] = $inputs [0];}
+		if (in_array('i1',     $hash)) {$args [] = $inputs [1];}
+		$query = sprintf($queryf, $args [0], $args [1], $args [2], $args [3], $args [4], $args [5]);
 		return $query;
 	}
 

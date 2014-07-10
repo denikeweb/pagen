@@ -36,6 +36,7 @@ abstract class eController {
 	}
 
 	final protected function loadModel ($modelPath = '') {
+		if ($modelPath === NULL) {return false;}
 		if (empty($modelPath)) {
 			$modelPath = $this->modelPath;
 		}

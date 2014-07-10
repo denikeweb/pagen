@@ -10,6 +10,7 @@ class m_test_index extends eModel {
 	}
 
 	public function show () {
+		$this->setDefault ();
 		$this->setFields(array ('id', 'title', 'text'));
 		$this->setOrder('id', 'DESC');
 		$this->readLast ();
@@ -17,7 +18,7 @@ class m_test_index extends eModel {
 		//$this->readFirst ();
 		//$this->addCond('id', 242);
 		//$this->read ();
-		return $this->getData ();;
+		return $this->getData ();
 	}
 
 	public function count () {
@@ -34,8 +35,18 @@ class m_test_index extends eModel {
 	}
 
 	public function add () {
-		$this->setData(array ('title' => "Add's -> ".mt_rand(0,50), 'text' => "Ha! It's mine text"));
+		//$this->setData(array ('title' => "Add's -> ".mt_rand(0,50), 'text' => "Ha! It's mine text"));
+		$this->title = "Add's -> ".mt_rand(0,50);
+		$this->text = "Ha! It's mine text";
 		return $this->create ();
+	}
+
+	public function find () {
+		$this->setDefault ();
+		$this->setLimits (10);
+		$this->setOrder('id', 'DESC');
+		$this->search ('title', '40 :342;123fsd weg 34* , r,,() def  ');
+		return $this->getData ();
 	}
 }
 ?>

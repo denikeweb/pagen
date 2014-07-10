@@ -32,7 +32,9 @@ include_once SITE.'classes/View.class.php';
 
 //echo memory_get_usage() - $start_memory;
 
+$start_time2 = microtime(2);
 DataBase::connect ();
+$end_time2 = microtime(2);
 User::userAuth ();
 Site::setupLanguage ();
 Site::getPage ();
@@ -41,8 +43,11 @@ DataBase::disconnect ();
 
 echo '<br>';
 $end_memory = memory_get_usage();
+$db_time = $end_time2 - $start_time2;
+echo '<br>';
 echo $end_memory - $start_memory;
 echo '<br>';
 $end_time = microtime(3);
-echo $time = $end_time-$start_time;
+$time = $end_time-$start_time;
+echo $time, '(', ($time - $db_time),')';
 ?>
