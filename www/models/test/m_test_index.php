@@ -13,7 +13,10 @@ class m_test_index extends eModel {
 		$this->setFields(array ('id', 'title', 'text'));
 		$this->setOrder('id', 'DESC');
 		//$this->readLast ();
-		$this->readById (543);
+		//$this->readById (543);
+		//$this->readFirst ();
+		$this->addCond('id', 242);
+		$this->read ();
 		return $this->getData ();;
 	}
 

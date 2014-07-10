@@ -78,9 +78,9 @@ abstract class eModel {
 	
 	final public function addCond($field, $value, $sign = '=', $table = NULL){
 		if ($table !== NULL) {
-			echo $field = $this->mysqli->real_escape_string ($table).'`.`'.$this->mysqli->real_escape_string ($field);
+			$field = $this->mysqli->real_escape_string ($table).'`.`'.$this->mysqli->real_escape_string ($field);
 		} else {
-			echo $field = $this->mysqli->real_escape_string ($field);
+			$field = $this->mysqli->real_escape_string ($field);
 		}
 		$value = $this->mysqli->real_escape_string ($value);
 		$sign = $this->mysqli->real_escape_string ($sign);
@@ -146,7 +146,7 @@ abstract class eModel {
 	// setting type of result array
 	
 	final public function getCount(){
-		$t = $this->returnQuery ('SELECT COUNT(*) FROM %s WHERE %s %s %s', array('tExist', 'tName', 'cond', 'limit', 'order'));
+		$t = $this->returnQuery ('SELECT COUNT(*) FROM %s WHERE %s %s %s', array('tExist', 'tName', 'cond', 'order', 'limit'));
 		$query = $this->mysqli->query ($t);
 		$result = $query->fetch_array ();
 		return $result [0];
@@ -169,22 +169,14 @@ abstract class eModel {
 	// set $data as $fields row by this $id and $condition as $union
 	
 	final public function readFirst($order = 'id'){
-		$this->returnTableExist ();
-		$all = $this->returnFields ();
-		$conditions = $this->returnCondition ();
-		$tablename = $this->returnTablename ();
-		$t = "SELECT $all FROM $tablename WHERE $conditions ORDER BY `$order` ASC LIMIT 1";
+		$t = $this->returnQuery ("SELECT %s FROM %s WHERE %s AND `id`='$id' ORDER BY `$order` ASC LIMIT 1", array('tExist', 'fields', 'tName', 'cond'));
 		$query = $this->mysqli->query ($t);
 		$this->returnResult ($query);
 	}
 	// set $data as first $fields row by $sql or $condition as $union
 	
 	final public function readLast($order = 'id'){
-		$this->returnTableExist ();
-		$all = $this->returnFields ();
-		$conditions = $this->returnCondition ();
-		$tablename = $this->returnTablename ();
-		$t = "SELECT $all FROM $tablename WHERE $conditions ORDER BY `$order` DESC LIMIT 1";
+		$t = $this->returnQuery ("SELECT %s FROM %s WHERE %s AND `id`='$id' ORDER BY `$order` DESC LIMIT 1", array('tExist', 'fields', 'tName', 'cond'));
 		$query = $this->mysqli->query ($t);
 		$this->returnResult ($query);
 	}
@@ -193,39 +185,21 @@ abstract class eModel {
 	final public function readBy($field, $value){
 		$field = $this->mysqli->real_escape_string ($field);
 		$value = $this->mysqli->real_escape_string ($value);
-		$this->returnTableExist ();
-		$all = $this->returnFields ();
-		$conditions = $this->returnCondition ();
-		$tablename = $this->returnTablename ();
-		$limits = $this->returnLimits ();
-		$order = $this->returnOrder ();
-		$t = "SELECT $all FROM $tablename WHERE $conditions AND `$field`='$value' $order $limits";
+		$t = $this->returnQuery ("SELECT %s FROM %s WHERE %s AND `$field`='$value' %s %s", array('tExist', 'fields', 'tName', 'cond', 'order', 'limit'));
 		$query = $this->mysqli->query ($t);
 		$this->returnResult ($query);
 	}
 	// set $data as $fields array by this $field $union $value, $order, $from, $limit, $assoc
 	
 	final public function read($poly = false){
-		$this->returnTableExist ();
-		$all = $this->returnFields ();
-		$conditions = $this->returnCondition ();
-		$tablename = $this->returnTablename ();
-		$limits = $this->returnLimits ();
-		$order = $this->returnOrder ();
-		$t = "SELECT $all FROM $tablename WHERE $conditions $order $limits";
+		$t = $this->returnQuery ("SELECT %s FROM %s WHERE %s %s %s", array('tExist', 'fields', 'tName', 'cond', 'order', 'limit'));
 		$query = $this->mysqli->query ($t);
 		$this->returnResult ($query, $poly);
 	}
 	// set $data as $fields array by $sql or $condition as $union, $order, $from, $limit, $assoc
 	
 	final public function update(){
-		$this->returnTableExist ();
-		$tablename = $this->returnTablename ();
-		$conditions = $this->returnCondition ();
-		$updates = $this->returnUpdates ();
-		$limits = $this->returnLimits ();
-		$order = $this->returnOrder ();
-		$t = "UPDATE $tablename SET $updates WHERE $conditions $order $limits";
+		$t = $this->returnQuery ("SELECT %s FROM %s WHERE %s %s %s", array('tExist', 'fields', 'updates', 'cond', 'order', 'limit'));
 		$this->mysqli->query ($t);
 		return $this->mysqli->affected_rows;
 	}
@@ -285,9 +259,10 @@ abstract class eModel {
 		if (in_array('tExist', $hash)) {$this->returnTableExist ();}
 		if (in_array('fields', $hash)) {$args [] = $this->returnFields ();}
 		if (in_array('tName',  $hash)) {$args [] = $this->returnTablename ();}
+		if (in_array('updates',$hash)) {$args [] = $this->returnUpdates ();}
 		if (in_array('cond',   $hash)) {$args [] = $this->returnCondition ();}
-		if (in_array('limit',  $hash)) {$args [] = $this->returnLimits ();}
 		if (in_array('order',  $hash)) {$args [] = $this->returnOrder ();}
+		if (in_array('limit',  $hash)) {$args [] = $this->returnLimits ();}
 		if (in_array('inputs0',$hash) or in_array('inputs1',  $hash)) {$inputs = $this->returnInputs ();}
 		if (in_array('inputs0',$hash)) {$args [] = $inputs [0];}
 		if (in_array('inputs1',$hash)) {$args [] = $inputs [1];}
