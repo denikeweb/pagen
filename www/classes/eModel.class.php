@@ -8,6 +8,7 @@ abstract class eModel {
 	
 	private $fields = array ();         # array
 	private $condition = array ();      # assoc array
+	private $joins = array ();      # assoc array
 	private $data = array ();           # assoc array
 	private $table = '';                # string || array
 	private $order = array('', '');     # array (2)
@@ -35,13 +36,14 @@ abstract class eModel {
 		#$this->table = '';           
 		$this->fields = array ();    
 		$this->condition = array (); 
+		$this->joins = array ();      
 		$this->data = array ();      
 		$this->order = array('', '');
 		$this->from = '';            
 		$this->limit = '';           
 		$this->sql = '';             
 		$this->union = 'AND';        
-		$this->assoc = true;         
+		$this->assoc = true;     
 	}
 	//set default options
 
@@ -76,9 +78,8 @@ abstract class eModel {
 	}
 	// setting array of table fields
 	
-	final public function addJoin(array $joinRules){
-		
-		#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	final public function addJoin($table1, $id1, $table2, $id2){
+		$this->joins [] = " INNER JOIN ‘$table2’ ON ‘$table1’.’$id1’ = ‘$table2’. ‘$id2’ ";
 	}
 	
 	final public function addCond($field, $value, $sign = '=', $table = NULL){
@@ -166,19 +167,19 @@ abstract class eModel {
 	
 	final public function readById($id){
 		$id = $this->mysqli->real_escape_string ($id);
-		$t = $this->returnQuery ("SELECT %s FROM %s WHERE %s AND `id`='$id'", array('tExist', 'fields', 'tName', 'cond'));
+		$t = $this->returnQuery ("SELECT %s %s FROM %s WHERE %s AND `id`='$id'", array('tExist', 'fields', 'join', 'tName', 'cond'));
 		return $this->r($t, 1);		
 	}
 	// set $data as $fields row by this $id and $condition as $union
 	
 	final public function readFirst($order = 'id'){
-		$t = $this->returnQuery ("SELECT %s FROM %s WHERE %s ORDER BY `$order` ASC LIMIT 1", array('tExist', 'fields', 'tName', 'cond'));
+		$t = $this->returnQuery ("SELECT %s %s FROM %s WHERE %s ORDER BY `$order` ASC LIMIT 1", array('tExist', 'fields', 'join', 'tName', 'cond'));
 		return $this->r($t, 1);
 	}
 	// set $data as first $fields row by $sql or $condition as $union
 	
 	final public function readLast($order = 'id'){
-		$t = $this->returnQuery ("SELECT %s FROM %s WHERE %s ORDER BY `$order` DESC LIMIT 1", array('tExist', 'fields', 'tName', 'cond'));
+		$t = $this->returnQuery ("SELECT %s %s FROM %s WHERE %s ORDER BY `$order` DESC LIMIT 1", array('tExist', 'fields', 'join', 'tName', 'cond'));
 		return $this->r($t, 1);
 	}
 	// set $data as last $fields row by $sql or $condition as $union
@@ -186,19 +187,19 @@ abstract class eModel {
 	final public function readBy($field, $value){
 		$field = $this->mysqli->real_escape_string ($field);
 		$value = $this->mysqli->real_escape_string ($value);
-		$t = $this->returnQuery ("SELECT %s FROM %s WHERE %s AND `$field`='$value' %s %s", array('tExist', 'fields', 'tName', 'cond', 'order', 'limit'));
+		$t = $this->returnQuery ("SELECT %s %s FROM %s WHERE %s AND `$field`='$value' %s %s", array('tExist', 'fields', 'join', 'tName', 'cond', 'order', 'limit'));
 		return $this->r($t, 1);
 	}
 	// set $data as $fields array by this $field $union $value, $order, $from, $limit, $assoc
 	
 	final public function read($poly = false){
-		$t = $this->returnQuery ("SELECT %s FROM %s WHERE %s %s %s", array('tExist', 'fields', 'tName', 'cond', 'order', 'limit'));
+		$t = $this->returnQuery ("SELECT %s %s FROM %s WHERE %s %s %s", array('tExist', 'fields', 'join', 'tName', 'cond', 'order', 'limit'));
 		return $this->r($t, 1, $poly);
 	}
 	// set $data as $fields array by $sql or $condition as $union, $order, $from, $limit, $assoc
 	
 	final public function update(){
-		$t = $this->returnQuery ("SELECT %s FROM %s WHERE %s %s %s", array('tExist', 'fields', 'updates', 'cond', 'order', 'limit'));
+		$t = $this->returnQuery ("UPDATE %s SET %s %s WHERE %s %s %s", array('tExist', 'tName', 'updates', 'join', 'cond', 'order', 'limit'));
 		return $this->r($t, 0);
 	}
 	// update record by $data and $sql or $condition as $union
@@ -271,6 +272,7 @@ abstract class eModel {
 	private function r ($t, $type = 0, $poly = false){
 		if ($this->is_buf) {
 			$this->buffer [] = $t;
+			$this->setDefault ();
 		} else {
 			if ($type == 0) {
 				$query = $this->mysqli->query ($t);
@@ -333,7 +335,6 @@ abstract class eModel {
 			} else {
 				$_conds = array();
 				foreach ($this->condition as $field => $value) {
-					$field = str_replace('.', '`.`', $field);
 					$_conds [] = '`'.$field.'`'.$value [1]."'".$value [0]."'";
 				}
 				$glue = ' '.$this->union.' ';
