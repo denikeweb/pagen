@@ -258,6 +258,7 @@ abstract class eModel {
 		if (in_array('fields', $hash)) {$args [] = $this->returnFields ();}
 		if (in_array('tName',  $hash)) {$args [] = $this->returnTablename ();}
 		if (in_array('updates',$hash)) {$args [] = $this->returnUpdates ();}
+		if (in_array('join',   $hash)) {$args [] = $this->returnJoins ();}
 		if (in_array('param',  $hash)) {$args [] = $param;}
 		if (in_array('cond',   $hash)) {$args [] = $this->returnCondition ();}
 		if (in_array('order',  $hash)) {$args [] = $this->returnOrder ();}
@@ -380,6 +381,10 @@ abstract class eModel {
 			}
 		}
 		return $limits;
+	}
+
+	private function returnJoins (){
+		return implode('', $this->joins);
 	}
 
 	private function returnUpdates () {

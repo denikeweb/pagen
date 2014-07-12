@@ -28,6 +28,7 @@ include_once SITE.'classes/Validator.class.php';
 include_once SITE.'classes/User.class.php';
 include_once SITE.'classes/Site.class.php';
 include_once SITE.'classes/eController.class.php';
+include_once SITE.'classes/Storage.class.php';
 include_once SITE.'classes/View.class.php';
 
 //echo memory_get_usage() - $start_memory;
