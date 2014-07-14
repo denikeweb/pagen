@@ -16,21 +16,23 @@ class View {
 		extract($data, EXTR_SKIP);
 
 		//files content loading
-		foreach ($storage->getFiles () as $key => $value) {
-			ob_start();
-			if ($storage->isCached ($key)) {
-				$storage->getCache ();
-			} else {
-				$thisFile = $viewPath.$value.EXT;
-				if (is_file($thisFile)) {
-					include $thisFile;
-					$var = 'file_'.$key;
-					$$var = ob_get_clean();
+		$fs = $storage->getFiles ();
+		if ($fs)
+			foreach ($fs as $key => $value) {
+				ob_start();
+				if ($storage->isCached ($key)) {
+					$storage->getCache ();
 				} else {
-					ob_end_clean();
+					$thisFile = $viewPath.$value.EXT;
+					if (is_file($thisFile)) {
+						include $thisFile;
+						$var = 'file_'.$key;
+						$$var = ob_get_clean();
+					} else {
+						ob_end_clean();
+					}
 				}
 			}
-		}
 
 		//template loading
 		ob_start();

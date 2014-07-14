@@ -195,7 +195,7 @@ abstract class Site {
 		include ($file);
 	}
 	private static function result (eController $a) {
-		echo $a->view;
+		echo $a->view ();
 	}
 }
 ?>

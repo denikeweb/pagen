@@ -11,10 +11,15 @@ abstract class eController {
 	private   $site_title;
 	private   $lang;
 	private   $ls_name;
-	protected $word;
+	protected $word = array();
+	protected $view = '';
 	
 	public function run () {
 		$this->loadModel ();
+	}
+	
+	public function view () {
+		return $this->view;
 	}
 
 	final public function __construct ($modelPath = '', array $args = NULL, array $word = NULL) {
