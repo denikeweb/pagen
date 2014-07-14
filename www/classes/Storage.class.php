@@ -18,7 +18,9 @@ class Storage {
 		if ($result) {
 			/**
 				*
+				*
 				* loading cache
+				*
 				*
 			*/
 		}
