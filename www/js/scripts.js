@@ -53,6 +53,9 @@ $(function (){
         pass = $('#pass_out_e').val ();
         _ajax ('auth/login', [login, pass], function (data) {alert(data)});
     });
+    $('.exit_span').on('click', function (){
+        _ajax ('auth/logout', [], function (data) {alert(data)});
+    });
 });
 
 //---------------------------------------------------------------------
