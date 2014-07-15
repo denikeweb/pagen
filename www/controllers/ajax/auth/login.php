@@ -36,7 +36,7 @@ class login extends eController {
 				session_start ();
 				$_SESSION ['id'] = $result ['id'];
 				$_SESSION ['rights'] = $result ['rights'];
-				$message = '';
+				$message = '200 OK';
 			}
 		}
 		return $message;

@@ -108,7 +108,6 @@ abstract class Site {
 			self::defaultController ();
 			//if page is static load default page controller
 		} else {
-			define ('DIRSEP', DIRECTORY_SEPARATOR);
 			$c_pagen_path = dirname (dirname(__FILE__)).DIRSEP.'controllers';
 			//get path to controllers
 			$modelPath = '';
@@ -137,6 +136,15 @@ abstract class Site {
 				}
 			}
 			//search untill getting file
+			
+			$file = $c_pagen_path.DIRSEP.$controller.EXT;
+			if (empty ($controller)) {
+				if (is_file ($fullpath.DIRSEP.'index'.EXT)) {
+					$file = $c_pagen_path.DIRSEP.$controller.DIRSEP.'index'.EXT;
+					$controller = $piece;
+				}
+			}
+
 			if (empty ($controller)) {
 				#$controller = 'index';
 				self::include404 ();
@@ -154,7 +162,6 @@ abstract class Site {
 				}
 				// get action, default method - run ()
 
-				$file = $c_pagen_path.DIRSEP.$controller.EXT;
 				$modelPath .= 'm_'.$controller;
 				//create full model path
 				$args = $pieces;
