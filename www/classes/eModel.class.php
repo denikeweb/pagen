@@ -21,7 +21,7 @@ abstract class eModel {
 	private $mysqli = NULL;             # mysqli
 	private $buffer = array ();         # array
 
-	final public function __construct ($table = ''){
+	public function __construct ($table = ''){
 		global $mysqli;
 		$this->mysqli = &$mysqli;
 		if (!empty($table)) {$this->setTable($table);}
@@ -126,7 +126,7 @@ abstract class eModel {
 	
 	final public function setOrder($myField, $myType = 0){
 		$myField = $this->mysqli->real_escape_string ($myField);
-		if ($myType == 0 or strtolower($myType) == 'desc') {
+		if ($myType == '0' or strtolower($myType) == 'desc') {
 			$myType = 'DESC';
 		} else {
 			$myType = 'ASC';
