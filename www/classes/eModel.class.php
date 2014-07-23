@@ -8,18 +8,19 @@ abstract class eModel {
 	
 	private $fields = array ();         # array
 	private $condition = array ();      # assoc array
-	private $joins = array ();      # assoc array
+	private $joins = array ();      	# assoc array
 	private $data = array ();           # assoc array
 	private $table = '';                # string || array
 	private $order = array('', '');     # array (2)
-	private $from = '';                 # integer/empty string
-	private $limit = '';                # integer/empty string
+	private $from = NULL;               # integer/NULL
+	private $limit = NULL;              # integer/NULL
 	private $sql = '';                  # string
 	private $union = 'AND';             # string
 	private $assoc = true;              # boolean
 	private $is_buf = false;            # boolean
 	private $mysqli = NULL;             # mysqli
 	private $buffer = array ();         # array
+	private $debug = false;
 
 	public function __construct ($table = ''){
 		global $mysqli;
@@ -31,6 +32,7 @@ abstract class eModel {
 	public function __get($name) {return $this->data[$name];}
 	public function __isset($name) {return isset($this->data[$name]);}
 	public function __unset($name) {unset($this->data[$name]); return true;}
+	public function debug ($bool) {$this->debug = (bool) $bool;}
 	
 	final public function setDefault(){
 		#$this->table = '';           
@@ -46,6 +48,21 @@ abstract class eModel {
 		$this->assoc = true;     
 	}
 	//set default options
+
+    public function mngItem ($key = NULL, $info = '', $replace = false, $many = false) {
+        if ($replace) {
+            if ($many) {
+                if (count($this->data) > 0)
+                    foreach ($this->data as &$data) {
+                        $data [$key] = $data [$info];
+                    }
+            } else {
+                $this->data [$key] = $this->data [$info];
+            }
+        } else {
+            $this->data [$key] = $info;
+        }
+    }
 
 	final public function bufferQuery($isBuffered = true){
 		$this->is_buf = (bool) $isBuffered;
@@ -81,18 +98,22 @@ abstract class eModel {
 	final public function addJoin($table1, $id1, $table2, $id2){
 		$this->joins [] = " INNER JOIN ‘$table2’ ON ‘$table1’.’$id1’ = ‘$table2’. ‘$id2’ ";
 	}
-	
-	final public function addCond($field, $value, $sign = '=', $table = NULL){
-		if ($table !== NULL) {
-			$field = $this->mysqli->real_escape_string ($table).'`.`'.$this->mysqli->real_escape_string ($field);
-		} else {
-			$field = $this->mysqli->real_escape_string ($field);
-		}
-		$value = $this->mysqli->real_escape_string ($value);
-		$sign = $this->mysqli->real_escape_string ($sign);
-		$this->condition [$field] [0] = $value;
-		$this->condition [$field] [1] = $sign;
-	}
+
+    final public function addCond($field, $value, $table1 = NULL, $table2 = NULL, $sign = '='){
+        if ($table1 !== NULL) {
+            $field = config::PREFIX.$this->mysqli->real_escape_string ($table1).'`.`'.$this->mysqli->real_escape_string ($field);
+        } else {
+            $field = config::PREFIX.$this->mysqli->real_escape_string ($field);
+        }
+        if ($table2 !== NULL) {
+            $value = $this->mysqli->real_escape_string ($table2).'`.`'.$this->mysqli->real_escape_string ($value);
+        } else {
+            $value = $this->mysqli->real_escape_string ($value);
+        }
+        $sign = $this->mysqli->real_escape_string ($sign);
+        $this->condition [$field] [0] = $value;
+        $this->condition [$field] [1] = $sign;
+    }
 	//add new condition to associative array of condition for WHERE
 
 	final public function setUnion($myUnion){
@@ -152,7 +173,7 @@ abstract class eModel {
 	// setting type of result array
 	
 	final public function getCount(){
-		$t = $this->returnQuery ('SELECT COUNT(*) FROM %s WHERE %s %s %s', array('tExist', 'tName', 'cond', 'order', 'limit'));
+		$t = $this->returnQuery ('SELECT COUNT(*) FROM %s WHERE %s %s', array('tExist', 'tName', 'cond', 'order'));
 		$query = $this->mysqli->query ($t);
 		$result = $query->fetch_array ();
 		return $result [0];
@@ -267,6 +288,7 @@ abstract class eModel {
 		if (in_array('i0',     $hash)) {$args [] = $inputs [0];}
 		if (in_array('i1',     $hash)) {$args [] = $inputs [1];}
 		$query = sprintf($queryf, $args [0], $args [1], $args [2], $args [3], $args [4], $args [5]);
+		if ($this->debug) {echo $query;}
 		return $query;
 	}
 
@@ -318,7 +340,7 @@ abstract class eModel {
 			$_fields = array();
 			foreach ($this->fields as $key => $item) {
 				if (!is_int($key)) {
-					$b = '`'.$key.'`.';
+                    $b = '`'.config::PREFIX.$key.'`.';
 				} else {
 					$b = '';
 				}
@@ -367,16 +389,17 @@ abstract class eModel {
 	private function returnOrder () {
 		$order = '';
 		if (!empty($this->order [0]) and !empty($this->order [1])) {
-			$order = "ORDER BY `{$this->order [0]}` {$this->order [1]}";
+            if (is_array($this->table)) {$orderTable = config::PREFIX.$this->table[0];} else {$orderTable = config::PREFIX.$this->table;}
+			$order = "ORDER BY `$orderTable`.`{$this->order [0]}` {$this->order [1]}";
 		}
 		return $order;
 	}
 
 	private function returnLimits () {
 		$limits = '';
-		if (!empty($this->from)) {
+		if ($this->from !== NULL) {
 			$limits = 'LIMIT '.$this->from;
-			if (!empty($this->limit)){
+			if ($this->limit != 0) {
 				$limits .= ','.$this->limit;
 			}
 		}
