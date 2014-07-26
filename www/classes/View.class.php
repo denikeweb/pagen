@@ -19,7 +19,6 @@ class View {
 		$fs = $storage->getFiles ();
 		if ($fs)
 			foreach ($fs as $key => $value) {
-				echo $value;
 				if ($storage->isCached ($key)) {
 					if ($storage->needCaching ($key)) {
 						$content = '';
@@ -31,13 +30,13 @@ class View {
 						} else {
 							ob_end_clean();
 						}
-						$thisFile = $storage->viewCachePath ().$value.EXT;
-						$handle = @fopen($storage->viewPath ().$value.EXT, 'w');
+						echo $thisFile = strtr($storage->viewCachePath ().$value.EXT, array ('\\', '\\\\'));
+						$handle = fopen($thisFile, 'w+');
 						if ($handle) {
 							fwrite($handle, $content);
 							fclose($handle);
 						}
-						echo $handle;
+						//echo $handle;
 						$var = 'file_'.$key;
 						$$var = $storage->getCache ($key);
 					}

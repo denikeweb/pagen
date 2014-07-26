@@ -17,7 +17,7 @@ abstract class Files {
 		return $content;
 	}
 	
-	public static function write ($fname, $content, $writeMode = 'w'){
+	public static function write ($fname, $content, $writeMode = 'w+'){
 		$handle = @fopen($fname, $writeMode);
 		$result = false;
 		if ($handle) {
