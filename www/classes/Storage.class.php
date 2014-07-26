@@ -29,33 +29,38 @@ class Storage {
 	}
 
 	private function needCaching ($key) {
-		return $this->getTime($this->files [$key]) > $this->cache [$key];
+		if (is_file($this->files [$key])) {
+			$time = $this->getTime($this->files [$key]);
+		} else {
+			$time = $this->cache [$key];
+		}
+		return ($this->cache [$key] - $time < 0);
 	}
 
 	private function getTime ($file) {
 		$time_sec = time ();
-		//$time_file = filemtime ($file);
+		$time_file = filemtime ($file);
 		return $time = $time_sec - $time_file;
 	}
 
 	private function setCache () {
-		$thisFile = $viewPath.$value.EXT;
+		/*$thisFile = $this->viewCachePath.$value.EXT;
 		if (is_file($thisFile)) {
 			include_once $thisFile;
 			$var = 'file_'.$key;
 			$$var = ob_get_clean();
 		} else {
 			ob_end_clean();
-		}
+		}*/
 	}
 
 	public function getCache ($key) {
 		ob_start();
-		$thisFile = $this->viewPath.$this->files [$key].EXT;
+		$content = NULL;
+		$thisFile = $this->viewCachePath.$this->files [$key].EXT;
 		if (is_file($thisFile)) {
 			include_once $thisFile;
-			$var = 'file_'.$key;
-			$$var = ob_get_clean();
+			$content = ob_get_clean();
 		} else {
 			ob_end_clean();
 		}

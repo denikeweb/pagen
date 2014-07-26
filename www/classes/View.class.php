@@ -42,7 +42,7 @@ class View {
 			$this->content = ob_get_clean();
 		} else {
 			ob_end_clean();
-			foreach ($filesInput as $value) {
+			foreach ($storage->getFiles () as $value) {
 				$this->content .= $value;
 			}
 		}
