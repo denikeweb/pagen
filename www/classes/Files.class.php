@@ -9,7 +9,7 @@ abstract class Files {
 		$handle = @fopen($fname, 'r');
 		if ($handle) {
 			$len = filesize($fname);
-			$content = @fread($handle,$len);
+			$content = @fread($handle, $len);
 			@fclose($handle);
 		} else {
 			$content = false;
@@ -17,8 +17,8 @@ abstract class Files {
 		return $content;
 	}
 	
-	public static function write ($fname, $content){
-		$handle = fopen($fname, 'w');
+	public static function write ($fname, $content, $writeMode = 'w'){
+		$handle = @fopen($fname, $writeMode);
 		$result = false;
 		if ($handle) {
 			if (fwrite($handle, $content)) {
@@ -30,15 +30,7 @@ abstract class Files {
 	}
 	
 	public static function writeToEnd ($fname, $content){
-		$handle = @fopen($fname, 'a');
-		$result = false;
-		if ($handle) {
-			if (@fwrite($handle, $content)) {
-				$result = true;
-			}
-			@fclose($handle);
-		}
-		return $result;
+		return self::write($fname, $content, 'a');
 	}
 	
 	public static function writeLog ($file = 'system/log.txt'){
