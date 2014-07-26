@@ -19,9 +19,28 @@ class View {
 		$fs = $storage->getFiles ();
 		if ($fs)
 			foreach ($fs as $key => $value) {
+				echo $value;
 				if ($storage->isCached ($key)) {
-					$var = 'file_'.$key;
-					$$var = $storage->getCache ($key);
+					if ($storage->needCaching ($key)) {
+						$content = '';
+						ob_start();
+						$tFile = $storage->viewPath ().$value.EXT;
+						if (is_file($tFile)) {
+							include $tFile;
+							$content = ob_get_clean ();
+						} else {
+							ob_end_clean();
+						}
+						$thisFile = $storage->viewCachePath ().$value.EXT;
+						$handle = @fopen($storage->viewPath ().$value.EXT, 'w');
+						if ($handle) {
+							fwrite($handle, $content);
+							fclose($handle);
+						}
+						echo $handle;
+						$var = 'file_'.$key;
+						$$var = $storage->getCache ($key);
+					}
 				} else {
 					ob_start();
 					$thisFile = $storage->viewPath ().$value.EXT;
