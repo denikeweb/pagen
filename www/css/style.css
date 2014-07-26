@@ -4,7 +4,7 @@
 	html {height: 100%;}
 	body {font: 18px Calibri, Arial, sans-serif; color: #111; height: 100%;}
 	fieldset{border: 0;}
-	h1,h2,h3,h4,h5,h6,h7{font-family: Candara, Calibri, sans-serif; color: #0c1638; line-height: 1.0em; padding-bottom:10px; cursor: default; text-align: left;}
+	h1,h2,h3,h4,h5,h6{font-family: Candara, Calibri, sans-serif; color: #0c1638; line-height: 1.0em; padding-bottom:10px; cursor: default; text-align: left;}
 	h1{font-size: 56px;}
 	h2{font-size: 48px;}
 	h3{font-size: 36px;}
@@ -61,7 +61,7 @@
 	.enter_label{color:#fff !important; font-size: 20px; padding: 0 0 10px; margin: 0;}
 	.exit_span{text-decoration: underline; color: #345784; cursor: pointer;}
 	#else_enter {float:right; text-align:right;}
-	#else_enter a{color:#fff;1}
+	#else_enter a{color:#fff;}
 	#user_plus{background: none; position: fixed; bottom: 10px; right: 10px; z-index: 4; display: block;}
 	.login_close{position: absolute; right: 10px; bottom: 120px; color: #fff; cursor: pointer; font-weight: bold;}
 /*--- log in form ---*/

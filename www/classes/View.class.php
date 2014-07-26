@@ -11,23 +11,24 @@ class View {
 	private function __construct ($data, $storage, $word, $template) {
 		//creating template path
 		$folder = config::TEMPLATE;
-		$viewPath = SITE.'templates'.DIRSEP.$folder.DIRSEP;
-		$templateFile = $viewPath.$template.EXT;
+		$storage->setviewPath(SITE.'templates'.DIRSEP.$folder.DIRSEP);
+		$templateFile = $storage->viewPath ().$template.EXT;
 		extract($data, EXTR_SKIP);
 
 		//files content loading
 		$fs = $storage->getFiles ();
 		if ($fs)
 			foreach ($fs as $key => $value) {
-				ob_start();
 				if ($storage->isCached ($key)) {
-					$storage->getCache ();
+					$var = 'file_'.$key;
+					$$var = $storage->getCache ($key);
 				} else {
-					$thisFile = $viewPath.$value.EXT;
+					ob_start();
+					$thisFile = $storage->viewPath ().$value.EXT;
 					if (is_file($thisFile)) {
 						include $thisFile;
 						$var = 'file_'.$key;
-						$$var = ob_get_clean();
+						$$var = ob_get_clean ();
 					} else {
 						ob_end_clean();
 					}

@@ -1,4 +1,8 @@
 <?php
+function __autoload($classname) {
+	$filename = SITE.'packages'.DIRSEP.$classname.'.class.php';
+	include_once($filename);
+}
 class config {
 	const PREFIX = 'pagen_';
 	const LANG = 'uk';
