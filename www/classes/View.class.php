@@ -12,6 +12,7 @@ class View {
 		//creating template path
 		$folder = config::TEMPLATE;
 		$storage->setviewPath(SITE.'templates'.DIRSEP.$folder.DIRSEP);
+		$storage->setviewCachePath(SITE.'templates/'.$folder.'/cache/');
 		$templateFile = $storage->viewPath ().$template.EXT;
 		extract($data, EXTR_SKIP);
 
@@ -30,16 +31,16 @@ class View {
 						} else {
 							ob_end_clean();
 						}
-						echo $thisFile = strtr($storage->viewCachePath ().$value.EXT, array ('\\', '\\\\'));
-						$handle = fopen($thisFile, 'w+');
+						$thisFile = $storage->viewCachePath ().$value.EXT;
+						$handle = fopen($thisFile, 'w+b');
 						if ($handle) {
 							fwrite($handle, $content);
 							fclose($handle);
 						}
 						//echo $handle;
-						$var = 'file_'.$key;
-						$$var = $storage->getCache ($key);
 					}
+					$var = 'file_'.$key;
+					$$var = $storage->getCache ($key);
 				} else {
 					ob_start();
 					$thisFile = $storage->viewPath ().$value.EXT;

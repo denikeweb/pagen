@@ -2,18 +2,11 @@ var ajax_contents;
 (function (){
     if (self.parent.frames.length != 0) {self.parent.location = window.location;} //iframe deffence
     function getSiteName () {
-        var url = window.location.href;
-        var count = 0;
-        var n = url.length;
-        var urlSlashEnd = 3;
-        var thisUrl = '';
+        var url = window.location.href, count = 0, n = url.length, urlSlashEnd = 3, thisUrl = '';
         for (var i = 0; i < n && count != urlSlashEnd; i ++) {
-            if (url [i] == '/') {
-                count ++;
-            }
+            if (url [i] == '/') {count ++;}
             thisUrl += url [i];
         }
-        //!!!!!!!!!!!!!!!!!!!!!!!!!
         return thisUrl;
     }
 
@@ -32,12 +25,9 @@ var ajax_contents;
             success_func = func;
         }
 
-        var i = 0;
-        args.forEach(function (){
-            sArgs += '&'+ /**/i/**/ + '=' + args [i];
-            i ++;
-        });
-        //!!!!!!!!!!!!!!!!!!!!!!!!! + assoc array
+	    for (arg in args) {
+		    sArgs +=  '&'+ arg + '=' + encodeURIComponent(args [arg]);
+	    }
         myData = "f=" + file + sArgs;
         $.ajax({
             data: myData,
@@ -51,10 +41,10 @@ $(function (){
     $('.log_button').on('click', function (){
         login = $('#login_e').val ();
         pass = $('#pass_out_e').val ();
-        _ajax ('auth/login', [login, pass], function (data) {alert(data)});
+        _ajax ('auth/login', {login: login, pass: pass}, function (data) {alert(data)});
     });
     $('.exit_span').on('click', function (){
-        _ajax ('auth/logout', [], function (data) {alert(data)});
+        _ajax ('auth/logout', {}, function (data) {alert(data)});
     });
 });
 

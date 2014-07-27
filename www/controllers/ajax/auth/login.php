@@ -3,8 +3,8 @@ __settings (array('Config', 'DataBase', 'Controller', 'RandKey', 'Validator', 'P
 
 class login extends eController {
 	public function run () {
-		$login = $_REQUEST['0'];
-		$pass = $_REQUEST['1'];
+		$login = $_REQUEST['login'];
+		$pass = $_REQUEST['pass'];
 
 		if (config::DB) {
 			echo $this->is_mysql ($login, $pass);

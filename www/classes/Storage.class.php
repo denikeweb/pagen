@@ -13,7 +13,8 @@ class Storage {
 
 	public function viewPath () {return $this->viewPath;}
 	public function viewCachePath () {return $this->viewCachePath;}
-	public function setviewPath ($str) {$this->viewPath = $str; $this->viewCachePath = $str.'cache'.DIRSEP;}
+	public function setviewPath ($str) {$this->viewPath = $str;}
+	public function setviewCachePath ($str) {$this->viewCachePath = $str;}
 
 	public function getFiles () {
 		return $this->files;
@@ -40,11 +41,11 @@ class Storage {
 	}
 
 	public function getCache ($key) {
-		$content = NULL;
 		$thisFile = $this->viewCachePath.$this->files [$key].EXT;
-		$handle = @fopen($thisFile, 'w');
+		$handle = @fopen($thisFile, 'r');
 		if ($handle) {
-			fwrite($handle, $content);
+			$len = filesize($thisFile);
+			$content = @fread($handle, $len);
 			fclose($handle);
 		}
 		return $content;
