@@ -26,7 +26,6 @@ class Storage {
 
 	public function needCaching ($key) {
 		$time = $this->getTime($this->files [$key]);
-		//echo $this->cache [$key] - $time;
 		return ($this->cache [$key] - $time < 1);
 	}
 
