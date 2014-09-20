@@ -1,6 +1,6 @@
 <?php
 function __autoload($classname) {
-	$filename = SITE.'packages'.DIRSEP.$classname.'.class.php';
+	$filename = SITE.'packages'.DIRSEP.$classname.'.php';
 	include_once($filename);
 }
 class config {

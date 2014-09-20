@@ -12,7 +12,7 @@ class View {
 		//creating template path
 		$folder = config::TEMPLATE;
 		$storage->setviewPath(SITE.'templates'.DIRSEP.$folder.DIRSEP);
-		$storage->setviewCachePath(SITE.'templates/'.$folder.'/cache/');
+		$storage->setviewCachePath(SITE.'templates/'.$folder.'/_cache/');
 		$templateFile = $storage->viewPath ().$template.EXT;
 		extract($data, EXTR_SKIP);
 

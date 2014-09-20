@@ -14,9 +14,7 @@ abstract class eController {
 	protected $word = array();
 	protected $view = '';
 	
-	public function run () {
-		$this->loadModel ();
-	}
+	abstract public function run ();
 	
 	public function view () {
 		return $this->view;
@@ -25,32 +23,18 @@ abstract class eController {
 	final public function __construct ($modelPath = '', array $args = NULL, array $word = NULL) {
 		$this->modelPath = $modelPath;
 		$this->args = $args;
-		$this->lang = config::$Lang;
+		$this->lang = \config::$Lang;
 		$this->url = "//$_SERVER[HTTP_HOST]";
-		$this->site_title = config::TITLE;
+		$this->site_title = \config::TITLE;
 		$this->ls_name = "//$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]?lang";
 		$this->word = $word;
 	}
 
-	final protected function getLocals (array $data = NULL, array $params = array ('url', 'title', 'lang', 'setLangUrl')) {
+	final protected function getLocals (array &$data = NULL, array $params = array ('url', 'title', 'lang', 'setLangUrl')) {
 		if (in_array('url', $params)) {$data ['url'] = $this->url;}
 		if (in_array('title', $params)) {$data ['SiteTitle'] = $this->site_title;}
 		if (in_array('lang', $params)) {$data ['SiteLang'] = $this->lang;}
 		if (in_array('setLangUrl', $params)) {$data ['setLangUrl'] = $this->ls_name;}
-		return $data;		
-	}
-
-	final protected function loadModel ($modelPath = '') {
-		if ($modelPath === NULL) {return false;}
-		if (empty($modelPath)) {
-			$modelPath = $this->modelPath;
-		}
-		$modelPath = SITE.'models'.DIRSEP.$modelPath.EXT;
-		if (is_file($modelPath)) {
-			$eModel = dirname(__FILE__).DIRSEP.'eModel.class'.EXT;
-			include_once ($eModel);
-			include ($modelPath);
-		}
 	}
 }
 ?>

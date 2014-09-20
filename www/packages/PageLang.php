@@ -2,7 +2,7 @@
 abstract class PageLang {
 	public static function word ($label) {
 		global $mysqli;
-		$lan = config::LANG;
+		$lan = \config::LANG;
 		//standart language is ukrainian
 		if (isset($_COOKIE["lang"]))
 		{
@@ -17,7 +17,7 @@ abstract class PageLang {
 	}
 	public static function alert ($label) {
 		global $mysqli;
-		$lan = config::LANG;
+		$lan = \config::LANG;
 		//standart language is ukrainian
 		if (isset($_COOKIE["lang"]))
 		{

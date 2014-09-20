@@ -1,5 +1,4 @@
 <?php
-//phpinfo ();
 $start_time = microtime(3);
 $start_memory = memory_get_usage();
 /**
@@ -20,22 +19,12 @@ define ('EXT', '.php');
 define ('SITE', dirname(__FILE__).DIRSEP);
 
 include_once 'pagen_config.php';
-#config::checkIP ();
-#config::toLog ();
+#\config::checkIP ();
+#\config::toLog ();
 
-include_once SITE.'classes/DataBase.class.php';
-include_once SITE.'classes/Validator.class.php';
-include_once SITE.'classes/User.class.php';
-include_once SITE.'classes/Site.class.php';
-include_once SITE.'classes/eController.class.php';
-include_once SITE.'classes/Storage.class.php';
-include_once SITE.'classes/View.class.php';
-
-//echo memory_get_usage() - $start_memory;
-
-$start_time2 = microtime(2);
+	$start_time2 = microtime(2);
 DataBase::connect ();
-$end_time2 = microtime(2);
+	$end_time2 = microtime(2);
 User::userAuth ();
 Site::setupLanguage ();
 Site::getPage ();
@@ -50,6 +39,6 @@ $db_time = $end_time2 - $start_time2;
 echo '<br>';
 echo '<br>';
 $end_time = microtime(3);
-$time = $end_time-$start_time;
+$time = $end_time - $start_time;
 echo $time, '(', ($time - $db_time),')';
 ?>

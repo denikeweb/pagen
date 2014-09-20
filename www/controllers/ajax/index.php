@@ -1,4 +1,11 @@
 <?php
+	/**
+	 *
+	 * @ajaxController
+	 * @pagen1.0
+	 * @author Denis Dragomiric
+	 *
+	 */
 	header ('Content-Type: text/html; charset=utf-8');
 
 	define ('DIRSEP', DIRECTORY_SEPARATOR);

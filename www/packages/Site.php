@@ -7,8 +7,8 @@ abstract class Site {
 	public static $word;
 	
 	public static function setupLanguage (){
-		global $mysqli;
-		$lang = config::LANG;
+		$mysqli = &\DataBase::$mysqli;
+		$lang = \config::LANG;
 		if (isset($_GET ['lang'])) { //if cookie is not showed
 			setcookie('lang', $_GET['lang'], time() + 2592000); //set language id
 			$url = 'http://'.$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']; 
@@ -26,27 +26,25 @@ abstract class Site {
 			if ($_COOKIE ['lang'] == 'en') {$lang = 'en';}
 		}
 		//choose language if isset cookie
-		
-		if (config::DB) {
-			$query_lang = $mysqli->query('SELECT `'.$lang.'`, `id` FROM `'.config::PREFIX.'titles` WHERE 1');
+
+			$query_lang = $mysqli->query('SELECT `'.$lang.'`, `id` FROM `'.\config::PREFIX.'titles` WHERE 1');
 			$lang_row = $query_lang->fetch_assoc();
 			do {
 				$lang_index = $lang_row ['id'];
 				$word [$lang_index] = $lang_row [$lang];
 			} while ($lang_row = $query_lang->fetch_assoc());
 			//create array of language words
-		}
 		
 		self::$word = $word;
 		self::$Lang = $lang;
-		config::$Lang = $lang;
+		\config::$Lang = $lang;
 	}
 	
 	public static function getPage (){
-		global $mysqli;
+		$mysqli = &\DataBase::$mysqli;
 		$thisUrl = '/';
 		if (isset($_GET ['page'])) {
-			if (Validator::urlname($_GET ['page'])) {
+			if (\Validator::urlname($_GET ['page'])) {
 				$thisUrl = $_GET ['page'];
 			} else {
 				$thisUrl = '404';
@@ -60,11 +58,11 @@ abstract class Site {
 		}
 		//user-friendly URL
 
-		if (config::DB) {
-			$result = $mysqli->query('SELECT * FROM `'.config::PREFIX.'pages` WHERE `cpurl`=\''.$mypage.'\'');
+		if (\config::DB) {
+			$result = $mysqli->query('SELECT * FROM `'.\config::PREFIX.'pages` WHERE `cpurl`=\''.$mypage.'\'');
 			$is404 = $result->num_rows == 0;
 			if ($is404) {
-				$result = $mysqli->query('SELECT * FROM `'.config::PREFIX.'pages` WHERE `id`=\'0\'');
+				$result = $mysqli->query('SELECT * FROM `'.\config::PREFIX.'pages` WHERE `id`=\'0\'');
 			}
 			//check page
 
@@ -93,11 +91,11 @@ abstract class Site {
 	}
 	
 	private static function getFromDB ($table, $page_id){
-		global $mysqli;
+		$mysqli = &\DataBase::$mysqli;
 		$lang_tag = self::$Lang;
-		$result = $mysqli->query('SELECT `'.$lang_tag.'` FROM `'.config::PREFIX.$table.'` WHERE `id`=\''.$page_id.'\'');
+		$result = $mysqli->query('SELECT `'.$lang_tag.'` FROM `'.\config::PREFIX.$table.'` WHERE `id`=\''.$page_id.'\'');
 		if ($result->num_rows == 0) {
-			$result = $mysqli->query('SELECT `'.$lang_tag.'` FROM `'.config::PREFIX.$table.'` WHERE `id`=\'0\'');
+			$result = $mysqli->query('SELECT `'.$lang_tag.'` FROM `'.\config::PREFIX.$table.'` WHERE `id`=\'0\'');
 		}
 		$my_row = $result->fetch_assoc();
 		return $my_row [$lang_tag];
@@ -108,11 +106,11 @@ abstract class Site {
 			self::defaultController ();
 			//if page is static load default page controller
 		} else {
-			$c_pagen_path = dirname (dirname(__FILE__)).DIRSEP.'controllers';
+			$c_pagen_path = dirname (dirname(__FILE__)).DIRSEP.'packages\Controllers';
 			//get path to controllers
 			$modelPath = '';
 			//get path to models
-			$pieces = Site::$urlArray;
+			$pieces = \Site::$urlArray;
 			$path = dirname (dirname(__FILE__)).DIRSEP;
 			// set site path
 			if (empty ($pieces [0])) {
@@ -189,8 +187,7 @@ abstract class Site {
 			}
 		}
 	}
-	private static function defaultController ($controller = 'IndexController') {
-		include ('classes/'.$controller.EXT);
+	private static function defaultController ($controller = '\Controllers\IndexController') {
 		$a = new $controller('', NULL, self::$word);
 		self::$word = NULL;
 		$a->run();

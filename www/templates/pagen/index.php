@@ -37,7 +37,8 @@
 		
 		<section id="content">
 			<article>
-				<pre style="text-align: left;">
+				<?= $data['content']; ?>
+				<pre style="text-align: left; width: 940px; overflow: hidden;">
 					<?php print_r ($data); ?>
 				</pre>
 			</article>
