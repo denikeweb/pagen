@@ -1,10 +1,10 @@
 <?php
-namespace \Controllers\test;
+	namespace Controllers\demo;
 
-class test_index extends \eController {
+class demo_index extends \eController {
 
 	public function run () {
-		$m = new \Data\test_index ('blog');
+		$m = new \Data\demo\test_index ('blog');
 		$data = $m->returnTitles ();
 
 		//$m->add ();

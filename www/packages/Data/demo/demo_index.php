@@ -1,5 +1,7 @@
 <?php
-class m_test_index extends eModel {
+	namespace Data\demo;
+
+class demo_index extends \eModel {
 	public function returnTitles () {
 		$data ['title'] = 'PaGen - iHome';
 		$data ['meta_d'] = 'iPaGen';

@@ -100,7 +100,10 @@ abstract class Site {
 		$my_row = $result->fetch_assoc();
 		return $my_row [$lang_tag];
 	}
-	
+
+	/**
+	 * it's really interesting code
+	 */
 	public static function printPage () {
 		if (self::$ThisPage['static'] == 1) {
 			self::defaultController ();

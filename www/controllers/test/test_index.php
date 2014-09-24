@@ -14,7 +14,7 @@ class test_index extends eController {
 		$this->getLocals ($data);
 		//print_r($this->data);
 
-		$data['_d'] = new Data\1defaultDesign();
+		$data['_d'] = new Data\defaultDesign();
 		$files = array(
 			'hor_menu' => 'blocks'.DIRSEP.'hor_menu',
 			'sign_in_form' => 'blocks'.DIRSEP.'sign_in_form'
