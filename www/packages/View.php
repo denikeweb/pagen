@@ -61,8 +61,9 @@ class View {
 			$this->content = ob_get_clean();
 		} else {
 			ob_end_clean();
-			foreach ($storage->getFiles () as $value) {
-				$this->content .= $value;
+			foreach ($storage->getFiles () as $key => $value) {
+				$var = 'file_'.$key;
+				$this->content .= $$var;
 			}
 		}
 	}
