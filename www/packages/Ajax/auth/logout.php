@@ -1,5 +1,5 @@
 <?php
-__settings (array('Controller'));
+__settings (['Controller']);
 
 class logout extends eController {
 	public function run () {

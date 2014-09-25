@@ -1,5 +1,5 @@
 <?php
-__settings (array('Config', 'DataBase', 'Controller', 'RandKey', 'Validator', 'PageLang'));
+__settings (['Config', 'DataBase', 'Controller', 'RandKey', 'Validator', 'PageLang']);
 
 class login extends eController {
 	public function run () {
@@ -24,7 +24,7 @@ class login extends eController {
 		return $message;
 	}
 	private function is_mysql ($login, $pass) {
-		global $mysqli;
+		$mysqli = DataBase::$mysqli;
 		if (!Validator::login ($login)) {
 			$message = PageLang::alert (8);
 		} else {

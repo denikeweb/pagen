@@ -42,33 +42,33 @@
 				break;
 			case 'Controller':{
 					include_once (SITE.'pagen_config.php');
-					include_once (SITE.'classes'.DIRSEP.'eController.php');
+					include_once (SITE.'packages'.DIRSEP.'eController.php');
 				}
 				break;
 			case 'DataBase':{
 					include_once (SITE.'pagen_config.php');
-					include_once (SITE.'classes'.DIRSEP.'DataBase.php');
+					include_once (SITE.'packages'.DIRSEP.'DataBase.php');
 					$db_used = true;
 					DataBase::connect ();
 				}
 				break;
 			case 'PageLang':
-				include_once (SITE.'classes'.DIRSEP.'PageLang.php');
+				include_once (SITE.'packages'.DIRSEP.'PageLang.php');
 				break;
 			case 'RandKey':
-				include_once (SITE.'classes'.DIRSEP.'RandKey.php');
+				include_once (SITE.'packages'.DIRSEP.'RandKey.php');
 				break;
 			case 'Validator':
-				include_once (SITE.'classes'.DIRSEP.'Validator.php');
+				include_once (SITE.'packages'.DIRSEP.'Validator.php');
 				break;
 			case 'User':
-				include_once (SITE.'classes'.DIRSEP.'User.php');
+				include_once (SITE.'packages'.DIRSEP.'User.php');
 				break;
 			case 'Files':
-				include_once (SITE.'classes'.DIRSEP.'Files.php');
+				include_once (SITE.'packages'.DIRSEP.'Files.php');
 				break;
 			case 'View':
-				include_once (SITE.'classes'.DIRSEP.'Viewphp');
+				include_once (SITE.'packages'.DIRSEP.'View.php');
 				break;
 			default: {
 					echo $module.' do not exists';

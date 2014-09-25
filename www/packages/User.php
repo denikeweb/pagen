@@ -10,7 +10,7 @@ abstract class User {
 	public static $IP;
 	
 	public static function userAuth () {
-		global $mysqli;
+		$mysqli = DataBase::$mysqli;
 		session_start();
 		//start session for user's identification
 
@@ -21,15 +21,13 @@ abstract class User {
 			self::$Rights = $_SESSION['rights'];
 		}
 		//create rights for guest; 0 - guest, 1 - user, 2 - vilide user, 4 - moderator, 6 - administrator
-		
-		if (config::DB) {
+
 			if (!empty($_SESSION['id'])) {
 				$id = $_SESSION['id'];
 				$user_query = $mysqli->query('SELECT `id`, `login`, `email`, `rights` FROM `'.config::PREFIX.'users` WHERE `id`=\''.$id.'\'');
 				self::$userInfo = $user_query->fetch_assoc();
 			}
 			//create array with user information
-		}
 		//if db connection is set we can authorisate this user
 		
 		self::$IP = $_SERVER['REMOTE_ADDR'];
