@@ -20,8 +20,7 @@ abstract class eController {
 		return $this->view;
 	}
 
-	final public function __construct ($modelPath = '', array $args = NULL, array $word = NULL) {
-		$this->modelPath = $modelPath;
+	final public function __construct (array $args = NULL, array $word = NULL) {
 		$this->args = $args;
 		$this->lang = \config::$Lang;
 		$this->url = "//$_SERVER[HTTP_HOST]";

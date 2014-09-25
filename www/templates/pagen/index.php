@@ -19,6 +19,7 @@
 		
 		<script type="text/javascript" src="<?php echo $url; ?>/js/jquery-1.11.js"></script>
 		<script type="text/javascript" src="<?php echo $url; ?>/js/scripts.js"></script>
+		<script type="text/javascript" src="<?php echo $url; ?>/js/ajax.js"></script>
 	</head>
 	<body>
 		<?php echo $file_sign_in_form; ?>

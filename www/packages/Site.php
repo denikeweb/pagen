@@ -109,89 +109,92 @@ abstract class Site {
 			self::defaultController ();
 			//if page is static load default page controller
 		} else {
-			$c_pagen_path = dirname (dirname(__FILE__)).DIRSEP.'packages\Controllers';
-			//get path to controllers
-			$modelPath = '';
-			//get path to models
-			$pieces = \Site::$urlArray;
-			$path = dirname (dirname(__FILE__)).DIRSEP;
-			// set site path
-			if (empty ($pieces [0])) {
-				unset ($pieces [0]);
-				$controller = 'index';
-			}
-			//unset empty array element
-			$fullpath = $c_pagen_path;
-			foreach ($pieces as $piece) {
-				$fullpath .= DIRSEP.$piece;
-				if (is_dir ($fullpath)) {
-					$c_pagen_path .= DIRSEP.$piece;
-					$modelPath .= $piece.DIRSEP;
-					array_shift ($pieces);
-					continue;
-				}
-				if (is_file ($fullpath.EXT)) {
-					$controller = $piece;
-					array_shift ($pieces);
-					break;
-				}
-			}
-			//search untill getting file
-			
-			$file = $c_pagen_path.DIRSEP.$controller.EXT;
-			if (empty ($controller)) {
-				if (is_file ($fullpath.DIRSEP.'index'.EXT)) {
-					$file = $c_pagen_path.DIRSEP.$controller.DIRSEP.'index'.EXT;
-					$controller = $piece;
-				}
-			}
+			self::normalPage ();
+		}
+	}
 
-			if (empty ($controller)) {
-				#$controller = 'index';
-				self::include404 ();
-				//if controller file not exists, send 404
+	private static function normalPage () {
+		$c_pagen_path = dirname (dirname(__FILE__)).DIRSEP.'packages';
+		//get path to controllers
+		$pieces = \Site::$urlArray;
+		$controller = '\Controllers';
+		// set site path
+
+		if (empty ($pieces [0])) {
+			unset ($pieces [0]);
+			$controller .= '\index';
+		}
+		//unset empty array element
+
+		$fullpath = $c_pagen_path;
+		foreach ($pieces as $piece) {
+			//$fullpath .= '\\'.$piece;
+			if (is_dir ($fullpath.$controller)) {
+				//$c_pagen_path .= DIRSEP.$piece;
+				$controller = $controller.'\\'.$piece;
+				array_shift ($pieces);
+				continue;
+			}
+			if (is_file ($fullpath.$controller.EXT)) {
+				$controller = $controller.'\\'.$piece;
+				array_shift ($pieces);
+				break;
+			}
+		}
+		//search untill getting file
+
+		$file = $c_pagen_path.$controller.EXT;
+		if (empty ($controller)) {
+			if (is_file ($fullpath.DIRSEP.'index'.EXT)) {
+				$file = $c_pagen_path.$controller.DIRSEP.'index'.EXT;
+				$controller = $controller.'\''.$piece;
+			}
+		}
+		if (empty ($controller)) {
+			#$controller = 'index';
+			self::include404 ();
+			//if controller file not exists, send 404
+		} else {
+			if (is_array ($pieces)) {
+				$action = array_shift ($pieces);
 			} else {
-				if (is_array ($pieces)) {
-					$action = array_shift ($pieces);
-				} else {
-					$action = '';
-				}
-				if (empty ($action) or $action == 'run') {
-					$_action = 'run';
-				} else {
-					$_action = 'action_'.$action;
-				}
-				// get action, default method - run ()
+				$action = '';
+			}
+			if (empty ($action) or $action == 'run') {
+				$_action = 'run';
+			} else {
+				$_action = 'action_'.$action;
+			}
+			// get action, default method - run ()
 
-				$modelPath .= 'm_'.$controller;
-				//create full model path
-				$args = $pieces;
-				include ($file);
-				$a = new $controller ($modelPath, $args, self::$word);
-				self::$word = NULL;
-				//construct controller
-				
-				if (method_exists ($a, $_action)){
-					$a->$_action ();
+			//create full model path
+			$args = $pieces;
+			include ($file);
+			$a = new $controller ($args, self::$word);
+			self::$word = NULL;
+			//construct controller
+
+			if (method_exists ($a, $_action)){
+				$a->$_action ();
+				self::result ($a);
+			} else {
+				if (method_exists ($a, 'run')){
+					if (!empty($_action)) {
+						array_unshift ($pieces, $action);
+						$a->args = $pieces;
+					}
+					$a->run ();
 					self::result ($a);
 				} else {
-					if (method_exists ($a, 'run')){
-						if (!empty($_action)) {
-							array_unshift ($pieces, $action);
-							$a->args = $pieces;
-						}
-						$a->run ();
-					self::result ($a);
-					} else {
-						self::include404 ();
-						//if action not exists, send 404
-					}
+					self::include404 ();
+					//if action not exists, send 404
 				}
 			}
 		}
 	}
+
 	private static function defaultController ($controller = '\Controllers\IndexController') {
-		$a = new $controller('', NULL, self::$word);
+		$a = new $controller(NULL, self::$word);
 		self::$word = NULL;
 		$a->run();
 		self::result ($a);

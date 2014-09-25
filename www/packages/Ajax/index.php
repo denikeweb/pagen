@@ -13,7 +13,6 @@
 
 	$path = strtr(array_shift($_REQUEST), '/', DIRSEP);
 	$fullpath = dirname(__FILE__).DIRSEP.$path.'.php';
-	$modelPath = strtr($fullpath, DIRSEP.'controllers'.DIRSEP, DIRSEP.'models'.DIRSEP);
 	$db_used = false;
 
 	if (
@@ -43,33 +42,33 @@
 				break;
 			case 'Controller':{
 					include_once (SITE.'pagen_config.php');
-					include_once (SITE.'classes'.DIRSEP.'eController.class.php');
+					include_once (SITE.'classes'.DIRSEP.'eController.php');
 				}
 				break;
 			case 'DataBase':{
 					include_once (SITE.'pagen_config.php');
-					include_once (SITE.'classes'.DIRSEP.'DataBase.class.php');
+					include_once (SITE.'classes'.DIRSEP.'DataBase.php');
 					$db_used = true;
 					DataBase::connect ();
 				}
 				break;
 			case 'PageLang':
-				include_once (SITE.'classes'.DIRSEP.'PageLang.class.php');
+				include_once (SITE.'classes'.DIRSEP.'PageLang.php');
 				break;
 			case 'RandKey':
-				include_once (SITE.'classes'.DIRSEP.'RandKey.class.php');
+				include_once (SITE.'classes'.DIRSEP.'RandKey.php');
 				break;
 			case 'Validator':
-				include_once (SITE.'classes'.DIRSEP.'Validator.class.php');
+				include_once (SITE.'classes'.DIRSEP.'Validator.php');
 				break;
 			case 'User':
-				include_once (SITE.'classes'.DIRSEP.'User.class.php');
+				include_once (SITE.'classes'.DIRSEP.'User.php');
 				break;
 			case 'Files':
-				include_once (SITE.'classes'.DIRSEP.'Files.class.php');
+				include_once (SITE.'classes'.DIRSEP.'Files.php');
 				break;
 			case 'View':
-				include_once (SITE.'classes'.DIRSEP.'View.class.php');
+				include_once (SITE.'classes'.DIRSEP.'Viewphp');
 				break;
 			default: {
 					echo $module.' do not exists';
@@ -101,7 +100,7 @@
 	$p_count = count ($pieces);
 	$controller = $pieces [$p_count - 1];
 
-	$a = new $controller ($modelPath, $_REQUEST);
+	$a = new $controller ($_REQUEST);
 	$a->run ();
 
 	if ($db_used) {
