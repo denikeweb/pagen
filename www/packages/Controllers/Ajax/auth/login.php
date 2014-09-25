@@ -2,44 +2,56 @@
 __settings (['Config', 'DataBase']);
 
 class login extends eAjaxController {
-	public function run () {
-		$login = $_REQUEST['login'];
-		$pass = $_REQUEST['pass'];
+	private $message;
+	private $login;
+	private $pass;
 
-		if (config::DB) {
-			echo $this->is_mysql ($login, $pass);
-		} else {
-			echo $this->not_mysql ($login, $pass);
-		}
+	public function run () {
+		$this->login = $_REQUEST ['login'];
+		$this->pass  = $_REQUEST ['pass'];
+		$this->request ()
+			->response ();
 	}
-	private function not_mysql ($login, $pass) {
-		if ($login == config::ADMIN and $pass == RandKey::demask(config::PASS)) {
+
+	protected function request () {
+		if (config::DB) {
+			$this->is_mysql ();
+		} else {
+			$this->not_mysql ();
+		}
+		return $this;
+	}
+
+	protected function response () {
+		echo $this->message;
+	}
+
+	private function not_mysql () {
+		if ($this->login == config::ADMIN and $this->pass == RandKey::demask(config::PASS)) {
 			session_start();
 			$_SESSION ['id'] = 0;
 			$_SESSION ['rights'] = 6;
-			$message = 'You are logged in!';
+			$this->message = 'You are logged in!';
 		} else {
-			$message = 'Error: check your login and password!';
+			$this->message = 'Error: check your login and password!';
 		}
-		return $message;
 	}
-	private function is_mysql ($login, $pass) {
+	private function is_mysql () {
 		$mysqli = DataBase::$mysqli;
-		if (!Validator::login ($login)) {
-			$message = PageLang::alert (8);
+		if (!Validator::login ($this->login)) {
+			$this->message = PageLang::alert (8);
 		} else {
-			$query = $mysqli->query ("SELECT `id`,`rights`,`pass` FROM `".config::PREFIX."users` WHERE `login`='$login'");
+			$query = $mysqli->query ("SELECT `id`,`rights`,`pass` FROM `".config::PREFIX."users` WHERE `login`='{$this->login}'");
 			$result = $query->fetch_assoc ();
-			if ($query->num_rows == 0 or $pass != RandKey::demask ($result['pass'])) {
-				$message = PageLang::alert (8);
+			if ($query->num_rows == 0 or $this->pass != RandKey::demask ($result['pass'])) {
+				$this->message = PageLang::alert (8);
 			} else {
 				session_start ();
 				$_SESSION ['id'] = $result ['id'];
 				$_SESSION ['rights'] = $result ['rights'];
-				$message = '200 OK';
+				$this->message = '200 OK';
 			}
 		}
-		return $message;
 	}
 }
 ?>

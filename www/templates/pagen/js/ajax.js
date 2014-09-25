@@ -41,9 +41,9 @@ $(function (){
 	$('.log_button').on('click', function (){
 		login = $('#login_e').val ();
 		pass = $('#pass_out_e').val ();
-		_ajax ('auth/login', {login: login, pass: pass}, function (data) {alert(data)});
+		_ajax ('auth/login', {login: login, pass: pass}, function (data) {alert(data); window.location = window.location;});
 	});
 	$('.exit_span').on('click', function (){
-		_ajax ('auth/logout', {}, function (data) {alert(data)});
+		_ajax ('auth/logout', {}, function (data) {alert(data); window.location = window.location;});
 	});
 });

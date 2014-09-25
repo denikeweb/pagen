@@ -22,6 +22,7 @@ include_once 'pagen_config.php';
 #\config::checkIP ();
 #\config::toLog ();
 
+Site::checkRequest ();
 	$start_time2 = microtime(2);
 DataBase::connect ();
 	$end_time2 = microtime(2);

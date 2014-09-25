@@ -5,7 +5,47 @@ abstract class Site {
 	public static $Content;
 	public static $urlArray;
 	public static $word;
-	
+	public static $pageRequest;
+
+	public static function checkRequest () {
+		self::$pageRequest = '/';
+		if (isset ($_GET ['ext'])) {
+			self::$pageRequest = $_GET ['page'];
+			self::printFile ($_GET ['ext']);
+		}
+		else if (isset($_GET ['page'])) {
+			if (\Validator::urlname($_GET ['page'])) {
+				self::$pageRequest = $_GET ['page'];
+			} else {
+				self::$pageRequest = '404';
+			}
+		}
+	}
+
+	private static function printFile ($ext) {
+		switch ($ext) {
+			case 'css': $fileType = 'css'; break;
+			case 'js': $fileType = 'javascript'; break;
+			default : $fileType = $ext;
+		}
+		$file = dirname(dirname(__FILE__)).'/templates/'.config::TEMPLATE.DIRSEP.self::$pageRequest.".$ext";
+		$handle = @fopen($file, 'r');
+		if ($handle) {
+			$len = filesize($file);
+			$content = @fread($handle, $len);
+			@fclose($handle);
+		} else {
+			self::include404 ();
+			exit ();
+		}
+		// default loading
+
+		header ("Content-type: text/$fileType; charset: UTF-8");
+		header ("Cache-Control: must-revalidate");
+		echo $content;
+		exit ();
+	}
+
 	public static function setupLanguage (){
 		$mysqli = &\DataBase::$mysqli;
 		$lang = \config::LANG;
@@ -42,15 +82,7 @@ abstract class Site {
 	
 	public static function getPage (){
 		$mysqli = &\DataBase::$mysqli;
-		$thisUrl = '/';
-		if (isset($_GET ['page'])) {
-			if (\Validator::urlname($_GET ['page'])) {
-				$thisUrl = $_GET ['page'];
-			} else {
-				$thisUrl = '404';
-			}
-		}
-		$thisUrl = trim($thisUrl, '/\\');
+		$thisUrl = trim(self::$pageRequest, '/\\');
 		self::$urlArray = explode('/', $thisUrl);
 		$mypage = self::$urlArray [0];
 		if (empty($mypage)) {
