@@ -40,11 +40,19 @@
 		exit ();
 	}
 
-	function __loadModule ($module) {
+	function loadModule ($module) {
 		switch ($module) {
-			case 'Config':
-				include_once (SITE.'pagen_config.php');
-				break;
+			case 'Config': {
+					include_once (SITE.'pagen_config.php');
+					$lang = config::LANG;
+					if (isset($_COOKIE ['lang'])) {
+						if ($_COOKIE ['lang'] == 'uk') {$lang = 'uk';}
+						if ($_COOKIE ['lang'] == 'ru') {$lang = 'ru';}
+						if ($_COOKIE ['lang'] == 'en') {$lang = 'en';}
+					}
+					config::$Lang = $lang;
+				}
+					break;
 			case 'DataBase':{
 					include_once (SITE.'pagen_config.php');
 					include_once (SITE.'packages'.DIRSEP.'DataBase.php');
@@ -60,28 +68,14 @@
 		}
 	}
 
-	function __settings ($modules) {
+	function settings ($modules) {
 		foreach ($modules as $i) {
-			__loadModule ($i);
+			loadModule ($i);
 		}
 	}
-	
+
 	include_once (PagenAjaxRegistry::$fullpath);
-
-
-	$lang = config::LANG;
-	if (isset($_COOKIE ['lang'])){
-		if ($_COOKIE ['lang'] == 'uk') {$lang = 'uk';}
-		if ($_COOKIE ['lang'] == 'ru') {$lang = 'ru';}
-		if ($_COOKIE ['lang'] == 'en') {$lang = 'en';}
-	}
-
-	config::$Lang = $lang;
-
-	$pieces = explode(DIRSEP, PagenAjaxRegistry::$path);
-	$p_count = count ($pieces);
-	$controller = $pieces [$p_count - 1];
-
+	$controller = '\Controllers\Ajax\\'.PagenAjaxRegistry::$path;
 	$a = new $controller ($_REQUEST);
 	$a->run ();
 

@@ -17,7 +17,7 @@
 		<!--link rel="shortcut icon" href="<?php echo $url; ?>/favicon.ico" -->
 		<link href="<?php echo $url; ?>/css/style.css" rel="stylesheet" type="text/css">
 		
-		<script type="text/javascript" src="<?php echo $url; ?>/js/jquery-1.11.js"></script>
+		<script type="text/javascript" src="<?php echo $url; ?>/js/jquery-1-11.js"></script>
 		<script type="text/javascript" src="<?php echo $url; ?>/js/scripts.js"></script>
 		<script type="text/javascript" src="<?php echo $url; ?>/js/ajax.js"></script>
 	</head>

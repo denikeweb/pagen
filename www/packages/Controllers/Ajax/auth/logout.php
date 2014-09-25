@@ -1,25 +1,27 @@
 <?php
-__settings (['Config']);
 
-class logout extends eAjaxController {
-	public function run () {
-		$this->request ()
-			->response ();
-	}
+	namespace Controllers\Ajax\auth;
+	\settings (['Config']);
 
-	protected function request () {
-		$this->removeAuth ();
-		return $this;
-	}
+	class logout extends \eAjaxController {
+		public function run () {
+			$this->request ()
+				->response ();
+		}
 
-	protected function response () {
-		echo '200 OK';
-	}
+		protected function request () {
+			$this->removeAuth ();
+			return $this;
+		}
 
-	private function removeAuth () {
-		session_start();
-		unset($_SESSION['id']);
-		unset($_SESSION['rights']);
+		protected function response () {
+			echo '200 OK';
+		}
+
+		private function removeAuth () {
+			session_start();
+			unset($_SESSION['id']);
+			unset($_SESSION['rights']);
+		}
 	}
-}
 ?>
