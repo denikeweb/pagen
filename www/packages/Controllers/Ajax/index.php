@@ -2,18 +2,23 @@
 	/**
 	 *
 	 * @ajaxController
-	 * @pagen1.0
+	 * @pagen1.1
 	 * @author Denis Dragomiric
 	 *
 	 */
 	header ('Content-Type: text/html; charset=utf-8');
 
 	define ('DIRSEP', DIRECTORY_SEPARATOR);
-	define ('SITE', dirname(dirname(dirname(__FILE__))).DIRSEP);
+	define ('SITE', dirname(dirname(dirname(dirname(__FILE__)))).DIRSEP);
 
-	$path = strtr(array_shift($_REQUEST), '/', DIRSEP);
-	$fullpath = dirname(__FILE__).DIRSEP.$path.'.php';
-	$db_used = false;
+	class PagenAjaxRegistry {
+		public static $db_used = false;
+		public static $path = NULL;
+		public static $fullpath = NULL;
+	}
+
+	PagenAjaxRegistry::$path = strtr(array_shift($_REQUEST), '/', DIRSEP);
+	PagenAjaxRegistry::$fullpath = dirname(__FILE__).DIRSEP.PagenAjaxRegistry::$path.'.php';
 
 	if (
 		substr_count($_SERVER['HTTP_REFERER'], $_SERVER['HTTP_HOST']) == 0
@@ -22,16 +27,16 @@
 	 	$_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest'
 	 	//request filt
 	 		or
-	 	$path == 'index'
+		PagenAjaxRegistry::$path == 'index'
 	 	//inputs, index.php cann't be controller file
 	 		or
-	 	strpos ($path, '..') > -1
+	 	strpos (PagenAjaxRegistry::$path, '..') > -1
 	 	//inputs, error controller path
 		
 		) {exit();}
 
-	if (!is_file($fullpath)) {
-		echo "Warning: file $path.php not exists!";
+	if (!is_file(PagenAjaxRegistry::$fullpath)) {
+		echo "Warning: file {${PagenAjaxRegistry::$path}}.php not exists!";
 		exit ();
 	}
 
@@ -40,35 +45,12 @@
 			case 'Config':
 				include_once (SITE.'pagen_config.php');
 				break;
-			case 'Controller':{
-					include_once (SITE.'pagen_config.php');
-					include_once (SITE.'packages'.DIRSEP.'eController.php');
-				}
-				break;
 			case 'DataBase':{
 					include_once (SITE.'pagen_config.php');
 					include_once (SITE.'packages'.DIRSEP.'DataBase.php');
-					$db_used = true;
+					PagenAjaxRegistry::$db_used = true;
 					DataBase::connect ();
 				}
-				break;
-			case 'PageLang':
-				include_once (SITE.'packages'.DIRSEP.'PageLang.php');
-				break;
-			case 'RandKey':
-				include_once (SITE.'packages'.DIRSEP.'RandKey.php');
-				break;
-			case 'Validator':
-				include_once (SITE.'packages'.DIRSEP.'Validator.php');
-				break;
-			case 'User':
-				include_once (SITE.'packages'.DIRSEP.'User.php');
-				break;
-			case 'Files':
-				include_once (SITE.'packages'.DIRSEP.'Files.php');
-				break;
-			case 'View':
-				include_once (SITE.'packages'.DIRSEP.'View.php');
 				break;
 			default: {
 					echo $module.' do not exists';
@@ -84,7 +66,7 @@
 		}
 	}
 	
-	include_once ($fullpath);
+	include_once (PagenAjaxRegistry::$fullpath);
 
 
 	$lang = config::LANG;
@@ -96,14 +78,14 @@
 
 	config::$Lang = $lang;
 
-	$pieces = explode(DIRSEP, $path);
+	$pieces = explode(DIRSEP, PagenAjaxRegistry::$path);
 	$p_count = count ($pieces);
 	$controller = $pieces [$p_count - 1];
 
 	$a = new $controller ($_REQUEST);
 	$a->run ();
 
-	if ($db_used) {
+	if (PagenAjaxRegistry::$db_used) {
 		DataBase::disconnect ();
 	}
 ?>

@@ -10,7 +10,7 @@ var ajax_contents;
 		return thisUrl;
 	}
 
-	var url = getSiteName () + 'packages/Ajax/index.php';
+	var url = getSiteName () + 'packages/Controllers/Ajax/index.php';
 	$.ajaxSetup({
 		url: url,
 		type: 'POST',

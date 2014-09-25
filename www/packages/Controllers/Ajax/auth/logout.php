@@ -1,7 +1,7 @@
 <?php
-__settings (['Controller']);
+__settings (['Config']);
 
-class logout extends eController {
+class logout extends eAjaxController {
 	public function run () {
 		session_start();
 		unset($_SESSION['id']);

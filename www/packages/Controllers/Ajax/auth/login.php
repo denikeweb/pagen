@@ -1,7 +1,7 @@
 <?php
-__settings (['Config', 'DataBase', 'Controller', 'RandKey', 'Validator', 'PageLang']);
+__settings (['Config', 'DataBase']);
 
-class login extends eController {
+class login extends eAjaxController {
 	public function run () {
 		$login = $_REQUEST['login'];
 		$pass = $_REQUEST['pass'];
