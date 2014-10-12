@@ -19,14 +19,12 @@ class config {
 	public static $Lang;
 	
 	/*public static function checkIP(){
-		include_once "classes/Files.class.php";
 		$host = '|'.$_SERVER['REMOTE_ADDR'].'|';
 		if (strpos(Files::read ('system/ban.txt'), $host) > -1) {
 			exit();
 		}
 	}
 	public static function toLog(){
-		include_once "classes/Files.class.php";
 		Files::writeLog ();
 	}*/
 }

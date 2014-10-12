@@ -22,6 +22,10 @@ abstract class Site {
 		}
 	}
 
+	/**
+	 * redirecting css, js and img files from root to template directory
+	 * @param $ext
+	 */
 	private static function printFile ($ext) {
 		switch ($ext) {
 			case 'css': $fileType = 'css'; break;

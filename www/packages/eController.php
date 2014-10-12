@@ -1,12 +1,11 @@
 <?php
 abstract class eController {
 	/**
-	*	Pagen Controller parrent class
-	*	Pagen v1.0
+	*	Pagen Controller parent class
+	*	Pagen v1.1
 	*
 	*/
 	public    $args;
-	private   $modelPath;
 	private   $url;
 	private   $site_title;
 	private   $lang;
@@ -15,18 +14,18 @@ abstract class eController {
 	protected $view = '';
 	
 	abstract public function run ();
-	
-	public function view () {
-		return $this->view;
-	}
+	public function view () {return $this->view;}
 
 	final public function __construct (array $args = NULL, array $word = NULL) {
 		$this->args = $args;
 		$this->lang = \config::$Lang;
 		$this->url = "//$_SERVER[HTTP_HOST]";
 		$this->site_title = \config::TITLE;
-		$this->ls_name = "//$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]?lang";
+		$this->ls_name = $this->url."$_SERVER[REQUEST_URI]?lang";
 		$this->word = $word;
+		echo '<pre><code style="text-align: left; display: block;">';
+		print_r ($word);
+		echo '</code></pre>';
 	}
 
 	final protected function getLocals (array &$data = NULL, array $params = array ('url', 'title', 'lang', 'setLangUrl')) {
