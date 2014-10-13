@@ -1,4 +1,8 @@
 <?php
+	/**
+	 * @author Denis Dragomiric <den@lux-blog.org>
+	 * @version Pagen 1.1
+	 */
 function __autoload($classname) {
 	$filename = SITE.'packages'.DIRSEP.$classname.'.php';
 	include_once($filename);
