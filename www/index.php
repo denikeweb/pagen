@@ -12,7 +12,7 @@
 	* @author Denis Dragomiric <den@lux-blog.org>
 	* @version Pagen 1.1
 	* @documentation http://www.lux-blog.org/blog/pagen/pagen-1.1
-	* @license http://www.lux-blog.org/storage/pagen/license.txt
+	* @license New BSD
 	*
 	* @phpVersion PHP 5.4+ {mysqli, mysqlnd}, MySQL 5+
 	*

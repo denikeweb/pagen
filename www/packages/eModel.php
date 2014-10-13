@@ -20,6 +20,7 @@
 		protected  $mysqli = NULL;          # mysqli
 		private $buffer = array ();         # array
 		private $debug = false;
+		private $lock = false;
 
 		public function __construct ($table = ''){
 			$this->mysqli = &\DataBase::$mysqli;
@@ -31,6 +32,7 @@
 		public function __isset($name) {return isset($this->data[$name]);}
 		public function __unset($name) {unset($this->data[$name]); return true;}
 		public function debug ($bool = true) {$this->debug = (bool) $bool;}
+		public function lock  ($bool = true) {$this->lock = (bool) $bool;}
 
 		final public function setDefault(){
 			#$this->table = '';
@@ -122,20 +124,12 @@
 			$this->joins [] = ' INNER JOIN `'.\config::PREFIX.$table2.'` ON `'.\config::PREFIX."$table1`.`$id1` = `".\config::PREFIX."$table2`.`$id2` ";
 		}
 
+		final public function addConditions(array $conditions){
+			foreach ($conditions as $cond) if ($cond instanceof Condition) $this->condition [] = $cond;
+		}
+
 		final public function addCond($field, $value, $table1 = NULL, $table2 = NULL, $sign = '='){
-			if ($table1 !== NULL) {
-				$field = \config::PREFIX.$this->mysqli->real_escape_string ($table1).'`.`'.$this->mysqli->real_escape_string ($field);
-			} else {
-				$field = $this->mysqli->real_escape_string ($field);
-			}
-			if ($table2 !== NULL) {
-				$value = \config::PREFIX.$this->mysqli->real_escape_string ($table2).'`.`'.$this->mysqli->real_escape_string ($value);
-			} else {
-				$value = $this->mysqli->real_escape_string ($value);
-			}
-			$sign = $this->mysqli->real_escape_string ($sign);
-			$this->condition [$field] [0] = $value;
-			$this->condition [$field] [1] = $sign;
+			$this->condition [] = new Condition ($field, $value, $table1, $table2, $sign);
 		}
 		//add new condition to associative array of condition for WHERE
 
@@ -270,8 +264,9 @@
 		// delete record by $sql or $condition as $union
 
 		final public function search($field = '', $request = ''){
-			#$trimmed = ',.!&/\\?;:\'"-=+%_*()^';
-			$trans = array("," => " ", '.' => ' ', '!' => ' ', '?' => ' ', '&' => ' ', ';' => ' ', ':' => ' ', '\\' => ' ', '/' => ' ', '\'' => ' ', '"' => ' ', '+' => ' ', '-' => ' ', '=' => ' ', '%' => ' ', '_' => ' ', '*' => ' ', '(' => ' ', ')' => ' ', '^' => ' ');
+			$trans = array("," => " ", '.' => ' ', '!' => ' ', '?' => ' ', '&' => ' ', ';' => ' ',
+				':' => ' ', '\\' => ' ', '/' => ' ', '\'' => ' ', '"' => ' ', '+' => ' ', '-' => ' ',
+				'=' => ' ', '%' => ' ', '_' => ' ', '*' => ' ', '(' => ' ', ')' => ' ', '^' => ' ');
 			$request = trim(strtr($request, $trans));
 			$r_array = explode(' ', $request);
 			foreach ($r_array as $key => &$value) {
@@ -284,11 +279,6 @@
 			return $this->r($t, 1, true);
 		}
 		// seach by database as LIKE by
-
-		final public function eSearch($titles = array(), $metas = array(), $content = array()){
-
-		}
-		// extended relevant search ($titles x20, $metas x10, $content x1)
 
 		/**
 		 *
@@ -316,7 +306,7 @@
 		}
 
 		private function r ($t, $type = 0, $poly = false){
-			if ($this->debug) {echo false;}
+			if ($this->lock) {return false;}
 			if ($this->is_buf) {
 				$this->addBuffer($t);
 			} else {
@@ -378,11 +368,8 @@
 				if (count($this->condition) == 0) {
 					return 1;
 				} else {
-					$_conds = array();
-					foreach ($this->condition as $field => $value) {
-						if (strpos($value [0], '`.`') > 0) {$tmp = "`".$value [0]."`";} else {$tmp = "'".$value [0]."'";}
-						$_conds [] = '`'.$field.'`'.$value [1].$tmp;
-					}
+					$_conds = [];
+					foreach ($this->condition as $item) $_conds [] = $item->getSQL ();
 					$glue = ' '.$this->union.' ';
 					$result = implode($glue, $_conds);
 					return $result;
