@@ -2,8 +2,8 @@
 	/**
 	 *
 	 * @ajaxController
-	 * @pagen1.1
-	 * @author Denis Dragomiric
+	 * @version Pagen 1.1
+	 * @author Denis Dragomiric <den@lux-blog.org>
 	 *
 	 */
 	header ('Content-Type: text/html; charset=utf-8');

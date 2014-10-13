@@ -1,4 +1,8 @@
 <?php
+	/**
+	 * @author Denis Dragomiric <den@lux-blog.org>
+	 * @version Pagen 1.1
+	 */
 abstract class User {
 	const GUEST = 0;
 	const USER = 1;
@@ -33,44 +37,10 @@ abstract class User {
 		self::$IP = $_SERVER['REMOTE_ADDR'];
 	}
 	
-	public static function is_auth () {
-		if (isset($_SESSION['id']) and ($_SESSION['rights'] >= self::USER)) {
-			return true;
-		} else {
-			return false;
-			}
-	}
-	
-	public static function is_user () {
-		if (isset($_SESSION['id']) and ($_SESSION['rights'] == self::USER)) {
-			return true;
-		} else {
-			return false;
-			}
-	}
-	
-	public static function is_v_user () {
-		if (isset($_SESSION['id']) and ($_SESSION['rights'] == self::V_USER)) {
-			return true;
-		} else {
-			return false;
-			}
-	}
-	
-	public static function is_moder () {
-		if (isset($_SESSION['id']) and ($_SESSION['rights'] == self::MODER)) {
-			return true;
-		} else {
-			return false;
-			}
-	}
-	
-	public static function is_admin () {
-		if (isset($_SESSION['id']) and ($_SESSION['rights'] == self::ADMIN)) {
-			return true;
-		} else {
-			return false;
-			}
-	}
+	public static function is_auth ()   {return isset($_SESSION['id']) and ($_SESSION['rights'] >= self::USER);     }
+	public static function is_user ()   {return isset($_SESSION['id']) and ($_SESSION['rights'] == self::USER);     }
+	public static function is_v_user () {return isset($_SESSION['id']) and ($_SESSION['rights'] == self::V_USER);   }
+	public static function is_moder ()  {return isset($_SESSION['id']) and ($_SESSION['rights'] == self::MODER);    }
+	public static function is_admin ()  {return isset($_SESSION['id']) and ($_SESSION['rights'] == self::ADMIN);    }
 }
 ?>

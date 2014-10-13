@@ -1,41 +1,46 @@
 <?php
+	/**
+	 * @author Denis Dragomiric <den@lux-blog.org>
+	 * @version Pagen 0.4
+	 */
 abstract class RandKey {
 	const LN = 62;
 	const KEYC = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz0123456789";
 	private static function get_ctrl($key){
+		$ctrl = NULL;
 		switch ($key){
-		case 1:  $ctrl = "q1LExINeSXhG68ayoPFjHtDgZfuRnzMd3rKAsvlViY95J4C2bQWTUpmOkw0B7c";
-		case 2:  $ctrl = "ie7wGm6Vyv9rUBD4CTkR2HJFd03gSYQoWL85ZhlNsxAbzcpKOEjfaPXtInqMu1";
-		case 3:  $ctrl = "Rc36n42ozHTtsYNZg5GJWQlBUFMbwedOKAmjqSVuPxEI9CpLry1DaXh0ki8v7f";
-		case 4:  $ctrl = "3pTikLI5dU6ugV4OSvDenQRAZJEzbcX7Mo9GqBCWwlsHPh2xjrNy0Y1fFKmt8a";
-		case 5:  $ctrl = "uoFR0NJscvUhzIaq12Xj5BKkEDnVYe97pyOlTgCAHZiw4tmPQd6fSW83MGxLrb";
-		case 6:  $ctrl = "yvYChN8tX3KSB6ZH0RwFexDaou7Jn4pOcP2WA5mgiVbkQzdsMrIE1TqlU9GjfL";
-		case 7:  $ctrl = "MHIlrwmq1TYo4U7v3VKZJkzFiCOdLQGX2gpc8hxEDfsyea9jSnBP0b5utWAN6R";
-		case 8:  $ctrl = "AgNkpKO7bUu324RMHjw6hLBYF9ZxatEylmSevsrq80CofzTQ5dDWPXicInGV1J";
-		case 9:  $ctrl = "1gwYBxACSyj9nIoT3NVfJdO6cMaXHuGl570Q2bism4tEZWUrKkRq8FLPDphzev";
-		case 10:  $ctrl = "R6SauAWCv2LE4li3qGZbyOeTVQ590kwPj8KX7FxfpIhYmDrHoBsMngN1UtzdJc";
-		case 11:  $ctrl = "qsypiQkbSal50nB68YDNWofU4HGhdMFzV7KvEJjZRTxXgr1cmtAIP2OuCLe39w";
-		case 12:  $ctrl = "lud5TEhLoMAvIkfXBK8SC4Jz0c6nxpV3F9brQZYyeWsPwDUq2aN1iRjgOtGH7m";
-		case 13:  $ctrl = "768hMNxXCRvbjuHZ4kplLJy3ictaOGSdY1A9TewfgoIBVnDzWqEUFmKsQ2P05r";
-		case 14:  $ctrl = "05nHExVvDzKBj1crGs26J3RSe78XglYOTNt9dLFobACUPIiuyafWZmhqMp4Qkw";
-		case 15:  $ctrl = "CdnGAwMYQ12Xf9rUWOa7Fl4DHyRTL0bs8ughqK6mJPpkNjSVoZE3cex5tiBvzI";
-		case 16:  $ctrl = "ykO4DpAioVQxEcWsTUS8eGqrmvBguIhYPwLdt0b3CJHNMjRf6nl52azFK1X7Z9";
-		case 17:  $ctrl = "GOL7cYepWKRbuXlwB3nhmfSV9FTiIao2E4CAysx8M6t0vZ1QHUrzjdPD5qgJkN";
-		case 18:  $ctrl = "hZqVnlbaXM61T4mIPKkL3gJpUNWBCzc9EvYOjys2xQtuAoDeGr5Rf0i78dFwSH";
-		case 19:  $ctrl = "jSpnK6v47ieYJ8aXDwczAo1qCxT9LQ5UGy2IRNusEkg0bZlhWrmMtFBP3VHfdO";
-		case 20:  $ctrl = "GOdyqnwL0JxP5E16YfFK3NogjBhQ4kVAs2vI7aeXrb8TuUlmCDcHWSipz9RtZM";
-		case 21:  $ctrl = "M2zIS4H5yiPcbXrewTsWf3UoCpqLG9EAKuDOnNZxdY80Jthvm1Fg7RjBQalkV6";
-		case 22:  $ctrl = "IrUOiH90xjslWFygSeB4JdZhk5ocQTVvtmLzXPbA3MCYu8a7EGf2NpKRq1D6wn";
-		case 23:  $ctrl = "tVuhmkDZjHlTrS5i4dU31Gspe07yRbAa6nxcOzXqKvQYLNJCIPwfF29EgWMoB8";
-		case 24:  $ctrl = "iW0abHAvgL2pz19PcCZujryXEewnqKxODtldGfSQYUMBh5J8o7N3IVsTR4Fk6m";
-		case 25:  $ctrl = "G8rkhFwRCIvUNQm613pYe2VtcPfX4EoaHudJgxWSjZMi9s0ynqDzKOT57LlABb";
-		case 26:  $ctrl = "ATudl5psPVSGQBoR2zJZ4xvN3IXmW6haMwLFktKrnHDU0bcijO7CEg8qYeyf91";
-		case 27:  $ctrl = "BmPlsDghqjMyUWLxrOd7A40G2FicHvItJYnue89kpQwaZRSfEbX5KC1N36VTzo";
-		case 28:  $ctrl = "Nnk8ZebKtDWycfgXM3UzSVFQY2xGPLAdOH5uq7hwCp1smIjE0ToR4la6JvB9ir";
-		case 29:  $ctrl = "pvBQmUATjJKNIYq748C3ox5HWGsreby6MFf9gh10DzEcPR2liOXkdZVaStnLwu";
-		case 30:  $ctrl = "VF3oLJ49CfUY1hI0sGdqXgRcE7wpxADu8OzkTKHWNaeQtryniBlM2S6vbPZjm5";
-		case 31:  $ctrl = "WLXeETjyFv2Z46DrktHIVmp3MnNYOqf5G1Qwg8CbB9PRAuKaSshxU0cJi7ldoz";
-		case 32:  $ctrl = "q9SO4gZe0JUbLWsCrEAKNv2jIYudXtTlkmH5ynDiPQB76pz8ahfwFGx3o1RVcM";
+			case 1:  $ctrl = "q1LExINeSXhG68ayoPFjHtDgZfuRnzMd3rKAsvlViY95J4C2bQWTUpmOkw0B7c"; break;
+			case 2:  $ctrl = "ie7wGm6Vyv9rUBD4CTkR2HJFd03gSYQoWL85ZhlNsxAbzcpKOEjfaPXtInqMu1"; break;
+			case 3:  $ctrl = "Rc36n42ozHTtsYNZg5GJWQlBUFMbwedOKAmjqSVuPxEI9CpLry1DaXh0ki8v7f"; break;
+			case 4:  $ctrl = "3pTikLI5dU6ugV4OSvDenQRAZJEzbcX7Mo9GqBCWwlsHPh2xjrNy0Y1fFKmt8a"; break;
+			case 5:  $ctrl = "uoFR0NJscvUhzIaq12Xj5BKkEDnVYe97pyOlTgCAHZiw4tmPQd6fSW83MGxLrb"; break;
+			case 6:  $ctrl = "yvYChN8tX3KSB6ZH0RwFexDaou7Jn4pOcP2WA5mgiVbkQzdsMrIE1TqlU9GjfL"; break;
+			case 7:  $ctrl = "MHIlrwmq1TYo4U7v3VKZJkzFiCOdLQGX2gpc8hxEDfsyea9jSnBP0b5utWAN6R"; break;
+			case 8:  $ctrl = "AgNkpKO7bUu324RMHjw6hLBYF9ZxatEylmSevsrq80CofzTQ5dDWPXicInGV1J"; break;
+			case 9:  $ctrl = "1gwYBxACSyj9nIoT3NVfJdO6cMaXHuGl570Q2bism4tEZWUrKkRq8FLPDphzev"; break;
+			case 10:  $ctrl = "R6SauAWCv2LE4li3qGZbyOeTVQ590kwPj8KX7FxfpIhYmDrHoBsMngN1UtzdJc"; break;
+			case 11:  $ctrl = "qsypiQkbSal50nB68YDNWofU4HGhdMFzV7KvEJjZRTxXgr1cmtAIP2OuCLe39w"; break;
+			case 12:  $ctrl = "lud5TEhLoMAvIkfXBK8SC4Jz0c6nxpV3F9brQZYyeWsPwDUq2aN1iRjgOtGH7m"; break;
+			case 13:  $ctrl = "768hMNxXCRvbjuHZ4kplLJy3ictaOGSdY1A9TewfgoIBVnDzWqEUFmKsQ2P05r"; break;
+			case 14:  $ctrl = "05nHExVvDzKBj1crGs26J3RSe78XglYOTNt9dLFobACUPIiuyafWZmhqMp4Qkw"; break;
+			case 15:  $ctrl = "CdnGAwMYQ12Xf9rUWOa7Fl4DHyRTL0bs8ughqK6mJPpkNjSVoZE3cex5tiBvzI"; break;
+			case 16:  $ctrl = "ykO4DpAioVQxEcWsTUS8eGqrmvBguIhYPwLdt0b3CJHNMjRf6nl52azFK1X7Z9"; break;
+			case 17:  $ctrl = "GOL7cYepWKRbuXlwB3nhmfSV9FTiIao2E4CAysx8M6t0vZ1QHUrzjdPD5qgJkN"; break;
+			case 18:  $ctrl = "hZqVnlbaXM61T4mIPKkL3gJpUNWBCzc9EvYOjys2xQtuAoDeGr5Rf0i78dFwSH"; break;
+			case 19:  $ctrl = "jSpnK6v47ieYJ8aXDwczAo1qCxT9LQ5UGy2IRNusEkg0bZlhWrmMtFBP3VHfdO"; break;
+			case 20:  $ctrl = "GOdyqnwL0JxP5E16YfFK3NogjBhQ4kVAs2vI7aeXrb8TuUlmCDcHWSipz9RtZM"; break;
+			case 21:  $ctrl = "M2zIS4H5yiPcbXrewTsWf3UoCpqLG9EAKuDOnNZxdY80Jthvm1Fg7RjBQalkV6"; break;
+			case 22:  $ctrl = "IrUOiH90xjslWFygSeB4JdZhk5ocQTVvtmLzXPbA3MCYu8a7EGf2NpKRq1D6wn"; break;
+			case 23:  $ctrl = "tVuhmkDZjHlTrS5i4dU31Gspe07yRbAa6nxcOzXqKvQYLNJCIPwfF29EgWMoB8"; break;
+			case 24:  $ctrl = "iW0abHAvgL2pz19PcCZujryXEewnqKxODtldGfSQYUMBh5J8o7N3IVsTR4Fk6m"; break;
+			case 25:  $ctrl = "G8rkhFwRCIvUNQm613pYe2VtcPfX4EoaHudJgxWSjZMi9s0ynqDzKOT57LlABb"; break;
+			case 26:  $ctrl = "ATudl5psPVSGQBoR2zJZ4xvN3IXmW6haMwLFktKrnHDU0bcijO7CEg8qYeyf91"; break;
+			case 27:  $ctrl = "BmPlsDghqjMyUWLxrOd7A40G2FicHvItJYnue89kpQwaZRSfEbX5KC1N36VTzo"; break;
+			case 28:  $ctrl = "Nnk8ZebKtDWycfgXM3UzSVFQY2xGPLAdOH5uq7hwCp1smIjE0ToR4la6JvB9ir"; break;
+			case 29:  $ctrl = "pvBQmUATjJKNIYq748C3ox5HWGsreby6MFf9gh10DzEcPR2liOXkdZVaStnLwu"; break;
+			case 30:  $ctrl = "VF3oLJ49CfUY1hI0sGdqXgRcE7wpxADu8OzkTKHWNaeQtryniBlM2S6vbPZjm5"; break;
+			case 31:  $ctrl = "WLXeETjyFv2Z46DrktHIVmp3MnNYOqf5G1Qwg8CbB9PRAuKaSshxU0cJi7ldoz"; break;
+			case 32:  $ctrl = "q9SO4gZe0JUbLWsCrEAKNv2jIYudXtTlkmH5ynDiPQB76pz8ahfwFGx3o1RVcM"; break;
 		}
 	return $ctrl;
 	}
@@ -81,6 +86,7 @@ abstract class RandKey {
 		
 	private static function pos_c ($ctrl1, $chr){
 		$ln = self::LN;
+		$mdb = NULL;
 		for ($k = 0; $k < $ln; $k ++){
 			if ($chr == $ctrl1 [$k]) {
 				$mdb = $k;
@@ -95,6 +101,7 @@ abstract class RandKey {
 		
 	private static function pos_b($ctrl1,$chr){
 		$ln = self::LN;
+		$mdb = NULL;
 		for ($k = 0; $k < $ln; $k ++){
 			if ($chr == $ctrl1 [$k]) {
 				$mdb = $k;
@@ -107,6 +114,7 @@ abstract class RandKey {
 		
 	private static function pos_t($c1,$chr){
 		$ln = self::LN;
+		$mdb = NULL;
 		for ($k = 0; $k < $ln; $k ++){
 			if ($chr == $c1 [$k]) {$mdb = $k;}
 		}

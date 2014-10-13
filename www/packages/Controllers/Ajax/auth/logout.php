@@ -1,4 +1,10 @@
 <?php
+	/**
+	 * demo AJAX-class
+	 *
+	 * @author Denis Dragomiric <den@lux-blog.org>
+	 * @version Pagen 1.1
+	 */
 
 	namespace Controllers\Ajax\auth;
 	\settings (['Config']);

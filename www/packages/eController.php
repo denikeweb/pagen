@@ -1,10 +1,10 @@
 <?php
-abstract class eController {
 	/**
-	*	Pagen Controller parent class
-	*	Pagen v1.1
-	*
-	*/
+	 *	Pagen Controller parent class
+	 * @author Denis Dragomiric <den@lux-blog.org>
+	 * @version Pagen 1.1
+	 */
+abstract class eController {
 	public    $args;
 	private   $url;
 	private   $site_title;

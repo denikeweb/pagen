@@ -1,11 +1,10 @@
 <?php
+	/**
+	 *	Pagen Model parrent class
+	 *  @author Denis Dragomiric <den@lux-blog.org>
+	 *	@version Pagen 1.1
+	 */
 	abstract class eModel {
-		/**
-		 *	Pagen Model parrent class
-		 *	Pagen v1.0
-		 *
-		 */
-
 		private $fields = array ();         # array
 		private $condition = array ();      # assoc array
 		private $joins = array ();      	# assoc array

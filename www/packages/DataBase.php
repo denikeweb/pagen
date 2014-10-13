@@ -1,4 +1,8 @@
 <?php
+	/**
+	 * @author Denis Dragomiric <den@lux-blog.org>
+	 * @version Pagen 1.1
+	 */
 abstract class DataBase {
 	public static $mysqli;
 
