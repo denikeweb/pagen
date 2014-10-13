@@ -11,14 +11,85 @@ class demo_index extends \eModel {
 		return $data;
 	}
 
+/*	public function show () {
+		$this->setDefault ();
+		$this->setFields(array ('id', 'title', 'text'));
+		//$this->addCond('id', 242);
+
+		// method 1
+		# $this->setSQL('((A OR B) AND (C AND (D OR (E OR F))) AND G)');
+
+		// method 2
+			$this->addConditions(
+				(new \Cdn (
+					(new \Cdn(
+						(new \Cdn())->setCond('A'),
+						(new \Cdn())->setCond('B')
+					))->setType (0),
+					(new \Cdn(
+						(new \Cdn())->setCond('C'),
+						(new \Cdn(
+							(new \Cdn())->setCond('D'),
+							(new \Cdn(
+								(new \Cdn())->setCond('E'),
+								(new \Cdn())->setCond('F')
+							))->setType (0)
+						))->setType(0)
+					))->setType(1),
+					(new \Cdn())->setCond('G')
+				))->setType(1)
+			);
+
+
+		$this->setOrder('id', 'DESC');
+		$this->debug ();
+		$this->lock ();
+		$this->read ();
+		//$this->readLast ();
+		//$this->readById (543);
+		//$this->readFirst ();
+		//$this->read ();
+		return $this->getData ();
+	}*/
+
 	public function show () {
 		$this->setDefault ();
 		$this->setFields(array ('id', 'title', 'text'));
+		//$this->addCond('id', 242);
+
+		$px = \config::PREFIX;
+		// method 1
+		# $this->setSQL('((A OR B) AND (C AND (D OR (E OR F))) AND G)');
+
+		// method 2
+			$this->addConditions(
+				(new \Cdn (
+					(new \Cdn(
+						(new \Cdn())->setCond('A'),
+						(new \Cdn())->setCond('B')
+					))->setType (0),
+					(new \Cdn(
+						(new \Cdn())->setCond('C'),
+						(new \Cdn(
+							(new \Cdn())->setCond('D'),
+							(new \Cdn(
+								(new \Cdn())->setCond('E'),
+								(new \Cdn())->setCond("!(`{$px}articles`.`title` LIKE '%today%')")
+							))->setType (0)
+						))->setType(0)
+					))->setType(1),
+					(new \Cdn())->setCond('id', 'author_id', 'articles', 'authors')
+				))->setType(1)
+			);
+
+
 		$this->setOrder('id', 'DESC');
-		$this->readLast ();
+		$this->debug ();
+		$this->lock ();
+		$this->read ();
+		//$this->readLast ();
 		//$this->readById (543);
 		//$this->readFirst ();
-		//$this->addCond('id', 242);
 		//$this->read ();
 		return $this->getData ();
 	}

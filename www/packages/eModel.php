@@ -124,12 +124,12 @@
 			$this->joins [] = ' INNER JOIN `'.\config::PREFIX.$table2.'` ON `'.\config::PREFIX."$table1`.`$id1` = `".\config::PREFIX."$table2`.`$id2` ";
 		}
 
-		final public function addConditions(array $conditions){
-			foreach ($conditions as $cond) if ($cond instanceof Condition) $this->condition [] = $cond;
+		final public function addConditions($cond){
+			$this->condition [] = $cond->process();
 		}
 
 		final public function addCond($field, $value, $table1 = NULL, $table2 = NULL, $sign = '='){
-			$this->condition [] = new Condition ($field, $value, $table1, $table2, $sign);
+			$this->condition [] = (new Cdn ())->setCond ($field, $value, $table1, $table2, $sign);
 		}
 		//add new condition to associative array of condition for WHERE
 
