@@ -92,14 +92,14 @@
 			$left = '';
 			$right = '';
 			if (!is_null($this->table1) && is_null($this->table2)) {
-				$left = '`'.DataBase::$mysqli->real_escape_string($this->table1).'`.`'
+				$left = '`'.\config::PREFIX.DataBase::$mysqli->real_escape_string($this->table1).'`.`'
 							.DataBase::$mysqli->real_escape_string($this->field).'`';
 				$right = "'".DataBase::$mysqli->real_escape_string($this->value)."'";
 			}
 			if (!is_null($this->table1) && !is_null($this->table2)) {
-				$left = '`'.DataBase::$mysqli->real_escape_string($this->table1).'`.`'
+				$left = '`'.\config::PREFIX.DataBase::$mysqli->real_escape_string($this->table1).'`.`'
 					.DataBase::$mysqli->real_escape_string($this->field).'`';
-				$right = '`'.DataBase::$mysqli->real_escape_string($this->table2).'`.`'
+				$right = '`'.\config::PREFIX.DataBase::$mysqli->real_escape_string($this->table2).'`.`'
 					.DataBase::$mysqli->real_escape_string($this->value).'`';
 			}
 			if (is_null($this->table1) && is_null($this->table2)) {

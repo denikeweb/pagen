@@ -58,22 +58,46 @@ class demo_index extends \eModel {
 		//$this->addCond('id', 242);
 
 		$px = \config::PREFIX;
+		$year = 2014;
+		$experience = 5;
 		// method 1
-		# $this->setSQL('((A OR B) AND (C AND (D OR (E OR F))) AND G)');
+		$this->setSQL("(
+			(
+				`{$px}articles`.`views`>'$year'
+				OR
+				`{$px}authors`.`experience`>='$experience'
+			)
+			AND
+			(
+				`{$px}articles`.`year`='2014'
+				AND
+				(
+					`{$px}authors`.`id`>'33'
+					OR
+					(
+						`id`<'12'
+						OR
+						!(`{$px}articles`.`title` LIKE '%today%')
+					)
+				)
+			)
+			AND
+			`{$px}articles`.`id`=`{$px}authors`.`author_id`
+		)");
 
 		// method 2
 			$this->addConditions(
 				(new \Cdn (
 					(new \Cdn(
-						(new \Cdn())->setCond('A'),
-						(new \Cdn())->setCond('B')
+						(new \Cdn())->setCond('views', 250, 'articles', NULL, '>'),
+						(new \Cdn())->setCond('experience', $experience, 'authors', NULL, '>=')
 					))->setType (0),
 					(new \Cdn(
-						(new \Cdn())->setCond('C'),
+						(new \Cdn())->setCond('year', $year, 'articles'),
 						(new \Cdn(
-							(new \Cdn())->setCond('D'),
+							(new \Cdn())->setCond('id', 33, 'authors', NULL, '>'),
 							(new \Cdn(
-								(new \Cdn())->setCond('E'),
+								(new \Cdn())->setCond('id', 12, NULL, NULL, '<'),
 								(new \Cdn())->setCond("!(`{$px}articles`.`title` LIKE '%today%')")
 							))->setType (0)
 						))->setType(0)
@@ -82,6 +106,9 @@ class demo_index extends \eModel {
 				))->setType(1)
 			);
 
+		// result: ((`pagen_articles`.`views`>'250' OR `pagen_authors`.`experience`>='5') AND
+		// (`pagen_articles`.`year`='2014' AND (`pagen_authors`.`id`>'33' OR (`id`<'12' OR
+		// !(`pagen_articles`.`title` LIKE '%today%')))) AND `pagen_articles`.`id`=`pagen_authors`.`author_id`)
 
 		$this->setOrder('id', 'DESC');
 		$this->debug ();
