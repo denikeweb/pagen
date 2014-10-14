@@ -35,4 +35,22 @@ ExpiresDefault "access plus 1 month"
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteRule ^([^.]+).([^.]+)$ index.php?page=$1&ext=$2 [QSA,L]
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^([^.]+).([^.]+).([^.]+)$ index.php?page=$1&names[]=$2&ext=$3 [QSA,L]
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^([^.]+).([^.]+).([^.]+).([^.]+)$ index.php?page=$1&names[]=$2&names[]=$3&ext=$4 [QSA,L]
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^([^.]+).([^.]+).([^.]+).([^.]+).([^.]+)$ index.php?page=$1&names[]=$2&names[]=$3&names[]=$4&ext=$5 [QSA,L]
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^([^.]+).([^.]+).([^.]+).([^.]+).([^.]+).([^.]+)$ index.php?page=$1&names[]=$2&names[]=$3&names[]=$4&names[]=$5&ext=$6 [QSA,L]
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^([^.]+).([^.]+).([^.]+).([^.]+).([^.]+).([^.]+).([^.]+)$ index.php?page=$1&names[]=$2&names[]=$3&names[]=$4&names[]=$5&names[]=$6&ext=$7 [QSA,L]
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    #warning
 </IfModule>

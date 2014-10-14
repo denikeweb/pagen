@@ -14,7 +14,9 @@
 		public static function checkRequest () {
 			self::$pageRequest = '/';
 			if (isset ($_GET ['ext'])) {
-				self::$pageRequest = $_GET ['page'];
+				$part = '';
+				if (count($_GET ['names'])) $part = '.'.implode('.', $_GET ['names']);
+				self::$pageRequest = $_GET ['page'].$part;
 				self::printFile ($_GET ['ext']);
 			}
 			if (isset($_GET ['page'])) {
