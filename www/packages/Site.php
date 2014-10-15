@@ -76,13 +76,13 @@
 			}
 			//choose language if isset cookie
 
-				$query_lang = $mysqli->query('SELECT `'.$lang.'`, `id` FROM `'.\config::PREFIX.'titles` WHERE 1');
-				$lang_row = $query_lang->fetch_assoc();
-				do {
-					$lang_index = $lang_row ['id'];
-					$word [$lang_index] = $lang_row [$lang];
-				} while ($lang_row = $query_lang->fetch_assoc());
-				//create array of language words
+			$query_lang = $mysqli->query('SELECT `'.$lang.'`, `id` FROM `'.\config::PREFIX.'titles` WHERE 1');
+			$lang_row = $query_lang->fetch_assoc();
+			do {
+				$lang_index = $lang_row ['id'];
+				$word [$lang_index] = $lang_row [$lang];
+			} while ($lang_row = $query_lang->fetch_assoc());
+			//create array of language words
 
 			self::$word = $word;
 			self::$Lang = $lang;
@@ -185,10 +185,10 @@
 			//search untill getting file
 
 			$file = $c_pagen_path.$controller.EXT;
-			if (empty ($controller)) {
-				if (is_file ($fullpath.DIRSEP.'index'.EXT)) {
-					$file = $c_pagen_path.$controller.DIRSEP.'index'.EXT;
-					$controller = $controller.'\''.$piece;
+			if (empty ($controller) or !is_file ($file)) {
+				$tmpFile = $c_pagen_path.$controller.'\index'.EXT;
+				if (is_file ($tmpFile)) {
+					$file = $tmpFile;
 				}
 			}
 			if (empty ($controller)) {
