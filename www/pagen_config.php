@@ -14,7 +14,7 @@ class config {
 	const DB_SERVER = '127.0.0.1';
 	const DB_USER = 'root';
 	const DB_PASS = '';
-	const DB_NAME = 'awm_001';
+	const DB_NAME = 'awm_05_pagen';
 	const EMAIL = 'admin@mysite.org';
 	const ADMIN = 'admin';
 	const PASS = '9GGm6GmcSGaHXiGD8dNuG44R21eRYtiqRhDJ46PBSJCZY'; //111111

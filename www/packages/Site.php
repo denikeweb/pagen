@@ -34,9 +34,13 @@
 		 */
 		private static function printFile ($ext) {
 			switch ($ext) {
-				case 'css': $fileType = 'css'; break;
-				case 'js': $fileType = 'javascript'; break;
-				default : $fileType = $ext;
+				case 'css': $fileType   = 'text/css; charset: UTF-8';                 break;
+				case 'js':  $fileType   = 'text/javascript; charset: UTF-8';          break;
+				case 'ttf': $fileType   = 'application/x-font-ttf';   break;
+				case 'png': $fileType   = 'image/png; charset: UTF-8';                break;
+				case 'gif': $fileType   = 'image/gif; charset: UTF-8';                break;
+				case 'jpg': $fileType   = 'image/jpg; charset: UTF-8';                break;
+				default :   $fileType   = 'text/'.$ext.'; charset: UTF-8';               break;
 			}
 			$file = dirname (dirname (__FILE__)).'/templates/'.config::TEMPLATE.DIRSEP.self::$pageRequest.".$ext";
 			$handle = @fopen ($file, 'r');
@@ -46,8 +50,15 @@
 				@fclose ($handle);
 
 				// default loading
-				header ("Content-type: text/$fileType; charset: UTF-8");
+				header ("Content-type: $fileType");
 				header ("Cache-Control: must-revalidate");
+
+				//gzip
+				$content = gzencode($content);
+				header('content-encoding: gzip');
+				header('vary: accept-encoding');
+				header('content-length: ' . strlen($content));
+
 				echo $content;
 				exit ();
 			} else {
@@ -56,7 +67,7 @@
 		}
 
 		public static function setupLanguage (){
-			$mysqli = &\DataBase::$mysqli;
+			//$mysqli = &\DataBase::$mysqli;
 			$lang = \config::LANG;
 			if (isset($_GET ['lang'])) { //if cookie is not showed
 				setcookie('lang', $_GET['lang'], time() + 2592000); //set language id
@@ -76,7 +87,7 @@
 			}
 			//choose language if isset cookie
 
-			$query_lang = $mysqli->query('SELECT `'.$lang.'`, `id` FROM `'.\config::PREFIX.'titles` WHERE 1');
+			/*$query_lang = $mysqli->query('SELECT `'.$lang.'`, `id` FROM `'.\config::PREFIX.'titles` WHERE 1');
 			$lang_row = $query_lang->fetch_assoc();
 			do {
 				$lang_index = $lang_row ['id'];
@@ -84,7 +95,7 @@
 			} while ($lang_row = $query_lang->fetch_assoc());
 			//create array of language words
 
-			self::$word = $word;
+			self::$word = $word;*/
 			self::$Lang = $lang;
 			\config::$Lang = $lang;
 		}
@@ -110,11 +121,13 @@
 				self::$ThisPage = $result->fetch_assoc();
 				if ($is404) {
 					self::$ThisPage ['static'] = -1;
+				} else {
+					self::$ThisPage ['static'] = 1;
 				}
-				//save data of rhis page in array
+				//save data of this page in array
 
 				if (self::$ThisPage ['static'] == '1') {
-					$title_index = self::$ThisPage ['title'];
+					//$title_index = self::$ThisPage ['title'];
 					$page_id = self::$ThisPage ['id'];
 					// get id for query
 
@@ -125,7 +138,7 @@
 					self::$ThisPage ['meta_d'] = self::getFromDB('meta_d', $page_id);
 					//return meta tags for this page (keywords & description)
 
-					self::$ThisPage ['title'] = self::$word [$title_index];
+					//self::$ThisPage ['title'] = self::$word [$title_index];
 					// replace title of this page from language array
 				}
 			}
@@ -152,7 +165,7 @@
 		}
 
 		/**
-		 * it's really interesting code
+		 * sth interesting code
 		 */
 		private static function normalPage () {
 			$c_pagen_path = dirname (dirname(__FILE__)).DIRSEP.'packages';
@@ -160,7 +173,6 @@
 			$pieces = \Site::$urlArray;
 			$controller = '\Controllers';
 			// set site path
-
 			if (empty ($pieces [0])) {
 				unset ($pieces [0]);
 				$controller .= '\index';
@@ -170,27 +182,40 @@
 			$fullpath = $c_pagen_path;
 			foreach ($pieces as $piece) {
 				//$fullpath .= '\\'.$piece;
-				if (is_dir ($fullpath.$controller)) {
+				$tmpController = strtr($controller, "\\", DIRSEP);
+				if (is_dir ($fullpath.$tmpController)) {
 					//$c_pagen_path .= DIRSEP.$piece;
+					//echo 1, $controller, 2;
 					$controller = $controller.'\\'.$piece;
+					$tmpController = strtr($controller, "\\", DIRSEP);
 					array_shift ($pieces);
+					if (
+						is_file  ($fullpath.$tmpController.DIRSEP.'index'.EXT)
+						and !is_file ($fullpath.$tmpController.DIRSEP.$pieces [0].EXT)
+						and !is_dir   ($fullpath.$tmpController.DIRSEP.$pieces [0])
+					) break;
+					//echo '<br>', $fullpath.$controller.'\\index'.EXT, '<br>';
 					continue;
 				}
-				if (is_file ($fullpath.$controller.EXT)) {
-					$controller = $controller.'\\'.$piece;
-					array_shift ($pieces);
+				$tmpController = strtr($controller, "\\", DIRSEP);
+				if (is_file ($fullpath.$tmpController.EXT)) {
+					//$controller = $controller.'\\'.$piece;
+					//array_shift ($pieces);
 					break;
 				}
 			}
 			//search untill getting file
 
-			$file = $c_pagen_path.$controller.EXT;
+			$tmpController = strtr($controller, "\\", DIRSEP);
+			//echo $controller,'<br>';
+			$file = $c_pagen_path.$tmpController.EXT;
 			if (empty ($controller) or !is_file ($file)) {
-				$tmpFile = $c_pagen_path.$controller.'\index'.EXT;
+				$tmpFile = $c_pagen_path.$tmpController.DIRSEP.'index'.EXT;
 				if (is_file ($tmpFile)) {
 					$file = $tmpFile;
 				}
 			}
+			//	echo $controller,'<br>';
 			if (empty ($controller)) {
 				#$controller = 'index';
 				self::include404 ();
@@ -210,6 +235,8 @@
 
 				//create full model path
 				$args = $pieces;
+				// echo '<br>',
+				$file = strtr($file, "\\", DIRSEP);
 				if (!is_file ($file)) {self::include404 ();}
 				include ($file);
 
@@ -219,6 +246,9 @@
 				//construct controller
 
 				if (method_exists ($a, $_action)){
+					//print_r ($a);
+					//echo $_action;
+					//$a->run ();
 					$a->$_action ();
 					self::result ($a);
 				} else {
@@ -243,14 +273,16 @@
 			$a->run();
 			self::result ($a);
 		}
-		private static function include404 () {
+
+		public static function include404 () {
 			#header("HTTP/1.x 404 Not Found");
 			$file = dirname(dirname(__FILE__)).DIRSEP.'404'.EXT;
 			include ($file);
 			exit ();
 		}
+
 		private static function result (eController $a) {
-			echo $a->view ();
+			echo \ViewController::getView($a, true);
 		}
 	}
 ?>
