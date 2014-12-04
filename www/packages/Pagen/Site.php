@@ -1,8 +1,14 @@
 <?php
 	/**
+	 * @package Pagen
+	 * @version 1.0
 	 * @author Denis Dragomiric <den@lux-blog.org>
-	 * @version Pagen 1.1
+	 * @framework_version Pagen 1.1.6
+	 *
+	 * @uses \Annex\Validator
 	 */
+	namespace Pagen;
+
 	abstract class Site {
 		public static $ThisPage;
 		public static $Lang;
@@ -20,7 +26,7 @@
 				self::printFile ($_GET ['ext']);
 			}
 			if (isset($_GET ['page'])) {
-				if (\Validator::urlname($_GET ['page'])) {
+				if (\Annex\Validator::urlname($_GET ['page'])) {
 					self::$pageRequest = $_GET ['page'];
 				} else {
 					self::$pageRequest = '404';
@@ -36,13 +42,13 @@
 			switch ($ext) {
 				case 'css': $fileType   = 'text/css; charset: UTF-8';                 break;
 				case 'js':  $fileType   = 'text/javascript; charset: UTF-8';          break;
-				case 'ttf': $fileType   = 'application/x-font-ttf';   break;
+				case 'ttf': $fileType   = 'application/x-font-ttf; charset: UTF-8';   break;
 				case 'png': $fileType   = 'image/png; charset: UTF-8';                break;
 				case 'gif': $fileType   = 'image/gif; charset: UTF-8';                break;
 				case 'jpg': $fileType   = 'image/jpg; charset: UTF-8';                break;
-				default :   $fileType   = 'text/'.$ext.'; charset: UTF-8';               break;
+				default :   $fileType   = 'text/'.$ext.'; charset: UTF-8';            break;
 			}
-			$file = dirname (dirname (__FILE__)).'/templates/'.config::TEMPLATE.DIRSEP.self::$pageRequest.".$ext";
+			$file = dirname (dirname (__FILE__)).'/templates/'.\config::TEMPLATE.DIRSEP.self::$pageRequest.".$ext";
 			$handle = @fopen ($file, 'r');
 			if ($handle) {
 				$len = filesize ($file);
@@ -101,7 +107,7 @@
 		}
 
 		public static function getPage (){
-			$mysqli = &\DataBase::$mysqli;
+			$mysqli = &DataBase::$mysqli;
 			$thisUrl = trim(self::$pageRequest, '/\\');
 			self::$urlArray = explode('/', $thisUrl);
 			$mypage = self::$urlArray [0];
@@ -145,7 +151,7 @@
 		}
 
 		private static function getFromDB ($table, $page_id){
-			$mysqli = &\DataBase::$mysqli;
+			$mysqli = &DataBase::$mysqli;
 			$lang_tag = self::$Lang;
 			$result = $mysqli->query('SELECT `'.$lang_tag.'` FROM `'.\config::PREFIX.$table.'` WHERE `id`=\''.$page_id.'\'');
 			if ($result->num_rows == 0) {
@@ -170,7 +176,7 @@
 		private static function normalPage () {
 			$c_pagen_path = dirname (dirname(__FILE__)).DIRSEP.'packages';
 			//get path to controllers
-			$pieces = \Site::$urlArray;
+			$pieces = self::$urlArray;
 			$controller = '\Controllers';
 			// set site path
 			if (empty ($pieces [0])) {
@@ -282,7 +288,7 @@
 		}
 
 		private static function result (eController $a) {
-			echo \ViewController::getView($a, true);
+			echo ViewController::getView($a, true);
 		}
 	}
 ?>

@@ -22,19 +22,18 @@ define ('DIRSEP', DIRECTORY_SEPARATOR);
 define ('EXT', '.php');
 define ('SITE', dirname(__FILE__).DIRSEP);
 
-include_once 'pagen_config.php';
-#config::checkIP ();
-#config::toLog ();
 
-Site::checkRequest ();
-	//$start_time2 = microtime(2); @toDelete
-DataBase::connect ();
-	//$end_time2 = microtime(2); @toDelete
-User::userAuth ();
-Site::setupLanguage ();
-Site::getPage ();
-Site::printPage ();
-DataBase::disconnect ();
+	include_once 'pagen_config.php';
+	#config::checkIP ();
+	#config::toLog ();
+
+	\Pagen\Site::checkRequest ();
+	\Pagen\DataBase::connect ();
+	\Pagen\User::userAuth ();
+	\Pagen\Site::setupLanguage ();
+	\Pagen\Site::getPage ();
+	\Pagen\Site::printPage ();
+	\Pagen\DataBase::disconnect ();
 
 /*
  *  @toDelete

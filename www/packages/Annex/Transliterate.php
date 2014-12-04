@@ -1,10 +1,8 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Денис
- * Date: 10.10.2014
- * Time: 15:29
- */
+	/**
+	 * @source http://htmlweb.ru/php/example/translit.php [edited]
+	 * @version Pagen 1.1.6
+	 */
 
 namespace Annex;
 
@@ -12,13 +10,14 @@ namespace Annex;
 class Transliterate {
 	private $type;
 	private $phrase;
+	private static $obj;
 
 
 	/**
 	 * 1 - from rus to eng
 	 * 2 - from eng to rus
 	 *
-	 * @param $variant
+	 * @param $type
 	 */
 	public function __construct ($type = 1) {
 		$this->type = $type;
@@ -26,9 +25,26 @@ class Transliterate {
 
 	public function convert ($phrase) {
 		$this->phrase = $phrase;
-		return $this->fromRusToLat ();
+		$func = ($this->type == 1) ? 'fromRusToLat' : 'fromLatToRus';
+		return $this->$func ();
 	}
 
+	/**
+	 * transliterate cyrillic to latin
+	 *
+	 * @param $phrase
+	 *
+	 * @return mixed
+	 */
+	public static function rusEncode ($phrase) {
+		if (self::$obj === NULL)
+			self::$obj = new Transliterate (1);
+		return self::$obj->convert($phrase);
+	}
+
+	/**
+	 * @return mixed|string
+	 */
 	private function fromRusToLat () {
 		$str = $this->rus2translit();
 		$str = strtolower($str);
@@ -37,6 +53,17 @@ class Transliterate {
 		return $str;
 	}
 
+	/**
+	 * @return mixed
+	 */
+	private function fromLatToRus () {
+		# @TODO
+		return $this->phrase;
+	}
+
+	/**
+	 * @return string
+	 */
 	function rus2translit() {
 		$converter = array(
 			'а' => 'a',   'б' => 'b',   'в' => 'v',
@@ -50,6 +77,7 @@ class Transliterate {
 			'ч' => 'ch',  'ш' => 'sh',  'щ' => 'sch',
 			'ь' => '\'',  'ы' => 'y',   'ъ' => '\'',
 			'э' => 'e',   'ю' => 'yu',  'я' => 'ya',
+			'і' => 'i',   'ї' => 'i',
 
 			'А' => 'A',   'Б' => 'B',   'В' => 'V',
 			'Г' => 'G',   'Д' => 'D',   'Е' => 'E',
@@ -62,6 +90,7 @@ class Transliterate {
 			'Ч' => 'Ch',  'Ш' => 'Sh',  'Щ' => 'Sch',
 			'Ь' => '\'',  'Ы' => 'Y',   'Ъ' => '\'',
 			'Э' => 'E',   'Ю' => 'Yu',  'Я' => 'Ya',
+			'І' => 'I',   'Ї' => 'I'
 		);
 		return strtr($this->phrase, $converter);
 	}

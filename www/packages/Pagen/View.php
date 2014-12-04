@@ -1,20 +1,27 @@
 <?php
 	/**
 	 * @author Denis Dragomiric <den@lux-blog.org>
-	 * @version Pagen 1.1
+	 * @version Pagen 1.1.6
 	 */
+	namespace Pagen;
+
 	class View {
 
 		private $content = '';
 
-		public static function factory (array $data = NULL, array $files = NULL, array $words = NULL,  $template = 'index', array $cache = NULL) {
+		public static function factory (
+			array $data = NULL,
+			array $files = NULL,
+			$template = 'index',
+			array $cache = NULL
+		) {
 			$storage = new Storage ($files, $cache);
 			return new View($data, $storage, $template);
 		}
 
 		private function __construct ($data, $storage, $template) {
 			//creating template path
-			$folder = config::TEMPLATE;
+			$folder = \config::TEMPLATE;
 			$storage->setviewPath(SITE.'templates'.DIRSEP.$folder.DIRSEP);
 			$storage->setviewCachePath(SITE.'templates/'.$folder.'/_cache/');
 			$templateFile = $storage->viewPath ().$template.EXT;

@@ -5,6 +5,8 @@
 	 * @version Pagen 0.8
 	 *
 	 */
+	namespace Pagen;
+
 	abstract class Files {
 		public static function read ($fname){
 			$handle = @fopen($fname, 'r');

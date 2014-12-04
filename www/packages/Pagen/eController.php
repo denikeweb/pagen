@@ -2,8 +2,10 @@
 	/**
 	 *	Pagen Controller parent class
 	 * @author Denis Dragomiric <den@lux-blog.org>
-	 * @version Pagen 1.1
+	 * @version Pagen 1.1.6
 	 */
+	namespace Pagen;
+
 	abstract class eController {
 		public    $args;
 		private   $url;
@@ -23,7 +25,7 @@
 
 		public function view () {
 			if (count($this->files) > 0)
-				$this->view = \View::factory ($this->data, $this->files, NULL, $this->template, $this->cache);
+				$this->view = View::factory ($this->data, $this->files, $this->template, $this->cache);
 			return $this->view;
 		}
 

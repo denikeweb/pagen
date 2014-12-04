@@ -2,8 +2,10 @@
 	/**
 	 *	Pagen Model parrent class
 	 *  @author Denis Dragomiric <den@lux-blog.org>
-	 *	@version Pagen 1.1
+	 *	@version Pagen 1.1.6
 	 */
+	namespace Pagen;
+
 	abstract class eModel {
 		private $fields = array ();         # array
 		private $condition = array ();      # assoc array

@@ -3,6 +3,9 @@
 	 * @author Denis Dragomiric <den@lux-blog.org>
 	 * @version Pagen 1.1
 	 */
+
+	namespace Pagen;
+
 	class Storage {
 		private $files;
 		private $cache;

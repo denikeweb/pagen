@@ -3,6 +3,9 @@
 	 * @author Denis Dragomiric <den@lux-blog.org>
 	 * @version Pagen 1.1
 	 */
+
+	namespace Pagen;
+
 	abstract class PageLang {
 		public static function word ($label)    {return self::printWord ('titles', $label);}
 		public static function alert ($label)   {return self::printWord ('alerts', $label);}

@@ -1,18 +1,22 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Денис
- * Date: 25.10.2014
- * Time: 1:01
- */
+	/**
+	 * @author Denis Dragomiric <den@lux-blog.org>
+	 * @version Pagen 1.1.6
+	 */
 
 namespace Annex;
 
 
 class Dev {
+
+	/**
+	 * Print array with tabulation
+	 *
+	 * @param $array
+	 */
 	public static function showArray ($array) {
-		echo '<pre style="white-space: pre-wrap">';
+		echo '<pre style="white-space: pre-wrap"><code class="php">';
 			print_r($array);
-		echo '</pre>';
+		echo '</code></pre>';
 	}
 } 

@@ -1,7 +1,7 @@
 <?php
-	if (User::is_auth()) {
+	if (\Pagen\User::is_auth()) {
 		$class = 'class="no_display"';
-		$user_plus = "<div id='user_plus'>$word[10] <strong>".User::$userInfo['login']."</strong> 
+		$user_plus = "<div id='user_plus'>$word[10] <strong>".\Pagen\User::$userInfo['login']."</strong>
 								(<span class='exit_span'>$word[12]</span>)</div>";
 	} else {
 		$class = 'class="display"';

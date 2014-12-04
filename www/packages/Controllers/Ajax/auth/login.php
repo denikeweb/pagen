@@ -3,34 +3,32 @@
 	 * demo AJAX-class
 	 *
 	 * @author Denis Dragomiric <den@lux-blog.org>
-	 * @version Pagen 1.1
+	 * @version Pagen 1.1.6
 	 */
-	namespace Controllers\Ajax\auth;
-	\settings (['Config', 'DataBase']);
 
-	class login extends \eAjaxController {
+	namespace Controllers\Ajax\auth;
+	\Pagen\ajaxSettings (['Config', 'DataBase']);
+
+	class login extends \Pagen\eAjaxController {
 		private $message;
 		private $login;
 		private $pass;
 
-		public function run () {
+		function request () {
 			$this->login = $_REQUEST ['login'];
 			$this->pass  = $_REQUEST ['pass'];
-			$this->request ()
-				->response ();
 		}
 
-		protected function request () {
+		function run () {
 			if (\config::DB) {
 				$this->is_mysql ();
 			} else {
 				$this->not_mysql ();
 			}
-			return $this;
 		}
 
-		protected function response () {
-			echo $this->message;
+		function response () {
+			return $this->message;
 		}
 
 		private function not_mysql () {

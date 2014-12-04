@@ -1,4 +1,8 @@
 <?php
+	/**
+	 * @author Denis Dragomiric <den@lux-blog.org>
+	 * @version Pagen 1.1.6
+	 */
 
 namespace Annex;
 
@@ -7,15 +11,30 @@ class Mailer {
 	private $subject;
 	private $text;
 	private $getter;
+	private $mailer;
 
-	public function facade ($subject, $text, $getterEmail) {
+	/**
+	 * Set parameters and send message to sth e-mail
+	 *
+	 * @param string $getterEmail
+	 * @param string $subject
+	 * @param string $text
+	 * @param string $mailerName
+	 */
+	public function facade ($getterEmail, $subject = '', $text = '', $mailerName = 'Mailer') {
 		$this->text = $text;
 		$this->subject = $subject;
 		$this->getter = $getterEmail;
+		$this->mailer = $mailerName;
 
 		$this->sendMail();
 	}
 
+	/**
+	 * Send mail by set parameters
+	 *
+	 * @return bool
+	 */
 	private function sendMail () {
 		$subject = '['.$_SERVER ['SERVER_NAME'].'] '.$this->subject;
 		$text = $this->text;
@@ -25,7 +44,7 @@ class Mailer {
 		$headers .= "Content-type: text/html; charset=utf-8\r\n";
 
 		/* дополнительные шапки */
-		$headers .= "From: Miradas-mailer <no-reply@miradas.ru>\r\n";
+		$headers .= "From: {$this->mailer} <no-reply@$_SERVER[SERVER_NAME]>\r\n";
 
 		return mail($this->getter, $subject, $text, $headers);
 	}
