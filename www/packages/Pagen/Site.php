@@ -48,7 +48,7 @@
 				case 'jpg': $fileType   = 'image/jpg; charset: UTF-8';                break;
 				default :   $fileType   = 'text/'.$ext.'; charset: UTF-8';            break;
 			}
-			$file = dirname (dirname (__FILE__)).'/templates/'.\config::TEMPLATE.DIRSEP.self::$pageRequest.".$ext";
+			$file = dirname (dirname (dirname (__FILE__))).'/templates/'.\config::TEMPLATE.DIRSEP.self::$pageRequest.".$ext";
 			$handle = @fopen ($file, 'r');
 			if ($handle) {
 				$len = filesize ($file);

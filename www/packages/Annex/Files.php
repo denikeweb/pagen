@@ -5,7 +5,7 @@
 	 * @version Pagen 0.8
 	 *
 	 */
-	namespace Pagen;
+	namespace Annex;
 
 	abstract class Files {
 		public static function read ($fname){

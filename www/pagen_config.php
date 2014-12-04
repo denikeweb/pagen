@@ -1,10 +1,10 @@
 <?php
 	/**
 	 * @author Denis Dragomiric <den@lux-blog.org>
-	 * @version Pagen 1.1
+	 * @version Pagen 1.1.6
 	 */
 function __autoload($classname) {
-	$filename = SITE.'packages'.DIRSEP.$classname.'.php';
+	$filename = SITE.'packages'.DIRSEP.strtr($classname, "\\", DIRSEP).'.php';
 	include_once($filename);
 }
 class config {
@@ -24,7 +24,7 @@ class config {
 	
 	/*public static function checkIP(){
 		$host = '|'.$_SERVER['REMOTE_ADDR'].'|';
-		if (strpos(Files::read ('system/ban.txt'), $host) > -1) {
+		if (strpos(\Annex\Files::read ('system/ban.txt'), $host) > -1) {
 			exit();
 		}
 	}
