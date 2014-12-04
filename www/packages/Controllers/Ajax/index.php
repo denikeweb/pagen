@@ -1,7 +1,7 @@
 <?php
 	/**
 	 *
-	 * @ajaxController
+	 * @ajaxFrontController
 	 * @version Pagen 1.1.6
 	 * @author Denis Dragomiric <den@lux-blog.org>
 	 *

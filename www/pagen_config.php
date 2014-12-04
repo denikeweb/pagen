@@ -20,6 +20,8 @@ class config {
 	const PASS = '9GGm6GmcSGaHXiGD8dNuG44R21eRYtiqRhDJ46PBSJCZY'; //111111
 	const DB = true;
 	const TEMPLATE = 'pagen';
+	const MCRYPT_IV = 'h9FhFMfZCxXUdGac12tbNHgGUuPeCzIyssRjKBz5zU0=';
+	// base64 encode iv for mcrypt
 	public static $Lang;
 	
 	/*public static function checkIP(){

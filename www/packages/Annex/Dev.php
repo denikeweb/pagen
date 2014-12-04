@@ -15,7 +15,7 @@ class Dev {
 	 * @param $array
 	 */
 	public static function showArray ($array) {
-		echo '<pre style="white-space: pre-wrap"><code class="php">';
+		echo '<pre style="white-space: pre-wrap; overflow: hidden; text-align: left;"><code class="php">';
 			print_r($array);
 		echo '</code></pre>';
 	}

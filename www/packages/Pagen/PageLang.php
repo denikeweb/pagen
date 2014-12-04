@@ -2,6 +2,8 @@
 	/**
 	 * @author Denis Dragomiric <den@lux-blog.org>
 	 * @version Pagen 1.1
+	 *
+	 * @delete @todo
 	 */
 
 	namespace Pagen;
