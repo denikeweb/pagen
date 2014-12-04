@@ -4,9 +4,18 @@
 	 *
 	 * @author Denis Dragomiric <den@lux-blog.org>
 	 * @version Pagen 1.1.6
+	 *
+	 * @uses \Pagen\DataBase
+	 * @uses \Pagen\PageLang
+	 * @uses \Pagen\RandKey
+	 * @uses \Annex\Validator
 	 */
 
 	namespace Controllers\Ajax\auth;
+	use \Pagen\DataBase;
+	use \Pagen\PageLang;
+	use \Pagen\RandKey;
+	use \Annex\Validator;
 	\Pagen\ajaxSettings (['Config', 'DataBase']);
 
 	class login extends \Pagen\eAjaxController {
@@ -42,14 +51,17 @@
 			}
 		}
 		private function is_mysql () {
-			$mysqli = \DataBase::$mysqli;
-			if (!\Validator::login ($this->login)) {
-				$this->message = \PageLang::alert (8);
+			$mysqli = &DataBase::$mysqli;
+			if (!Validator::login ($this->login)) {
+				$this->message = PageLang::alert (8);
 			} else {
-				$query = $mysqli->query ("SELECT `id`,`rights`,`pass` FROM `".\config::PREFIX."users` WHERE `login`='{$this->login}'");
+				$query = $mysqli->query ("SELECT `id`,`rights`,`pass` FROM `".
+					\config::PREFIX."users` WHERE `login`='{$this->login}'");
 				$result = $query->fetch_assoc ();
-				if ($query->num_rows == 0 or $this->pass != \RandKey::demask ($result['pass'])) {
-					$this->message = \PageLang::alert (8);
+				if ($query->num_rows == 0 or $this->pass != RandKey::demask ($result['pass'])) {
+					echo $query->num_rows;
+					echo RandKey::demask ($result['pass']);
+					$this->message = PageLang::alert (8);
 				} else {
 					session_start ();
 					$_SESSION ['id'] = $result ['id'];

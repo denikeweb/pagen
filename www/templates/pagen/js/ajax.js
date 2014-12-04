@@ -10,7 +10,7 @@ var ajax_contents;
 		return thisUrl;
 	}
 
-	var url = getSiteName () + 'packages/Controllers/Ajax/index.php';
+	var url = '//' + document.domain + '/packages/Controllers/Ajax/index.php';
 	$.ajaxSetup({
 		url: url,
 		type: 'POST',
@@ -35,21 +35,3 @@ var ajax_contents;
 		});
 	}
 })();
-
-
-$(function (){
-	$('.log_button').on('click', function (){
-		login = $('#login_e').val ();
-		pass = $('#pass_out_e').val ();
-		_ajax ("auth\\login", {login: login, pass: pass}, function (data) {
-			alert(data);
-			if (data == '200 OK') window.location = window.location;
-		});
-	});
-	$('.exit_span').on('click', function (){
-		_ajax ("auth\\logout", {}, function (data) {
-			alert(data);
-			if (data == '200 OK') window.location = window.location;
-		});
-	});
-});

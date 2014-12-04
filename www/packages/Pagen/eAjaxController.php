@@ -8,6 +8,5 @@
 	abstract class eAjaxController extends eController {
 		abstract public function request ();
 		abstract public function response ();
-		abstract public function run ();
 	}
 ?>

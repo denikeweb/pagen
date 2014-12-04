@@ -11,7 +11,7 @@
 		public static function alert ($label)   {return self::printWord ('alerts', $label);}
 
 		private static function printWord ($table, $label) {
-			$mysqli = DataBase::$mysqli;
+			$mysqli = &DataBase::$mysqli;
 			$lan = \config::LANG;
 			//standart language is ukrainian
 			if (isset($_COOKIE["lang"]))
@@ -21,7 +21,7 @@
 				if ($_COOKIE ['lang'] == "en") {$lang = 'en';}
 			}
 			//choose language if isset cookie
-			$query = $mysqli->query ('SELECT `'.$lan.'` FROM `'.config::PREFIX.$table.'` WHERE `id`=\''.$label.'\'');
+			$query = $mysqli->query ('SELECT `'.$lan.'` FROM `'.\config::PREFIX.$table.'` WHERE `id`=\''.$label.'\'');
 			$result_k = $query->fetch_array ();
 			return $result_k [$lan];
 		}

@@ -12,11 +12,11 @@
 
 	include_once (SITE.'pagen_config.php');
 	\Pagen\AjaxRegistry::start ();
-	$controller = '\Controllers\Ajax\\'.\Pagen\AjaxRegistry::$path;
+	$controller = \Pagen\AjaxRegistry::$path;
 	$a = new $controller ($_REQUEST);
 	$a->request ();
 	$a->run ();
-	$a->response ();
+	echo $a->response ();
 
 	\Pagen\AjaxRegistry::finish ();
 ?>

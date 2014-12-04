@@ -23,10 +23,8 @@
 	function ajaxDefault () {
 		header ('Content-Type: text/html; charset=utf-8');
 
-
-
-		AjaxRegistry::$path = strtr(array_shift($_REQUEST), '/', DIRSEP);
-		AjaxRegistry::$fullpath = dirname(__FILE__).DIRSEP.AjaxRegistry::$path.'.php';
+		AjaxRegistry::$path = '\\Controllers\\Ajax\\'.strtr(array_shift($_REQUEST), '\\', DIRSEP);
+		AjaxRegistry::$fullpath = dirname (dirname (__FILE__)).DIRSEP.AjaxRegistry::$path.'.php';
 
 		if (
 			substr_count($_SERVER['HTTP_REFERER'], $_SERVER['HTTP_HOST']) == 0
@@ -44,7 +42,7 @@
 		) {exit();}
 
 		if (!is_file(AjaxRegistry::$fullpath)) {
-			echo "Warning: controller {${AjaxRegistry::$path}} not exists!";
+			echo "Warning: controller ".AjaxRegistry::$path." not exists!";
 			exit ();
 		}
 	}
