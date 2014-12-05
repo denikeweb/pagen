@@ -174,7 +174,7 @@
 		 * sth interesting code
 		 */
 		private static function normalPage () {
-			$c_pagen_path = dirname (dirname(__FILE__)).DIRSEP.'packages';
+			$c_pagen_path = dirname (dirname(__FILE__));//.DIRSEP.'packages';
 			//get path to controllers
 			$pieces = self::$urlArray;
 			$controller = '\Controllers';
@@ -282,7 +282,7 @@
 
 		public static function include404 () {
 			#header("HTTP/1.x 404 Not Found");
-			$file = dirname(dirname(__FILE__)).DIRSEP.'404'.EXT;
+			$file = dirname(dirname(dirname(__FILE__))).DIRSEP.'404'.EXT;
 			include ($file);
 			exit ();
 		}

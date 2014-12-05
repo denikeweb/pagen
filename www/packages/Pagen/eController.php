@@ -44,5 +44,22 @@
 			if (in_array('lang', $params)) {$data ['SiteLang'] = $this->lang;}
 			if (in_array('setLangUrl', $params)) {$data ['setLangUrl'] = $this->ls_name;}
 		}
+
+		/**
+		 * Load words of sth group of sth language
+		 *
+		 * @param      $group
+		 * @param null $lang
+		 *
+		 * @return array
+		 */
+		final public static function getWords ($group, $lang = NULL) {
+			if (is_null($lang))
+				$lang = \config::$Lang;
+			$path = SITE.'templates'.DIRSEP.\config::TEMPLATE.DIRSEP.'languages'.DIRSEP.$lang.DIRSEP.$group.EXT;
+			if (is_file($path) === false)
+				return [];
+			return include ($path);
+		}
 	}
 ?>

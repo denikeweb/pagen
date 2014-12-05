@@ -7,8 +7,9 @@
 	class IndexController extends eController {
 		public function run (){
 			$this->getLocals ($this->data);
-			$this->data ['_d'] = new Design ();
+			Design::addMenu ($this->data);
 			$this->files = Design::getDefaultFilesArray ();
+			$this->files ['content'] = 'pages'.DIRSEP.'static';
 
 			if (isset(Site::$ThisPage ['title']))  {$this->data ['title']   = Site::$ThisPage ['title'];}
 			if (isset(Site::$ThisPage ['meta_d'])) {$this->data ['meta_d']  = Site::$ThisPage ['meta_d'];}

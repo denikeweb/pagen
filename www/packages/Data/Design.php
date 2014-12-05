@@ -1,38 +1,58 @@
 <?php
 	/**
-	 * demo class
+	 * @todo demo class
 	 *
 	 * @author Denis Dragomiric <den@lux-blog.org>
 	 * @version Pagen 1.1.6
 	 */
 	namespace Data;
-	use \Pagen\DataBase;
-	use \Pagen\User;
+	use \Pagen\eController;
 
 	class Design {
-		public function createMenu ($word) {
-			$mysqli = &DataBase::$mysqli;
-			$user_prioritet = User::$userInfo ['rights'] + 1;
-			$menu = array ();
-			$menu_query = $mysqli->query ("SELECT * FROM `".
-				\config::PREFIX."pages` WHERE `show` <= '$user_prioritet' AND `show` != '0' ORDER BY `hor_menu` ASC");
-			$menu_row = $menu_query->fetch_assoc ();
-			$i = 0;
-			do {
-				$title_index = $menu_row ['title'];
-				$menu_row ['title'] = $word [$title_index];
-				if ($menu_row ['cpurl'] == '/') {
-					$menu_row ['cpurl'] = '';
-				}
-				// replace title of pages for menu from language array
-
-				$menu [$i] ['title'] = $menu_row ['title'];
-				$menu [$i] ['cpurl'] = $menu_row ['cpurl'];
-				//get menu array
-				$i ++;
-			} while ($menu_row = $menu_query->fetch_assoc ());
-			//forming horisontal menu
-			return $menu;
+		public static function addMenu (&$data) {
+			$words = eController::getWords ('menu');
+			$data ['pages_url'] = [
+				'index'          => [
+					'url' => '/',
+					'title' => $words ['index']
+				],
+				'sign_in'        => [
+					'url' => '/sign_in',
+					'title' => $words ['sign_in']
+				],
+				'sign_up'        => [
+					'url' => '/sign_up',
+					'title' => $words ['sign_up']
+				],
+				'page1'          => [
+					'url' => '/page1',
+					'title' => $words ['page1']
+				],
+				'page2'          => [
+					'url' => '/page2',
+					'title' => $words ['page2']
+				],
+				'blog'           => [
+					'url' => '/blog',
+					'title' => $words ['blog']
+				],
+				'blog_note'      => [
+					'url' => '/blog/demo-note',
+					'title' => $words ['blog_note']
+				],
+				'blog_note_edit' => [
+					'url' => '/blog/demo-note/edit',
+					'title' => $words ['blog_note_edit']
+				],
+				'users'          => [
+					'url' => '/users',
+					'title' => $words ['users']
+				],
+				'users_admin'    => [
+					'url' => '/users/admin',
+					'title' => $words ['users_admin']
+				]
+			];
 		}
 
 		public static function getDefaultFilesArray () {
