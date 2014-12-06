@@ -33,40 +33,8 @@ define ('SITE', dirname(__FILE__).DIRSEP);
 	\Pagen\User::userAuth ();
 	\Pagen\Site::setupLanguage ();
 	\Pagen\Site::getPage ();
-	\Pagen\Site::printPage ();
 	\Pagen\DataBase::disconnect ();
 
-/*
-	//$iv = mcrypt_create_iv (mcrypt_get_iv_size (MCRYPT_RIJNDAEL_256, MCRYPT_MODE_CBC), MCRYPT_RAND);
-	$key = "This is a very secret key";
-	$text = "Meet me at 11 1111111";
-	echo strlen ($text)."\n";
-
-	$iv = \Annex\Files::read ('f2.txt');
-	$crypttext = mcrypt_encrypt (MCRYPT_RIJNDAEL_256, $key, $text, MCRYPT_MODE_CBC, $iv);
-	//echo strlen ($crypttext)."\n";
-	\Annex\Files::write ('f1.txt', $crypttext);
-	//\Annex\Files::write ('f2.txt', $iv);
-	$crypttext = \Annex\Files::read ('f1.txt');
-	echo $mytext = mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $key, $crypttext, MCRYPT_MODE_CBC, $iv);
-
-	echo '<br><br><br>';
-
-	$crypttext = mcrypt_encrypt (MCRYPT_RIJNDAEL_256, $key, $text, MCRYPT_MODE_CBC, $iv);
-	echo base64_encode($crypttext);
-	echo '<br><br><br>';
-	echo base64_encode($iv);
-	$crypttext2 = base64_decode ('IWsWimrOVt0JkkG+Fw0eVmQt4EbsO3ww3RkXRhdobL9O3HjH0TDyUXQlCbFMGG+AdYIIe4e07Lv3EGgS3kYG7g==');
-	$iv2        = base64_decode ('h9FhFMfZCxXUdGac12tbNHgGUuPeCzIyssRjKBz5zU0=');
-	echo '<br><br><br>';
-	echo $mytext = mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $key, $crypttext2, MCRYPT_MODE_CBC, $iv2);
-*/
-
-
-
-	$text = '[tag]';
-	$masked = \Pagen\PassMask::mask($text);
-	echo \Pagen\PassMask::demask($masked);
 /*
  *  @toDelete
  *

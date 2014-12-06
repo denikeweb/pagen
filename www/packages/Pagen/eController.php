@@ -29,13 +29,12 @@
 			return $this->view;
 		}
 
-		final public function __construct (array $args = NULL, array $word = NULL) {
+		final public function __construct (array $args = NULL) {
 			$this->args = $args;
 			$this->lang = \config::$Lang;
 			$this->url = "//$_SERVER[HTTP_HOST]";
 			$this->site_title = \config::TITLE;
 			$this->ls_name = $this->url."$_SERVER[REQUEST_URI]?lang";
-			$this->word = $word;
 		}
 
 		final protected function getLocals (array &$data = NULL, array $params = array ('url', 'title', 'lang', 'setLangUrl')) {
