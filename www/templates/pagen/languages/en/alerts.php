@@ -8,6 +8,7 @@
 			'success_sign_up' => 'You successfully signed up',
 			'sys_error' => 'System error',
 			'user_exist' => 'User with this login exists',
+			'success_log_in' => 'You successfully logged in!',
 			'wrong_login_or_pass' => 'Wrong login/password',
 			'email_not_exist' => 'E-mail doesn\'t exist',
 			'letter_sent' => 'Letter with password sent to yours e-mail',

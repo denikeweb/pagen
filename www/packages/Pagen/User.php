@@ -2,51 +2,109 @@
 	/**
 	 * @author Denis Dragomiric <den@lux-blog.org>
 	 * @version Pagen 1.1
+	 *
+	 * use magic method __callStatic
 	 */
 
 	namespace Pagen;
 
 	abstract class User {
-		const GUEST = 0;
-		const USER = 1;
-		const V_USER = 2;
-		const MODER = 4;
-		const ADMIN = 6;
-
-
+		/**
+		 * @var array
+		 */
 		public static $userInfo;
-		public static $Rights;
-		public static $IP;
 
-		public static function userAuth () {
-			$mysqli = DataBase::$mysqli;
+		protected static $table = 'users';
+		/**
+		 * @abstract
+		 *
+		 * @return array
+		 */
+		public static function getRights () {
+			return \config::$userRights;
+		}
+
+		/**
+		 * @abstract
+		 */
+		public static function getUserInfo ($value, $field = 'id') {
+			if ($value === 0) {
+				return self::$userInfo = ['users_name' => 'admin'];
+			}
+			if (!empty( $value )) {
+				$px = \config::PREFIX;
+				$table = self::$table;
+				$data_postfix = ($field == 'id') ? '' : '_data';
+				$query_text = "
+					SELECT * FROM `{$px}users`
+
+					INNER JOIN `{$px}{$table}_data`
+						ON  `{$px}{$table}`.`{$table}_id`=`{$px}{$table}_data`.`{$table}_id`
+
+					WHERE
+						`{$px}{$table}{$data_postfix}`.`{$table}_{$field}`='$value'
+				";
+				$user_query = DataBase::$mysqli->query($query_text);
+				return self::$userInfo = $user_query->fetch_assoc();
+			}
+		}
+
+		/**
+		 * init user
+		 */
+		public static function init () {
 			session_start();
 			//start session for user's identification
 
-			if (empty($_SESSION['rights']) or !isset($_SESSION['id'])) {
-				$_SESSION['rights'] = 0;
-				self::$Rights = 0;
-			} else {
-				self::$Rights = $_SESSION['rights'];
-			}
-			//create rights for guest; 0 - guest, 1 - user, 2 - vilide user, 4 - moderator, 6 - administrator
-
-				if (!empty($_SESSION['id'])) {
-					$id = $_SESSION['id'];
-					$user_query = $mysqli->query('SELECT `id`, `login`, `email`, `rights` FROM `'.
-						\config::PREFIX.'users` WHERE `id`=\''.$id.'\'');
-					self::$userInfo = $user_query->fetch_assoc();
-				}
-				//create array with user information
-			//if db connection is set we can authorisate this user
-
-			self::$IP = $_SERVER['REMOTE_ADDR'];
+			if (empty($_SESSION['rights']) or !isset($_SESSION['id']))
+				$_SESSION['rights'] = self::getRights () ['guest'];
+			if (\config::GET_USER_DATA)
+				self::getUserInfo ($_SESSION['id']);
 		}
 
-		public static function is_auth ()   {return isset($_SESSION['id']) and ($_SESSION['rights'] >= self::USER);     }
-		public static function is_user ()   {return isset($_SESSION['id']) and ($_SESSION['rights'] == self::USER);     }
-		public static function is_v_user () {return isset($_SESSION['id']) and ($_SESSION['rights'] == self::V_USER);   }
-		public static function is_moder ()  {return isset($_SESSION['id']) and ($_SESSION['rights'] == self::MODER);    }
-		public static function is_admin ()  {return isset($_SESSION['id']) and ($_SESSION['rights'] == self::ADMIN);    }
+		/**
+		 * Sign in user
+		 *
+		 * @param $id
+		 * @param $rights
+		 */
+		public static function setUser ($id, $rights) {
+			session_start();
+			$_SESSION ['id'] = $id;
+			$_SESSION ['rights'] = $rights;
+		}
+
+		/**
+		 * Sign out user
+		 */
+		public static function removeUser () {
+			session_start();
+			unset($_SESSION['id']);
+			unset($_SESSION['rights']);
+		}
+
+		/**
+		 * Check user rights. For example: User::is_admin () User::is_user () User::is_guest ()
+		 *
+		 * @magic
+		 * @param $name
+		 * @param $args
+		 */
+		public static function __callStatic ($name, $args) {
+			return
+				isset($_SESSION['id'])
+				and $_SESSION['rights'] = self::getRights () [substr ($name, 3)];
+		}
+
+		/**
+		 * Is user signed in
+		 *
+		 * @return bool
+		 */
+		public static function is_auth ()   {
+			return
+				isset($_SESSION['id'])
+				and $_SESSION['rights'] >= self::getRights () ['user'];
+		}
 	}
 ?>

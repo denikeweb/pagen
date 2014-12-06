@@ -13,62 +13,54 @@
 
 	namespace Controllers\Ajax\auth;
 	use \Pagen\DataBase;
-	use \Pagen\PageLang;
-	use \Pagen\RandKey;
+	use \Pagen\User;
+	use \Pagen\PassMask;
+	use \Pagen\eController;
 	use \Annex\Validator;
 	\Pagen\ajaxSettings (['Config', 'DataBase']);
 
 	class login extends \Pagen\eAjaxController {
 		private $message;
-		private $login;
+		private $email;
 		private $pass;
 
 		function request () {
-			$this->login = $_REQUEST ['login'];
+			$this->email = $_REQUEST ['login'];
 			$this->pass  = $_REQUEST ['pass'];
 		}
 
 		function run () {
-			if (\config::DB) {
-				$this->is_mysql ();
-			} else {
-				$this->not_mysql ();
-			}
+			if (\config::CONFIG_ADMIN_ACCESS) {
+				$this->not_DB ();
+			} else
+				$this->use_DB ();
 		}
 
 		function response () {
 			return $this->message;
 		}
 
-		private function not_mysql () {
-			if ($this->login == \config::ADMIN and $this->pass == \RandKey::demask(\config::PASS)) {
-				session_start();
-				$_SESSION ['id'] = 0;
-				$_SESSION ['rights'] = 6;
-				$this->message = 'You are logged in!';
-			} else {
-				$this->message = 'Error: check your login and password!';
-			}
+		private function not_DB () {
+			$ver_login = $this->email == \config::ADMIN_EMAIL;
+			$ver_pass = (bool) $this->pass == PassMask::demask(\config::PASS);
+			if ($ver_login and $ver_pass) {
+				User::setUser (0, User::getRights() ['admin']);
+				$this->message = eController::getWords ('alerts') ['success_log_in'];
+			} else
+				$this->message = eController::getWords ('alerts') ['wrong_login_or_pass'];
 		}
-		private function is_mysql () {
-			$mysqli = &DataBase::$mysqli;
-			if (!Validator::login ($this->login)) {
-				$this->message = PageLang::alert (8);
-			} else {
-				$query = $mysqli->query ("SELECT `id`,`rights`,`pass` FROM `".
-					\config::PREFIX."users` WHERE `login`='{$this->login}'");
-				$result = $query->fetch_assoc ();
-				if ($query->num_rows == 0 or $this->pass != RandKey::demask ($result['pass'])) {
-					echo $query->num_rows;
-					echo RandKey::demask ($result['pass']);
-					$this->message = PageLang::alert (8);
-				} else {
-					session_start ();
-					$_SESSION ['id'] = $result ['id'];
-					$_SESSION ['rights'] = $result ['rights'];
-					$this->message = '200 OK';
-				}
-			}
+
+		private function use_DB () {
+			if (Validator::email ($this->email)) {
+				$result = User::getUserInfo($this->email, 'email');
+				$ver_pass = (bool) $this->pass == PassMask::demask($result['users_pass']);
+				if (isset($result ['users_id']) and $ver_pass) {
+					User::setUser ($result ['users_id'], $result ['users_rights']);
+					$this->message = eController::getWords ('alerts') ['success_log_in'];
+				} else
+					$this->message = eController::getWords ('alerts') ['wrong_login_or_pass'];
+			} else
+				$this->message = eController::getWords ('alerts') ['wrong_login_or_pass'];
 		}
 	}
 ?>

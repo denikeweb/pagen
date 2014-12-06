@@ -12,13 +12,14 @@
 		private   $site_title;
 		private   $lang;
 		private   $ls_name;
-		protected $word = array();
 		protected $view = '';
 
 		protected $data = [];
 		protected $files = [];
 		protected $template = 'index';
 		protected $cache = NULL;
+
+		protected static $words = [];
 
 		abstract public function run ();
 		public function setTemplate ($template) {$this->template = $template;}
@@ -55,10 +56,13 @@
 		final public static function getWords ($group, $lang = NULL) {
 			if (is_null($lang))
 				$lang = \config::$Lang;
+			if (isset (self::$words [$lang] [$group]))
+				return self::$words [$lang] [$group];
 			$path = SITE.'templates'.DIRSEP.\config::TEMPLATE.DIRSEP.'languages'.DIRSEP.$lang.DIRSEP.$group.EXT;
 			if (is_file($path) === false)
 				return [];
-			return include ($path);
+			self::$words [$lang] [$group] = include ($path);
+			return self::$words [$lang] [$group];
 		}
 	}
 ?>

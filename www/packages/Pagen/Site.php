@@ -7,7 +7,7 @@
 	 *
 	 * @uses \Annex\Validator
 	 */
-	
+
 	namespace Pagen;
 	use \Annex\Validator;
 
@@ -115,11 +115,11 @@
 
 			// check static mode
 			if (\config::CHECK_STATIC_PAGE) {
-				$dynamic = self::checkStaticPage ($mypage);
+				$dynamic = !self::checkStaticPage ($mypage);
 			} else
 				$dynamic = true;
-
 			// if we have no static page, search and run relevant controller
+
 			if ($dynamic)
 				self::printPage ();
 		}
@@ -169,10 +169,10 @@
 				self::$ThisPage ['title'] = $data [0];
 				self::$ThisPage ['meta_k'] = $data [2];
 				self::$ThisPage ['meta_d'] = $data [3];
+				self::defaultController ();
+				//if page is static load default page controller
 			}
-			self::defaultController ();
-			//if page is static load default page controller
-			return !$is_exist;
+			return $is_exist;
 		}
 
 		/**
