@@ -3,6 +3,8 @@
 	 * @author Denis Dragomiric <den@lux-blog.org>
 	 * @version Pagen 1.1
 	 */
+	namespace Pagen;
+
 	class Cdn {
 		private $field;
 		private $value;

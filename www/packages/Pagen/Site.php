@@ -106,44 +106,31 @@
 			\config::$Lang = $lang;
 		}
 
-		public static function getPage (){
+		public static function getPage () {
 			$mysqli = &DataBase::$mysqli;
-			$thisUrl = trim(self::$pageRequest, '/\\');
-			self::$urlArray = explode('/', $thisUrl);
+			$thisUrl = trim (self::$pageRequest, '/\\');
+			self::$urlArray = explode ('/', $thisUrl);
 			$mypage = self::$urlArray [0];
 			if (empty($mypage)) {
 				$mypage = '/';
 			}
 			//user-friendly URL
+			if (\config::CHECK_STATIC_PAGE) {
+				$result = $mysqli->query ('SELECT * FROM `'.\config::PREFIX.'pages` WHERE `url`=\''.$mypage.'\'');
+				$is_exist = $result->num_rows > 0;
+				if ($is_exist) {
+					//check page
+					self::$ThisPage = $result->fetch_assoc ();
 
-			if (\config::DB) {
-				$result = $mysqli->query('SELECT * FROM `'.\config::PREFIX.'pages` WHERE `cpurl`=\''.$mypage.'\'');
-				$is404 = $result->num_rows == 0;
-				if ($is404) {
-					$result = $mysqli->query('SELECT * FROM `'.\config::PREFIX.'pages` WHERE `id`=\'0\'');
-				}
-				//check page
-
-				self::$ThisPage = $result->fetch_assoc();
-				if ($is404) {
-					self::$ThisPage ['static'] = -1;
-				} else {
 					self::$ThisPage ['static'] = 1;
-				}
-				//save data of this page in array
-
-				if (self::$ThisPage ['static'] == '1') {
-					//$title_index = self::$ThisPage ['title'];
+					//save data of this page in array
 					$page_id = self::$ThisPage ['id'];
 					// get id for query
-
-					self::$Content = self::getFromDB('content', $page_id);
+					self::$Content = self::getFromDB ('content', $page_id);
 					//return page content
-
-					self::$ThisPage ['meta_k'] = self::getFromDB('meta_k', $page_id);
-					self::$ThisPage ['meta_d'] = self::getFromDB('meta_d', $page_id);
+					self::$ThisPage ['meta_k'] = self::getFromDB ('meta_k', $page_id);
+					self::$ThisPage ['meta_d'] = self::getFromDB ('meta_d', $page_id);
 					//return meta tags for this page (keywords & description)
-
 					//self::$ThisPage ['title'] = self::$word [$title_index];
 					// replace title of this page from language array
 				}

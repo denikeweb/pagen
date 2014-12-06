@@ -5,6 +5,8 @@
 			'login' => 'Login',
 			'sign_in' => 'Sign in',
 			'sign_up' => 'Sign up',
+			'to_sign_in' => 'To sign in',
+			'to_sign_up' => 'To sign up',
 			'repeat_pass' => 'Repeat password',
 			'account' => 'Account',
 			'remind_pass' => 'Remind password',

@@ -25,7 +25,7 @@
 		private $lock = false;
 
 		public function __construct ($table = ''){
-			$this->mysqli = &\DataBase::$mysqli;
+			$this->mysqli = &DataBase::$mysqli;
 			if (!empty($table)) {$this->setTable($table);}
 		}
 
@@ -89,6 +89,8 @@
 				#return false;
 			}
 
+			if ($this->lock) {return false;}
+
 			$query = $this->mysqli->multi_query ($t);
 			if ($contents) {
 				if ($this->assoc) {
@@ -122,8 +124,9 @@
 		}
 		// setting array of table fields
 
-		final public function addJoin($table1, $id1, $table2, $id2){
-			$this->joins [] = ' INNER JOIN `'.\config::PREFIX.$table2.'` ON `'.\config::PREFIX."$table1`.`$id1` = `".\config::PREFIX."$table2`.`$id2` ";
+		final public function addJoin($table1, $id1, $table2, $id2, $type = 'INNER'){
+			$this->joins [] = ' '.$type.' JOIN `'.\config::PREFIX.$table2.'` ON `'
+				.\config::PREFIX."$table1`.`$id1` = `".\config::PREFIX."$table2`.`$id2` ";
 		}
 
 		final public function addConditions($cond){
@@ -164,14 +167,16 @@
 		}
 		// setting tablename or array of tablenames
 
-		final public function setOrder($myField, $myType = 0){
+		final public function setOrder($myField, $myType = 0, $table = NULL){
 			$myField = $this->mysqli->real_escape_string ($myField);
+			if ($table !== NULL)
+				$table = $this->mysqli->real_escape_string ($table);
 			if ($myType == '0' or strtolower($myType) == 'desc') {
 				$myType = 'DESC';
 			} else {
 				$myType = 'ASC';
 			}
-			$this->order = array($myField, $myType);
+			$this->order = array($myField, $myType, $table);
 		}
 		// setting order ASC [1] | DESC [0]
 
@@ -187,7 +192,7 @@
 		// setting SQL-query [no escaping]
 
 		final public function setResultType($myAssoc){
-			$this->assoc = (boolean) $myAssoc;
+			$this->assoc = $myAssoc; # 0 - rows | 1 - assoc | 2 - array
 		}
 		// setting type of result array
 
@@ -299,19 +304,21 @@
 			if (in_array('cond',   $hash)) {$args [] = $this->returnCondition ();}
 			if (in_array('order',  $hash)) {$args [] = $this->returnOrder ();}
 			if (in_array('limit',  $hash)) {$args [] = $this->returnLimits ();}
-			if (in_array('i0',     $hash) or in_array('i1',  $hash)) {$inputs = $this->returnInputs ();}
-			if (in_array('i0',     $hash)) {$args [] = $inputs [0];}
-			if (in_array('i1',     $hash)) {$args [] = $inputs [1];}
+			if (in_array('i0',     $hash) or in_array('i1',  $hash)) {
+				$inputs = $this->returnInputs ();
+				if (in_array('i0', $hash)) {$args [] = $inputs [0];}
+				if (in_array('i1', $hash)) {$args [] = $inputs [1];}
+			}
 			$query = sprintf($queryf, $args [0], $args [1], $args [2], $args [3], $args [4], $args [5]);
 			if ($this->debug) {echo $query;}
 			return $query;
 		}
 
 		private function r ($t, $type = 0, $poly = false){
-			if ($this->lock) {return false;}
 			if ($this->is_buf) {
 				$this->addBuffer($t);
 			} else {
+				if ($this->lock) {return false;}
 				if ($type == 0) {
 					$this->mysqli->query ($t);
 					return $this->mysqli->affected_rows;
@@ -324,10 +331,11 @@
 		}
 
 		private function returnResult ($query, $poly = false){
-			if ($this->assoc) {
-				$func = 'fetch_assoc';
-			} else {
-				$func = 'fetch_row';
+			switch ($this->assoc){
+				case 0 : $func = 'fetch_row'; break;
+				case 1 : $func = 'fetch_assoc'; break;
+				case 2 : $func = 'fetch_array'; break;
+				default : $func = 'fetch_assoc';
 			}
 			$nums = $query->num_rows;
 			if ($nums > 0) {
@@ -401,8 +409,14 @@
 		private function returnOrder () {
 			$order = '';
 			if (!empty($this->order [0]) and !empty($this->order [1])) {
-				if (is_array($this->table)) {$orderTable = \config::PREFIX.$this->table[0];} else {$orderTable = \config::PREFIX.$this->table;}
-				$order = "ORDER BY `$orderTable`.`{$this->order [0]}` {$this->order [1]}";
+				if (is_array($this->table)) {
+					$orderTable = $this->table[0];
+				} else {
+					$orderTable = $this->table;
+				}
+				if (!empty($this->order [2]))
+					$orderTable = $this->order [2];
+				$order = "ORDER BY `".\config::PREFIX."$orderTable`.`{$this->order [0]}` {$this->order [1]}";
 			}
 			return $order;
 		}
@@ -444,4 +458,4 @@
 		}
 
 	}
-?>
+	?>

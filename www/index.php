@@ -36,7 +36,7 @@ define ('SITE', dirname(__FILE__).DIRSEP);
 	\Pagen\Site::printPage ();
 	\Pagen\DataBase::disconnect ();
 
-
+/*
 	//$iv = mcrypt_create_iv (mcrypt_get_iv_size (MCRYPT_RIJNDAEL_256, MCRYPT_MODE_CBC), MCRYPT_RAND);
 	$key = "This is a very secret key";
 	$text = "Meet me at 11 1111111";
@@ -60,7 +60,13 @@ define ('SITE', dirname(__FILE__).DIRSEP);
 	$iv2        = base64_decode ('h9FhFMfZCxXUdGac12tbNHgGUuPeCzIyssRjKBz5zU0=');
 	echo '<br><br><br>';
 	echo $mytext = mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $key, $crypttext2, MCRYPT_MODE_CBC, $iv2);
+*/
 
+
+
+	$text = '[tag]';
+	$masked = \Pagen\PassMask::mask($text);
+	echo \Pagen\PassMask::demask($masked);
 /*
  *  @toDelete
  *

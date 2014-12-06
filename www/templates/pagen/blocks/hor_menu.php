@@ -1,4 +1,3 @@
-<?php if (config::DB) { ?>
 	<ul id="menu">
 		<?php
 		$menu_rows = $pages_url;
@@ -10,4 +9,3 @@
 		}
 		?>
 	</ul><!-- #menu -->
-<?php } ?>
