@@ -1,15 +1,17 @@
 $(function (){
 	$('.log_button').on('click', function (){
-		login = $('#login_e').val ();
-		pass = $('#pass_out_e').val ();
+		var parent = $(this).prev ().prev ('fieldset'),
+			login = parent.children ('.control.login').val (),
+			pass =  parent.children ('.control.pass').val ();
 		_ajax ("auth\\login", {login: login, pass: pass}, function (data) {
-			alert(data);
-			if (data == '200 OK') window.location = window.location;
+			data = $.parseJSON (data);
+			alert (data ['message']);
+			if (data ['response'] == true)
+				window.location = window.location;
 		});
 	});
 	$('.exit_span').on('click', function (){
 		_ajax ("auth\\logout", {}, function (data) {
-			alert(data);
 			if (data == '200 OK') window.location = window.location;
 		});
 	});

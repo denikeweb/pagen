@@ -1,3 +1,4 @@
+<nav id="nav">
 	<ul id="menu">
 		<?php
 		$menu_rows = $pages_url;
@@ -9,3 +10,4 @@
 		}
 		?>
 	</ul><!-- #menu -->
+</nav><!-- #nav -->

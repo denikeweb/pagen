@@ -21,6 +21,7 @@
 
 	class login extends \Pagen\eAjaxController {
 		private $message;
+		private $response;
 		private $email;
 		private $pass;
 
@@ -37,7 +38,10 @@
 		}
 
 		function response () {
-			return $this->message;
+			return json_encode([
+				'message'  => $this->message,
+				'response' => $this->response
+			]);
 		}
 
 		private function not_DB () {
@@ -46,8 +50,11 @@
 			if ($ver_login and $ver_pass) {
 				User::setUser (0, User::getRights() ['admin']);
 				$this->message = eController::getWords ('alerts') ['success_log_in'];
-			} else
+				$this->response = true;
+			} else {
 				$this->message = eController::getWords ('alerts') ['wrong_login_or_pass'];
+				$this->response = false;
+			}
 		}
 
 		private function use_DB () {
@@ -57,10 +64,15 @@
 				if (isset($result ['users_id']) and $ver_pass) {
 					User::setUser ($result ['users_id'], $result ['users_rights']);
 					$this->message = eController::getWords ('alerts') ['success_log_in'];
-				} else
+					$this->response = true;
+				} else {
 					$this->message = eController::getWords ('alerts') ['wrong_login_or_pass'];
-			} else
+					$this->response = false;
+				}
+			} else {
 				$this->message = eController::getWords ('alerts') ['wrong_login_or_pass'];
+				$this->response = false;
+			}
 		}
 	}
 ?>

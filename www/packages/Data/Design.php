@@ -53,12 +53,15 @@
 					'title' => $words ['users_admin']
 				]
 			];
+			$data ['titles'] = eController::getWords('titles');
 		}
 
 		public static function getDefaultFilesArray () {
 			return [
+				'sign_in_form' => 'blocks'.DIRSEP.'sign_in_form',
 				'hor_menu' => 'blocks'.DIRSEP.'hor_menu',
-				'sign_in_form' => 'blocks'.DIRSEP.'sign_in_form'
+				'header' => 'blocks'.DIRSEP.'header',
+				'footer' => 'blocks'.DIRSEP.'footer'
 			];
 		}
 	}
