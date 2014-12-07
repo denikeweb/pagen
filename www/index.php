@@ -1,6 +1,6 @@
 <?php
-// $start_time = microtime(3); //@toDelete
-// $start_memory = memory_get_usage(); //@toDelete
+ $start_time = microtime(3); //@toDelete
+ $start_memory = memory_get_usage(); //@toDelete
 /**
 	*
 	* Pagen — high performance HMVC-framework.
@@ -31,13 +31,12 @@ define ('SITE', dirname(__FILE__).DIRSEP);
 	\Pagen\Site::checkRequest ();
 	\Pagen\DataBase::connect ();
 	\Pagen\User::init ();
-	\Pagen\Site::setupLanguage ();
-	\Pagen\Site::getPage ();
+	\Pagen\Site::facade ();
 	\Pagen\DataBase::disconnect ();
 
 /*
  *  @toDelete
- * /
+ * */
 echo '<br>';
 $end_memory = memory_get_usage();
 echo $end_memory - $start_memory;

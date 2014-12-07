@@ -34,6 +34,8 @@
 		// check short files URL at template folder
 		const GET_USER_DATA = true;
 		// get user data from DataBase
+		const FLY_MODE = false;
+		// set fly mode
 
 		public static $langHash = [
 			'uk' => 'uk',

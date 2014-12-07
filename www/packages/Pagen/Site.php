@@ -20,6 +20,27 @@
 		public static $pageRequest;
 
 		/**
+		 * facade for FrontController, check fly mode
+		 */
+		public static function facade () {
+			self::setupLanguage ();
+			self::userFriendlyURL ();
+			if (\config::FLY_MODE) {
+				self::fly_mode ();
+			} else
+				self::getPage ();
+		}
+
+		private static function userFriendlyURL () {
+			//user-friendly URL
+			$thisUrl = trim (self::$pageRequest, '/\\');
+			self::$urlArray = explode ('/', $thisUrl);
+			$mypage = &self::$urlArray [0];
+			if (empty($mypage))
+				$mypage = 'index';
+		}
+
+		/**
 		 * analyzing response and check files used at template
 		 */
 		public static function checkRequest () {
@@ -39,6 +60,18 @@
 					self::$pageRequest = $_GET ['page'];
 				} else
 					self::include404();
+		}
+
+		/**
+		 * bootstrap application for fly mode
+		 */
+		private static function fly_mode () {
+			$bootstrap = include (SITE.DIRSEP.'fly_mode_bootstrap'.EXT);
+
+			$mypage = &self::$urlArray [0];
+			if (!isset($bootstrap [$mypage])) $mypage = 'index';
+
+			self::defaultController($bootstrap [$mypage]);
 		}
 
 		/**
@@ -83,17 +116,19 @@
 		 * setup site language, if user sent $_GET ['lang']
 		 * else setup default site language
 		 */
-		public static function setupLanguage (){
+		private static function setupLanguage (){
 			$lang = \config::LANG;
-			if (isset($_GET ['lang'])) { //if cookie is not showed
-				setcookie('lang', $_GET['lang'], time() + 2592000); //set language id
+			//if cookie is not set
+			if (isset($_GET ['lang'])) {
+				//set language id
+				setcookie('lang', $_GET['lang'], time() + 2592000);
 				$url = 'http://'.$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'];
 				$pos = strpos($url, '?lang=');
 				if ($pos === false) {
 					$pos = strpos($url, '&lang=');
 				}
 				$url = substr($url, 0, $pos);
-				//formed uri
+				// formed uri
 				header('Location:'.$url);
 			}
 			if (isset($_COOKIE ['lang']))
@@ -106,13 +141,8 @@
 		/**
 		 * page bootstrapper
 		 */
-		public static function getPage () {
-			//user-friendly URL
-			$thisUrl = trim (self::$pageRequest, '/\\');
-			self::$urlArray = explode ('/', $thisUrl);
-			$mypage = &self::$urlArray [0];
-			if (empty($mypage)) $mypage = 'index';
-
+		private static function getPage () {
+			$mypage = self::$urlArray [0];
 			// check static mode
 			if (\config::CHECK_STATIC_PAGE) {
 				$dynamic = !self::checkStaticPage ($mypage);
