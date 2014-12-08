@@ -1,15 +1,7 @@
 var ajax_contents;
-(function (){
-	if (self.parent.frames.length != 0) {self.parent.location = window.location;} //iframe deffence
-	function getSiteName () {
-		var url = window.location.href, count = 0, n = url.length, urlSlashEnd = 3, thisUrl = '';
-		for (var i = 0; i < n && count != urlSlashEnd; i ++) {
-			if (url [i] == '/') {count ++;}
-			thisUrl += url [i];
-		}
-		return thisUrl;
-	}
+//if (self.parent.frames.length != 0) self.parent.location = window.location;
 
+(function () {
 	var url = '//' + document.domain + '/packages/Controllers/Ajax/index.php';
 	$.ajaxSetup({
 		url: url,

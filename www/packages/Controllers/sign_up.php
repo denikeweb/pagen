@@ -6,6 +6,8 @@
 
 	class sign_up extends eController {
 		public function run (){
+			Design::notForAuth ();
+
 			$this->getLocals ($this->data);
 			Design::addMenu ($this->data);
 			\Data\Pages\SignUp::addTitles($this->data);

@@ -20,7 +20,7 @@
 		<input class="fields control pass" type="password" id="pass_out_e" name="pass"
 		       title="Пароль" placeholder="Пароль">
 		</fieldset>
-		<input type="submit" class="log_button" value="Вход" name="log_btn">
+		<input type="submit" class="log_button control sign_in" value="Вход" name="log_btn">
 	</form>
 	<div id="else_enter"><a href="sign_up">Регистрация</a></div>
 	<div id="errors_e" class="errors"></div>

@@ -7,6 +7,7 @@
 	 */
 	namespace Data;
 	use \Pagen\eController;
+	use Pagen\User;
 
 	class Design {
 		public static function addMenu (&$data) {
@@ -63,6 +64,12 @@
 				'header' => 'blocks'.DIRSEP.'header',
 				'footer' => 'blocks'.DIRSEP.'footer'
 			];
+		}
+
+		public static function notForAuth () {
+			$url = '/';
+			if (User::is_auth())
+				header ("Location: $url");
 		}
 	}
 ?>

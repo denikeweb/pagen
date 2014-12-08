@@ -10,7 +10,6 @@
 			'user_exist' => 'User with this login exists',
 			'success_log_in' => 'You successfully logged in!',
 			'wrong_login_or_pass' => 'Wrong login/password',
-			'email_not_exist' => 'E-mail doesn\'t exist',
 			'letter_sent' => 'Letter with password sent to yours e-mail',
 			'letter_sent_error' => 'A server error occurred while sending a message',
 			'email_not_exist' => 'User with this e-mail not exist',
@@ -22,5 +21,7 @@
 			'error_in_old' => 'Error at the introduction of the old password',
 			'wrong_pass' => 'Wrong password',
 			'wrong_pass_format' => 'Wrong password format',
-			'wrong_login_format' => 'Wrong login format'
+			'wrong_login_format' => 'Wrong login format',
+			'wrong_name_format' => 'Wrong name format',
+			'wrong_user_url_format' => 'Wrong URL profile format'
 		];
