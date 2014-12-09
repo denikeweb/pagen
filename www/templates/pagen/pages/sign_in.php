@@ -16,9 +16,6 @@
 		<input class="fields control pass" type="password" id="pass_out_e" name="pass"
 		       title="Пароль" placeholder="Пароль">
 	</fieldset>
-	<div id="else_enter" class="display: none">
-		<a href="sign_up"><?= $titles ['sign_up']; ?></a>
-	</div>
 	<input type="submit" class="log_button control sign_in" value="Вход" name="log_btn">
 </form>
 <div id="errors_e" class="errors"></div>

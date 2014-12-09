@@ -9,16 +9,10 @@ $(function (){
 	};
 
 	$('.control.sign_in').on('click', function (){
-		var parent = $(this).prev ().prev ('fieldset'),
+		var parent = $(this).prev ('fieldset'),
 			login = parent.children ('.control.login').val (),
 			pass =  parent.children ('.control.pass').val ();
 		pagenAuth(login, pass);
-		/*_ajax ("auth\\login", {login: login, pass: pass}, function (data) {
-			data = $.parseJSON (data);
-			alert (data ['message']);
-			if (data ['response'] == true)
-				window.location = window.location;
-		});*/
 	});
 	$('.exit_span').on('click', function (){
 		_ajax ("auth\\logout", {}, function (data) {

@@ -48,7 +48,7 @@
 
 /*--- content ---*/
 	#content{background: #f9f9f9; padding: 10px; width: 940px;}
-
+	article {text-align: left;}
 /*--- footer ---*/
 	#footer {background: #79C066; height: 50px; position: relative; text-align: center; padding: 10px 0; color: #fff; text-shadow: 1px 1px 1px rgba(0,0,0,0.2);}
 	#footer a{color: #eee;}
