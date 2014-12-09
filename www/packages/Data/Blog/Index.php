@@ -8,10 +8,11 @@
 		public  $publics_url;
 		public  $postPerPage = 5;
 		private $title;
+		private $tableName;
 
 		public function returnContents () {
 			$this->setDefault();
-			$this->setTable('blog');
+			$this->setTable($this->tableName);
 			$this->setOrder('blog_id');
 			if (!is_null($this->publics_url)) $this->addCond('blog_url', $this->publics_url);
 			$this->setLimits(($this->page - 1) * $this->postPerPage, $this->postPerPage);
@@ -32,5 +33,32 @@
 		public function returnCount () {
 			$this->setLimits(NULL, NULL);
 			return $this->getCount();
+		}
+
+		public function actionAdd ($url, $title, $desc, $text) {
+			$this->setTable($this->tableName);
+			$this->blog_url = $url;
+			$this->blog_title = $title;
+			$this->blog_desc = $desc;
+			$this->blog_text = $text;
+			$result = $this->create();
+			return $result;
+		}
+
+		public function actionEdit ($url, $title, $desc, $text, $id) {
+			$this->setTable($this->tableName);
+			$this->blog_url = $url;
+			$this->blog_title = $title;
+			$this->blog_desc = $desc;
+			$this->blog_text = $text;
+			$this->addCond('blog_id', $id);
+			$result = $this->update();
+			return $result;
+		}
+
+		public function actionDelete ($id) {
+			$this->setTable($this->tableName);
+			$result = $this->deleteById($id);
+			return $result;
 		}
 	}

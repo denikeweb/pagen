@@ -6,7 +6,7 @@
 		public $title;
 		public $page;
 		public $pages_count;
-		public $message_key;
+		public $message_key = 'sys_error';
 
 		public function facade ($params, &$is_page) {
 			$model = new \Data\Blog\Index ();
@@ -27,21 +27,32 @@
 		public function delete ($id) {
 			$model = new \Data\Blog\Index ();
 			$result = $model->actionDelete ($id);
+			if ($result)
+				$this->message_key = 'note_deleted';
 			return $result;
-			// @todo
 		}
 
 		public function add ($url, $title, $desc, $text) {
 			$model = new \Data\Blog\Index ();
+			if (strlen($url) < 4 or !\Annex\Validator::urlname($url)) {
+				$this->message_key = 'blog_wrong_url_format';
+				return false;
+			}
+			if (\Annex\Validator::cyryillic($url)) {
+				$this->message_key = 'blog_wrong_url_format';
+				return false;
+			}
 			$result = $model->actionAdd ($url, $title, $desc, $text);
+			if ($result)
+				$this->message_key = 'note_added';
 			return $result;
-			// @todo
 		}
 
 		public function edit ($url, $title, $desc, $text, $id) {
 			$model = new \Data\Blog\Index ();
 			$result = $model->actionEdit ($url, $title, $desc, $text, $id);
+			if ($result)
+				$this->message_key = 'note_edited';
 			return $result;
-			// @todo
 		}
 	}
