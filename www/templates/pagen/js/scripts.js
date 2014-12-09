@@ -21,10 +21,10 @@ $(function (){
 	});
 	$('.control.sign_up').on('click', function (){
 		var parent = $(this).prev ('fieldset').children ('div'),
-			email = parent..children ( '.control.text-email' ).val (),
-			name  = parent..children ( '.control.text-name'  ).val (),
-			pass  = parent..children ( '.control.text-pass'  ).val (),
-			url   = parent..children ( '.control.text-url'   ).val ();
+			email = parent.children ( '.control.text-email' ).val (),
+			name  = parent.children ( '.control.text-name'  ).val (),
+			pass  = parent.children ( '.control.text-pass'  ).val (),
+			url   = parent.children ( '.control.text-url'   ).val ();
 		_ajax ("auth\\sign_up", {email: email, pass: pass, name: name, url: url}, function (data) {
 			data = $.parseJSON (data);
 			alert (data ['message']);

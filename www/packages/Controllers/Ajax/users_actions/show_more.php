@@ -8,21 +8,29 @@
 
 	namespace Controllers\Ajax\users_actions;
 	use \Pagen\eAjaxController;
+	use \Pagen\ViewController;
 	\Pagen\ajaxSettings (['Config', 'DataBase']);
 
 	class show_more extends eAjaxController {
-		private $has_more;
-		private $new_last_id;
-		private $contents;
+		public $has_more;
+		public $new_last_id;
+		public $contents;
 
-		private $last_id;
+		public $last_id;
 
 		function request () {
-			$this->last_id   = $_REQUEST ['last_id'];
+			$this->last_id = $_REQUEST ['last_id'];
 		}
 
 		function run () {
-			// @todo
+			$this->contents = (string) ViewController::facade(
+				'users',
+				'ctrl_action_items',
+				[
+					'last_id' => $this->last_id,
+					'dataPicker' => $this
+				]
+			);
 		}
 
 		function response () {

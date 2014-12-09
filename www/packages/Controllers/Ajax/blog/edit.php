@@ -8,6 +8,8 @@
 
 	namespace Controllers\Ajax\blog;
 	use \Pagen\eAjaxController;
+	use \Pagen\User;
+	use \Pagen\eController;
 	\Pagen\ajaxSettings (['Config', 'DataBase']);
 
 	class edit extends eAjaxController {
@@ -21,7 +23,7 @@
 		private $text;
 
 		function request () {
-			$this->id   = $_REQUEST ['id'];
+			$this->id    = $_REQUEST ['id'];
 			$this->url   = $_REQUEST ['url'];
 			$this->desc  = $_REQUEST ['desc'];
 			$this->title = $_REQUEST ['title'];
@@ -29,7 +31,15 @@
 		}
 
 		function run () {
-			// @todo
+			User::init();
+			if (User::is_admin ()) {
+				$logic = new \Logic\Blog\Index ();
+				$this->response = $logic->edit ($this->url, $this->title, $this->desc, $this->text, $this->id);
+				$this->message = eController::getWords('alerts') [$logic->message_key];
+			} else {
+				$this->response = false;
+				$this->message = eController::getWords ('alerts') ['access_error'];
+			}
 		}
 
 		function response () {
