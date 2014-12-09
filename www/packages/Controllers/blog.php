@@ -15,7 +15,7 @@ class blog extends eController {
 		$n = count ($this->args);
 		for ($i = 0; $i < $n; $i ++) {
 			if ($this->args [$i] == 'edit' and $i + 1 == $n) {
-				$params ['edit'] = true;
+				$params ['edit'] = \Pagen\User::is_admin ();
 				break;
 			}
 			if ($this->args [$i] == 'page') {
@@ -26,12 +26,17 @@ class blog extends eController {
 		}
 		$func = 'ctrl_action_index';
 		$this->$func ($params);
-
-		$this->files ['content'] = 'blog'.DIRSEP.'index';
 	}
 
 	public function action_add () {
-		echo 1;
+		$this->getLocals ($this->data);
+		Design::addMenu ($this->data);
+		$this->files = Design::getDefaultFilesArray ();
+
+		$this->files ['publics'] = 'blog'.DIRSEP.'edit';
+		$this->files ['content'] = 'blog'.DIRSEP.'index';
+		$this->data ['action'] = 'add';
+		$this->data ['title'] = "Добавить заметку";
 	}
 
 	public function ctrl_action_index ($params = NULL) {
@@ -41,10 +46,12 @@ class blog extends eController {
 		$is_page = NULL;
 		$this->data  ['content'] = $logic->facade ($params, $is_page);
 		if ($is_page) {
-			$this->files ['publics'] .= 'page';
-			if (!is_null($params ['edit']))
-				$this->files ['publics'] .= 'edit';
-
+			$annex = 'page';
+			if (!is_null($params ['edit']) and $params ['edit']) {
+				$annex = 'edit';
+				$this->data ['action'] = 'edit';
+			}
+			$this->files ['publics'] .= $annex;
 		} else
 			$this->files ['publics'] .= 'list';
 

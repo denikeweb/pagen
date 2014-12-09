@@ -48,10 +48,6 @@
 				'users'          => [
 					'url' => '/users',
 					'title' => $words ['users']
-				],
-				'users_admin'    => [
-					'url' => '/users/admin',
-					'title' => $words ['users_admin']
 				]
 			];
 			$data ['titles'] = eController::getWords('titles');
