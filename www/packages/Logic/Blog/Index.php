@@ -38,8 +38,12 @@
 				$this->message_key = 'blog_wrong_url_format';
 				return false;
 			}
-			if (\Annex\Validator::cyryillic($url)) {
-				$this->message_key = 'blog_wrong_url_format';
+			if (strlen($title) < 4 or !\Annex\Validator::cyryillic($title)) {
+				$this->message_key = 'blog_title_too_short';
+				return false;
+			}
+			if ($model->isSetted($url) != 0) {
+				$this->message_key = 'blog_url_allready_set';
 				return false;
 			}
 			$result = $model->actionAdd ($url, $title, $desc, $text);
@@ -50,6 +54,18 @@
 
 		public function edit ($url, $title, $desc, $text, $id) {
 			$model = new \Data\Blog\Index ();
+			if (strlen($url) < 4 or !\Annex\Validator::urlname($url)) {
+				$this->message_key = 'blog_wrong_url_format';
+				return false;
+			}
+			if (strlen($title) < 4 or !\Annex\Validator::cyryillic($title)) {
+				$this->message_key = 'blog_title_too_short';
+				return false;
+			}
+			if ($model->isSetted($url, $id) != 0) {
+				$this->message_key = 'blog_url_allready_set';
+				return false;
+			}
 			$result = $model->actionEdit ($url, $title, $desc, $text, $id);
 			if ($result)
 				$this->message_key = 'note_edited';

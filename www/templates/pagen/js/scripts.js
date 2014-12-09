@@ -60,13 +60,12 @@ $(function (){
 	});
 	$('.control.blog_delete').on('click', function (){
 		if (confirm("Удалить заметку?")) {
-			var id = $(this).prev('div').children('.control.text-id').text();
+			var id = $(this).parent ().prev ('.control.text-id').text ();
 			_ajax("blog\\delete", {id: id}, function (data) {
 				data = $.parseJSON(data);
 				alert(data ['message']);
-				if (data ['response'])
-					$(this).prev('div').css({'opacity': '0.4'});
 			});
+			$(this).parent ('div').parent ('div').css({'opacity': '0.4'});
 		}
 		return false;
 	});

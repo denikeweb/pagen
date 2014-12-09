@@ -75,4 +75,7 @@
 
 	/*---- system headers ----*/
 		.title {font-size: 24px; padding-bottom: 15px; color: #345771; font-weight: 600; font-family: Helvetica, Arial, sans-serif !important;}
+
+		.blog_control {color: #6846DD; text-decoration: underline; cursor: pointer;}
+		.blog_control:hover {color: #9B46DD; text-decoration: none;}
 /*--- forms ---*/

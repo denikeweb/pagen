@@ -28,5 +28,7 @@
 			'note_added'   => 'Запись успешно добавлена',
 			'note_edited'  => 'Запись успешно отредактирована',
 			'note_deleted' => 'Запись удалена',
-			'blog_wrong_url_format' => 'Неправильный формат URL'
+			'blog_wrong_url_format' => 'Неправильный формат URL',
+			'blog_url_allready_set' => 'Заметка с таким URL уже существует',
+			'blog_title_too_short'  => 'Заголовок не может быть короче 4-х символов'
 		];

@@ -8,7 +8,7 @@
 		public  $publics_url;
 		public  $postPerPage = 5;
 		private $title;
-		private $tableName;
+		private $tableName = 'blog';
 
 		public function returnContents () {
 			$this->setDefault();
@@ -36,6 +36,7 @@
 		}
 
 		public function actionAdd ($url, $title, $desc, $text) {
+			$this->setDefault();
 			$this->setTable($this->tableName);
 			$this->blog_url = $url;
 			$this->blog_title = $title;
@@ -46,6 +47,7 @@
 		}
 
 		public function actionEdit ($url, $title, $desc, $text, $id) {
+			$this->setDefault();
 			$this->setTable($this->tableName);
 			$this->blog_url = $url;
 			$this->blog_title = $title;
@@ -57,8 +59,17 @@
 		}
 
 		public function actionDelete ($id) {
+			$this->setDefault();
 			$this->setTable($this->tableName);
-			$result = $this->deleteById($id);
+			$result = $this->deleteBy('blog_id', $id);
 			return $result;
+		}
+
+		public function isSetted ($url, $id = NULL) {
+			$this->setTable($this->tableName);
+			$this->addCond('blog_url', $url);
+			if ($id !== NULL)
+				$this->addCond('blog_id', $id, NULL, NULL, '!=');
+			return $this->getCount();
 		}
 	}
