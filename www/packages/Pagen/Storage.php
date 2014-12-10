@@ -28,16 +28,17 @@
 		}
 
 		public function isCached ($key) {
-			return$result = isset($this->cache [$key]);
+			return $result = isset($this->cache [$key]);
 		}
 
 		public function needCaching ($key) {
-			$time = $this->getTime($this->files [$key]);
+			$time = $this->getTime($key);
 			return ($this->cache [$key] - $time < 1);
 		}
 
-		private function getTime ($file) {
+		private function getTime ($file_key) {
 			$time_sec = time ();
+			$file = $this->viewCachePath . $this->files [$file_key] . EXT;
 			if (is_file($file)) {
 				$time_file = filemtime ($file);
 			} else {

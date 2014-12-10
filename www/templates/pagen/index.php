@@ -25,7 +25,6 @@
 		<section id="content">
 			<article>
 				<?= $file_content; ?>
-				<?php \Annex\Dev::showArray ($data); ?>
 			</article>
 		</section><!-- #content-->
 

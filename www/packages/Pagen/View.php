@@ -33,19 +33,19 @@
 				foreach ($fs as $key => $value) {
 					if ($storage->isCached ($key)) {
 						if ($storage->needCaching ($key)) {
-							$content = '';
+							$pagen_cache_content_f3fs53df = '';
 							ob_start();
 							$tFile = $storage->viewPath ().$value.EXT;
 							if (is_file($tFile)) {
 								include $tFile;
-								$content = ob_get_clean ();
+								$pagen_cache_content_f3fs53df = ob_get_clean ();
 							} else {
-								ob_end_clean();
+								ob_end_clean ();
 							}
 							$thisFile = $storage->viewCachePath ().$value.EXT;
 							$handle = fopen($thisFile, 'w+b');
 							if ($handle) {
-								fwrite($handle, $content);
+								fwrite($handle, $pagen_cache_content_f3fs53df);
 								fclose($handle);
 							}
 							//echo $handle;

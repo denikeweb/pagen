@@ -66,7 +66,10 @@ class blog extends eController {
 	 *      [pages_count] -- pages_count
 	 */
 	public function ctrl_action_pagination ($params) {
-		$this->files = ['blog'.DIRSEP.'pagination'];
+		$this->files = ['pagination' => 'blog'.DIRSEP.'pagination'];
+		$this->cache = array(
+			'pagination' => 60
+		);
 		$this->data = $params;
 	}
 }

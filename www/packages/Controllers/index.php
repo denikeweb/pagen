@@ -12,5 +12,9 @@
 
 			$this->files = Design::getDefaultFilesArray ();
 			$this->files ['content'] = 'pages'.DIRSEP.'static';
+
+			$this->cache = array(
+				'footer' => 30
+			);
 		}
 	}
