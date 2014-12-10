@@ -8,26 +8,33 @@ SET NAMES utf8;
 
 CREATE TABLE IF NOT EXISTS `pagen_blog` (
   `blog_id` int(11) NOT NULL AUTO_INCREMENT,
+  `blog_url` varchar(50) NOT NULL,
   `blog_title` varchar(255) NOT NULL,
   `blog_desc` text NOT NULL,
   `blog_text` text NOT NULL,
-  PRIMARY KEY (`blog_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=12 ;
+  PRIMARY KEY (`blog_id`),
+  UNIQUE KEY `blog_url` (`blog_url`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=15 ;
 
 --
 -- Дамп данных таблицы `pagen_blog`
 --
 
-INSERT INTO `pagen_blog` (`blog_id`, `blog_title`, `blog_desc`, `blog_text`) VALUES
-(1, 'Article1', 'This is my test article', 'This is lorem ipsum for my first test article in PaGen'),
-(2, 'My Article/ for Pagen', 'This is my test article...', 'This is lorem ipsum for my first test article in PaGen'),
-(3, 'My Article/ for Pagen', '', 'Ha! It''s mine text'),
-(4, 'My Article/ for Pagen', '', 'Ha! It''s mine text'),
-(7, 'Add''s -> 50', '', 'Ha! It''s mine text'),
-(8, 'Add''s -> 0', '', 'Ha! It''s mine text'),
-(9, 'Add''s -> 48', '', 'Ha! It''s mine text'),
-(10, 'Add''s -> 29', '', 'Ha! It''s mine text'),
-(11, 'Add''s -> 28', '', 'Ha! It''s mine text');
+INSERT INTO `pagen_blog` (`blog_id`, `blog_title`, `blog_desc`, `blog_text`, `blog_url`) VALUES
+(1,  'Demo note', 'This is my test article', 'This is lorem ipsum for my first test article in PaGen. This is lorem ipsum for my first test article in PaGen. This is lorem ipsum for my first test article in PaGen. This is lorem ipsum for my first test article in PaGen.', 'demo-note'),
+(2,  'Note2',  'Lorem ipsum for note description', 'This is lorem ipsum for my test article in PaGen', 'note2'),
+(3,  'Note3',  'Lorem ipsum for note description', 'This is lorem ipsum for my test article in PaGen', 'note3'),
+(4,  'Note4',  'Lorem ipsum for note description', 'This is lorem ipsum for my test article in PaGen', 'note4'),
+(5,  'Note5',  'Lorem ipsum for note description', 'This is lorem ipsum for my test article in PaGen', 'note5'),
+(6,  'Note6',  'Lorem ipsum for note description', 'This is lorem ipsum for my test article in PaGen', 'note6'),
+(7,  'Note7',  'Lorem ipsum for note description', 'This is lorem ipsum for my test article in PaGen', 'note7'),
+(8,  'Note8',  'Lorem ipsum for note description', 'This is lorem ipsum for my test article in PaGen', 'note8'),
+(9,  'Note9',  'Lorem ipsum for note description', 'This is lorem ipsum for my test article in PaGen', 'note9'),
+(10, 'Note10', 'Lorem ipsum for note description', 'This is lorem ipsum for my test article in PaGen', 'note10'),
+(11, 'Note11', 'Lorem ipsum for note description', 'This is lorem ipsum for my test article in PaGen', 'note11'),
+(12, 'Note12', 'Lorem ipsum for note description', 'This is lorem ipsum for my test article in PaGen', 'note12'),
+(13, 'Note13', 'Lorem ipsum for note description', 'This is lorem ipsum for my test article in PaGen', 'note13'),
+(14, 'Note14', 'Lorem ipsum for note description', 'This is lorem ipsum for my test article in PaGen', 'note14');
 
 -- --------------------------------------------------------
 
@@ -40,7 +47,7 @@ CREATE TABLE IF NOT EXISTS `pagen_pages` (
   `pages_url` varchar(100) NOT NULL,
   `pages_child` int(5) DEFAULT NULL,
   PRIMARY KEY (`pages_id`),
-  KEY `pages_url` (`pages_url`)
+  UNIQUE KEY `pages_url` (`pages_url`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
 --
@@ -148,8 +155,9 @@ INSERT INTO `pagen_pages_titles` (`pages_id`, `uk`, `ru`, `en`) VALUES
 CREATE TABLE IF NOT EXISTS `pagen_users` (
   `users_id` int(11) NOT NULL AUTO_INCREMENT,
   `users_url` varchar(50) NOT NULL,
-  PRIMARY KEY (`users_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+  PRIMARY KEY (`users_id`),
+  UNIQUE KEY `users_url` (`users_url`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
 
 --
 -- Дамп данных таблицы `pagen_users`
@@ -157,7 +165,10 @@ CREATE TABLE IF NOT EXISTS `pagen_users` (
 
 INSERT INTO `pagen_users` (`users_id`, `users_url`) VALUES
 (1, 'admin'),
-(2, 'ant');
+(2, 'ant'),
+(3, 'user1'),
+(4, 'user2'),
+(5, 'user3');
 
 -- --------------------------------------------------------
 
@@ -171,8 +182,9 @@ CREATE TABLE IF NOT EXISTS `pagen_users_data` (
   `users_pass` varchar(255) NOT NULL,
   `users_rights` tinyint(4) NOT NULL,
   `users_name` varchar(50) NOT NULL,
-  PRIMARY KEY (`users_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+  PRIMARY KEY (`users_id`),
+  UNIQUE KEY `users_email` (`users_email`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
 
 --
 -- Дамп данных таблицы `pagen_users_data`
@@ -180,7 +192,10 @@ CREATE TABLE IF NOT EXISTS `pagen_users_data` (
 
 INSERT INTO `pagen_users_data` (`users_id`, `users_email`, `users_pass`, `users_rights`, `users_name`) VALUES
 (1, 'admin@mysite.com', 'w9Kec/J4OmCehhZYpu7iNKnHScVgaWmdAIJiPJF9h6s=', 6, 'Administator'),
-(2, 'ant@antimatter.mysite.com', 'w9Kec/J4OmCehhZYpu7iNKnHScVgaWmdAIJiPJF9h6s=', 1, 'Antella Johnson');
+(2, 'ant@mysite.com', 'w9Kec/J4OmCehhZYpu7iNKnHScVgaWmdAIJiPJF9h6s=', 1, 'Antella Johnson'),
+(3, 'user1@mysite.com', 'w9Kec/J4OmCehhZYpu7iNKnHScVgaWmdAIJiPJF9h6s=', 1, 'User1'),
+(4, 'user2@mysite.com', 'w9Kec/J4OmCehhZYpu7iNKnHScVgaWmdAIJiPJF9h6s=', 1, 'User2'),
+(5, 'user3@mysite.com', 'w9Kec/J4OmCehhZYpu7iNKnHScVgaWmdAIJiPJF9h6s=', 1, 'User3');
 
 --
 -- Ограничения внешнего ключа сохраненных таблиц
