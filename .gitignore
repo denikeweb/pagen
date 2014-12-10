@@ -40,5 +40,4 @@ Icon
 /.idea
 
 #Docs
-Documentation.docx
-~$cumentation.docx
+*.docx
