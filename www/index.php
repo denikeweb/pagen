@@ -8,8 +8,8 @@
     * Framework uses on of theme for view.
 	*
 	* @author Denis Dragomiric <den@lux-blog.org>
-	* @version Pagen 1.1.6
-	* @documentation http://www.lux-blog.org/blog/pagen-framework/pagen-1-1-6
+	* @version Pagen 1.1.7
+	* @documentation http://www.lux-blog.org/blog/pagen-framework/pagen-1-1-7
 	* @license New BSD
 	*
 	* @phpVersion PHP 5.4+ {mysqli, mysqlnd, mcrypt}, MySQL 5+
