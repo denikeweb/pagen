@@ -4,11 +4,11 @@
 	 * @version Pagen 1.1.6
 	 */
 	function __autoload($classname) {
-		$filename = SITE.'packages'.DIRSEP.strtr($classname, "\\", DIRSEP).'.php';
+		$filename = SITE.'packages'.DIRSEP.strtr($classname, "\\", DIRSEP).EXT;
 		include_once($filename);
 	}
 
-	
+
 	abstract class config {
 		const LANG = 'uk';
 		// default site localisation
