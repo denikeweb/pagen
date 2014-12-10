@@ -8,6 +8,7 @@
 		include_once($filename);
 	}
 
+	
 	abstract class config {
 		const LANG = 'uk';
 		// default site localisation
@@ -65,7 +66,7 @@
 			}
 
 			public static function toLog(){
-				Files::writeLog ();
+				\Annex\Files::writeLog ();
 			}
 		*/
 	}
