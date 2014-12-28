@@ -22,6 +22,7 @@
 				$ctrl = $_this->ctrls [$controllerName] [$methodName];
 			} else {
 				$ctrl = new $controllerName ();
+				$ctrl->files = [];
 				$ctrl->$methodName ($params);
 				$_this->ctrls [$controllerName] [$methodName] = $ctrl;
 			}

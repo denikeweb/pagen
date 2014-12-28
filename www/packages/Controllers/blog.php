@@ -7,10 +7,6 @@ use \Data\Design;
 
 class blog extends eController {
 	public function run (){
-		$this->getLocals ($this->data);
-		Design::addMenu ($this->data);
-		$this->files = Design::getDefaultFilesArray ();
-
 		$params = ['page' => 1];
 		$n = count ($this->args);
 		for ($i = 0; $i < $n; $i ++) {
@@ -29,10 +25,6 @@ class blog extends eController {
 	}
 
 	public function action_add () {
-		$this->getLocals ($this->data);
-		Design::addMenu ($this->data);
-		$this->files = Design::getDefaultFilesArray ();
-
 		$this->files ['publics'] = 'blog'.DIRSEP.'edit';
 		$this->files ['content'] = 'blog'.DIRSEP.'index';
 		$this->data ['action'] = 'add';
@@ -68,7 +60,7 @@ class blog extends eController {
 	public function ctrl_action_pagination ($params) {
 		$this->files = ['pagination' => 'blog'.DIRSEP.'pagination'];
 		$this->cache = array(
-			'pagination' => 60
+			'pagination' => 20
 		);
 		$this->data = $params;
 	}

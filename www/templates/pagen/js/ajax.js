@@ -11,7 +11,7 @@ var ajax_contents;
 
 	_ajax = function (file, args, func) {
 		var success_func, myData, sArgs = '';
-		if (func == false) {
+		if (func === undefined) {
 			success_func = function (data, textStatus, jqXHR) {ajax_contents = data};
 		} else {
 			success_func = func;

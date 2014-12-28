@@ -26,9 +26,10 @@
 			self::setupLanguage ();
 			self::userFriendlyURL ();
 			if (\config::FLY_MODE) {
-				self::fly_mode ();
+				$func = 'fly_mode';
 			} else
-				self::getPage ();
+				$func = 'printPage';
+			self::getPage ($func);
 		}
 
 		private static function userFriendlyURL () {
@@ -141,7 +142,7 @@
 		/**
 		 * page bootstrapper
 		 */
-		private static function getPage () {
+		private static function getPage ($func) {
 			$mypage = self::$urlArray [0];
 			// check static mode
 			if (\config::CHECK_STATIC_PAGE) {
@@ -151,7 +152,7 @@
 			// if we have no static page, search and run relevant controller
 
 			if ($dynamic)
-				self::printPage ();
+				self::$func ();
 		}
 
 		/**
@@ -299,7 +300,8 @@
 		 * @param string $controller
 		 */
 		private static function defaultController ($controller = '\Controllers\IndexController') {
-			$a = new $controller(NULL, self::$word);
+			array_shift(self::$urlArray);
+			$a = new $controller(self::$urlArray, self::$word);
 			self::$word = NULL;
 			$a->run();
 			self::result ($a);

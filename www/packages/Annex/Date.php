@@ -145,6 +145,6 @@ class Date {
 	 * @return string
 	*/
 	public function getMonthName () {
-		return $this->monthNames [date("m", strtotime($this->date))];
+		return $this->monthNames [(int) date("m", strtotime($this->date))];
 	}
 } 

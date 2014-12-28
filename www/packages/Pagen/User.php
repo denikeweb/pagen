@@ -10,12 +10,29 @@
 
 	abstract class User {
 		/**
+		 * array with user data
+		 *
 		 * @var array
 		 */
 		public static $userInfo;
 
-		protected static $table = 'users';
 		/**
+		 * Table with users at DB
+		 *
+		 * @var string
+		 */
+		protected static $table = 'users';
+
+		/**
+		 * unique user type key in session
+		 *
+		 * @var string
+		 */
+		protected static $id_key = 'id';
+
+		/**
+		 * get array with types of user rights
+		 *
 		 * @abstract
 		 *
 		 * @return array
@@ -25,6 +42,8 @@
 		}
 
 		/**
+		 * generate array with user data
+		 *
 		 * @abstract
 		 */
 		public static function getUserInfo ($value, $field = 'id') {
@@ -33,7 +52,7 @@
 			}
 			if (!empty( $value )) {
 				$px = \config::PREFIX;
-				$table = self::$table;
+				$table = static::$table;
 				$data_postfix = ($field == 'id') ? '' : '_data';
 				$query_text = "
 					SELECT * FROM `{$px}users`
@@ -50,16 +69,16 @@
 		}
 
 		/**
-		 * init user
+		 * init user at session
 		 */
 		public static function init () {
 			session_start();
 			//start session for user's identification
 
-			if (empty($_SESSION['rights']) or !isset($_SESSION['id']))
+			if (empty($_SESSION['rights']) or !isset($_SESSION[static::$id_key]))
 				$_SESSION['rights'] = self::getRights () ['guest'];
 			if (\config::GET_USER_DATA)
-				self::getUserInfo ($_SESSION['id']);
+				self::getUserInfo ($_SESSION[static::$id_key]);
 		}
 
 		/**
@@ -70,7 +89,7 @@
 		 */
 		public static function setUser ($id, $rights) {
 			session_start();
-			$_SESSION ['id'] = $id;
+			$_SESSION [static::$id_key] = $id;
 			$_SESSION ['rights'] = $rights;
 		}
 
@@ -79,7 +98,7 @@
 		 */
 		public static function removeUser () {
 			session_start();
-			unset($_SESSION['id']);
+			unset($_SESSION[static::$id_key]);
 			unset($_SESSION['rights']);
 		}
 
@@ -92,7 +111,7 @@
 		 */
 		public static function __callStatic ($name, $args) {
 			return
-				isset($_SESSION['id'])
+				isset($_SESSION[static::$id_key])
 				and $_SESSION['rights'] = self::getRights () [substr ($name, 3)];
 		}
 
@@ -103,7 +122,7 @@
 		 */
 		public static function is_auth ()   {
 			return
-				isset($_SESSION['id'])
+				isset($_SESSION[static::$id_key])
 				and $_SESSION['rights'] >= self::getRights () ['user'];
 		}
 	}
